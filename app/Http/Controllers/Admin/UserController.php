@@ -9,15 +9,23 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use App\Services\UserService;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index(): Response
+    protected UserService $userService;
+
+    public function __construct(UserService $userService)
     {
-        $users = User::with('roles')
-            ->withCount('jeweller')
-            ->latest()
-            ->paginate(20)
+        $this->userService = $userService;
+    }
+
+    public function index(Request $request): Response
+    {
+        $filters = $request->only(['search', 'sortField', 'sortDirection']);
+        $users = $this->userService->getPaginatedList($filters)
             ->through(fn ($u) => [
                 'id'           => $u->id,
                 'name'         => $u->name,
@@ -29,20 +37,46 @@ class UserController extends Controller
 
         return Inertia::render('Admin/Users/Index', [
             'users' => $users,
+            'filters' => $filters
+        ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Admin/Users/Create', [
+            'roles' => Role::all()
         ]);
     }
 
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $user = User::create([
-            'name'     => $request->validated('name'),
-            'email'    => $request->validated('email'),
-            'password' => Hash::make($request->validated('password')),
+        $this->userService->createUser($request->validated());
+
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
+    }
+
+    public function edit(User $user): Response
+    {
+        $user->load('roles');
+
+        return Inertia::render('Admin/Users/Edit', [
+            'user' => $user,
+            'roles' => Role::all()
+        ]);
+    }
+
+    public function update(Request $request, User $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'role'     => ['required', 'exists:roles,name'],
         ]);
 
-        $user->assignRole($request->validated('role'));
+        $this->userService->updateUser($user->id, $validated);
 
-        return back()->with('success', 'User created successfully.');
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy(User $user): RedirectResponse
@@ -51,8 +85,8 @@ class UserController extends Controller
             return back()->with('error', 'Cannot delete the last admin user.');
         }
 
-        $user->delete();
+        $this->userService->deleteUser($user->id);
 
-        return back()->with('success', 'User deleted.');
+        return redirect()->route('admin.users.index')->with('success', 'User deleted.');
     }
 }

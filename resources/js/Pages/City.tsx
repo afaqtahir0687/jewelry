@@ -57,7 +57,7 @@ export default function CityPage({ city, jewellers, categories }: CityProps) {
             </section>
 
             {/* Content grid */}
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in-up">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     
                     {/* Left 2 Columns */}
@@ -80,12 +80,12 @@ export default function CityPage({ city, jewellers, categories }: CityProps) {
                         ) : (
                             <div class="space-y-6">
                                 {jewellers.map((j) => (
-                                    <div key={j.id} class="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row">
-                                        <div class="md:w-60 bg-[#faf9f6] relative flex-shrink-0 min-h-[180px]">
-                                            <img src={j.cover_image} alt={`${j.business_name} Cover`} class="w-full h-full object-cover absolute inset-0" />
-                                            <div class="absolute inset-0 bg-[#0f172a]/40"></div>
+                                    <div key={j.id} class="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 flex flex-col md:flex-row hover-shine">
+                                        <div class="md:w-60 bg-[#faf9f6] relative flex-shrink-0 min-h-[180px] group/cover overflow-hidden">
+                                            <img src={j.cover_image} alt={`${j.business_name} Cover`} class="w-full h-full object-cover absolute inset-0 group-hover/cover:scale-105 transition-transform duration-700" />
+                                            <div class="absolute inset-0 bg-[#0f172a]/40 group-hover/cover:bg-[#0f172a]/50 transition-colors duration-300"></div>
                                             <div class="absolute inset-0 flex items-center justify-center p-4">
-                                                <div class="w-16 h-16 rounded-full bg-white p-1 border shadow overflow-hidden">
+                                                <div class="w-16 h-16 rounded-full bg-white p-1 border shadow overflow-hidden transition-transform duration-500 group-hover/cover:scale-110">
                                                     <img src={j.logo} alt={`${j.business_name} Logo`} class="w-full h-full object-cover" />
                                                 </div>
                                             </div>
@@ -95,27 +95,27 @@ export default function CityPage({ city, jewellers, categories }: CityProps) {
                                             <div>
                                                 <div class="flex items-center gap-3 mb-2 flex-wrap">
                                                     <h3 class="font-luxury text-xl font-bold text-[#0f172a]">{j.business_name}</h3>
-                                                    <span class="bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-green-200"><i class="fa-solid fa-circle-check"></i> Verified</span>
+                                                    <span class="bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-green-200"><i class="fa-solid fa-circle-check animate-pulse"></i> Verified</span>
                                                 </div>
                                                 <p class="text-xs text-gray-500 mb-3"><i class="fa-solid fa-map-marker-alt text-[#d4af37] mr-1"></i> {j.full_address}</p>
                                                 
                                                 <div class="flex flex-wrap gap-1.5 mb-4">
                                                     {j.specialities?.map((spec, idx) => (
-                                                        <span key={idx} class="text-[10px] bg-[#faf9f6] text-[#0f172a]/80 px-2 py-0.5 rounded border border-gray-200">{spec}</span>
+                                                        <span key={idx} class="text-[10px] bg-[#faf9f6] text-[#0f172a]/80 px-2 py-0.5 rounded border border-gray-200 hover:border-[#d4af37] transition-colors">{spec}</span>
                                                     ))}
                                                 </div>
                                             </div>
 
                                             <div class="flex items-center justify-between border-t border-gray-100 pt-4 mt-4 flex-wrap gap-4">
                                                 <div class="text-xs text-gray-500">
-                                                    <div><i class="fa-solid fa-gem text-[#d4af37] mr-1.5"></i> {j.products_count} Designs Listed</div>
+                                                    <div><i class="fa-solid fa-gem text-[#d4af37] mr-1.5 animate-pulse"></i> {j.products_count} Designs Listed</div>
                                                     <div><i class="fa-solid fa-user-tie text-[#d4af37] mr-1.5"></i> {j.years_in_business} Yrs Experience</div>
                                                 </div>
                                                 <div class="flex gap-2">
-                                                    <Link href={`/jeweller/${j.slug}`} class="border border-[#0f172a]/30 hover:border-[#d4af37] hover:text-[#d4af37] text-xs font-bold uppercase tracking-wider px-4 py-2 rounded transition-all">
+                                                    <Link href={`/jeweller/${j.slug}`} class="border border-[#0f172a]/30 hover:border-[#d4af37] hover:text-[#d4af37] text-xs font-bold uppercase tracking-wider px-4 py-2 rounded transition-all duration-300 active:scale-[0.98]">
                                                         View Profile
                                                     </Link>
-                                                    <Link href={`/custom-jewellery?jeweller_id=${j.id}`} class="bg-[#d4af37] hover:bg-[#bda030] text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded transition-all">
+                                                    <Link href={`/custom-jewellery?jeweller_id=${j.id}`} class="bg-[#d4af37] hover:bg-[#bda030] text-white text-xs font-bold uppercase tracking-wider px-4 py-2 rounded transition-all duration-300 hover-shine shadow shadow-[#d4af37]/15 active:scale-[0.98]">
                                                         Book Visit
                                                     </Link>
                                                 </div>

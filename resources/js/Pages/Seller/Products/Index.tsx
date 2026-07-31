@@ -5,6 +5,7 @@ import SellerLayout from '@/Layouts/SellerLayout';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import StatusBadge from '@/components/admin/StatusBadge';
+import { confirmDelete } from '@/lib/swal';
 import type { Product, PaginatedData } from '@/types';
 
 interface ProductsIndexProps {
@@ -13,9 +14,11 @@ interface ProductsIndexProps {
 
 export default function SellerProductsIndex({ products }: ProductsIndexProps) {
     const handleDelete = (id: number, name: string) => {
-        if (confirm(`Delete catalog design "${name}"?`)) {
-            router.delete(`/seller/products/${id}`);
-        }
+        confirmDelete(
+            'Delete Catalog Design?',
+            `Are you sure you want to delete design "${name}"? This action cannot be undone.`,
+            () => router.delete(`/seller/products/${id}`)
+        );
     };
 
     return (

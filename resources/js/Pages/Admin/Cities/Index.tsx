@@ -1,177 +1,85 @@
-import React, { useState } from 'react';
-import { Head, Link, useForm, router } from '@inertiajs/react';
-import { Plus, Pencil, Trash2 } from 'lucide-react';
+import React from 'react';
+import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
+import { DataTable, Column } from '@/components/ui/DataTable';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { confirmDelete } from '@/lib/swal';
+import { Pencil, Trash2, Plus } from 'lucide-react';
 import type { City, PaginatedData } from '@/types';
 
 interface CitiesIndexProps {
     cities: PaginatedData<City>;
+    filters: { search?: string; sortField?: string; sortDirection?: 'asc' | 'desc' };
 }
 
-export default function AdminCitiesIndex({ cities }: CitiesIndexProps) {
-    const [editingCity, setEditingCity] = useState<City | null>(null);
-
-    const createForm = useForm({
-        name: '',
-    });
-
-    const editForm = useForm({
-        name: '',
-    });
-
-    const handleCreate = (e: React.FormEvent) => {
-        e.preventDefault();
-        createForm.post('/admin/cities', {
-            onSuccess: () => createForm.reset(),
-        });
+export default function CitiesIndex({ cities, filters }: CitiesIndexProps) {
+    const handleSearch = (query: string) => {
+        router.get('/admin/cities', { ...filters, search: query }, { preserveState: true, preserveScroll: true });
     };
 
-    const handleUpdate = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!editingCity) return;
-        editForm.patch(`/admin/cities/${editingCity.id}`, {
-            onSuccess: () => setEditingCity(null),
-        });
+    const handleSort = (field: string, direction: 'asc' | 'desc') => {
+        router.get('/admin/cities', { ...filters, sortField: field, sortDirection: direction }, { preserveState: true, preserveScroll: true });
     };
 
     const handleDelete = (id: number, name: string) => {
-        if (confirm(`Delete city "${name}"?`)) {
-            router.delete(`/admin/cities/${id}`);
-        }
+        confirmDelete(
+            'Delete City?',
+            `Are you sure you want to delete city "${name}"? This action cannot be undone.`,
+            () => router.delete(`/admin/cities/${id}`)
+        );
     };
 
-    const startEdit = (city: City) => {
-        setEditingCity(city);
-        editForm.setData('name', city.name);
-    };
+    const columns: Column<City>[] = [
+        { header: 'ID', accessorKey: 'id', sortable: true },
+        { header: 'Name', accessorKey: 'name', sortable: true },
+        { header: 'Slug', accessorKey: 'slug', sortable: true },
+        { header: 'Jewellers', accessorKey: 'jewellers_count', sortable: true },
+        {
+            header: 'Actions',
+            cell: (city) => (
+                <div className="flex items-center gap-2">
+                    <Link href={`/admin/cities/${city.id}/edit`}>
+                        <Button size="icon" variant="ghost" className="h-8 w-8 hover:text-gold text-gray-400">
+                            <Pencil size={14} />
+                        </Button>
+                    </Link>
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-8 w-8 hover:text-red-400 text-gray-400"
+                        onClick={() => handleDelete(city.id, city.name)}
+                    >
+                        <Trash2 size={14} />
+                    </Button>
+                </div>
+            )
+        }
+    ];
 
     return (
         <AdminLayout title="Cities">
             <Head title="Cities — Admin" />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* List Cities */}
-                <div className="md:col-span-2 rounded-xl border border-white/10 bg-white/5 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-white/10">
-                        <h2 className="font-semibold text-white">All Cities</h2>
-                        <p className="text-xs text-gray-400 mt-0.5">{cities.total} total</p>
-                    </div>
-
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Name</TableHead>
-                                <TableHead>Slug</TableHead>
-                                <TableHead>Jewellers</TableHead>
-                                <TableHead className="text-right">Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {cities.data.map((city) => (
-                                <TableRow key={city.id}>
-                                    <TableCell className="font-medium">{city.name}</TableCell>
-                                    <TableCell className="font-mono text-xs text-gray-400">{city.slug}</TableCell>
-                                    <TableCell>{city.jewellers_count ?? 0}</TableCell>
-                                    <TableCell className="text-right">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <Button
-                                                size="icon"
-                                                variant="ghost"
-                                                className="h-8 w-8 hover:text-gold"
-                                                onClick={() => startEdit(city)}
-                                            >
-                                                <Pencil size={14} />
-                                            </Button>
-                                            <Button
-                                                size="icon"
-                                                variant="ghost"
-                                                className="h-8 w-8 hover:text-red-400"
-                                                onClick={() => handleDelete(city.id, city.name)}
-                                            >
-                                                <Trash2 size={14} />
-                                            </Button>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-
-                    {cities.last_page > 1 && (
-                        <div className="flex items-center justify-between px-6 py-4 border-t border-white/10">
-                            <p className="text-sm text-gray-400">Page {cities.current_page} of {cities.last_page}</p>
-                            <div className="flex gap-2">
-                                {cities.prev_page_url && <Link href={cities.prev_page_url}><Button variant="outline" size="sm">Previous</Button></Link>}
-                                {cities.next_page_url && <Link href={cities.next_page_url}><Button variant="outline" size="sm">Next</Button></Link>}
-                            </div>
-                        </div>
-                    )}
+            <div className="flex items-center justify-between mb-6">
+                <div>
+                    <h2 className="text-2xl font-bold text-white">Cities</h2>
+                    <p className="text-gray-400 text-sm mt-1">Manage operation cities</p>
                 </div>
-
-                {/* Forms Column */}
-                <div className="space-y-6">
-                    {/* Create City */}
-                    <div className="rounded-xl border border-white/10 bg-white/5 p-6">
-                        <h3 className="font-semibold text-white mb-4">Create City</h3>
-                        <form onSubmit={handleCreate} className="space-y-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="new-city-name">City Name</Label>
-                                <Input
-                                    id="new-city-name"
-                                    placeholder="e.g. Peshawar"
-                                    value={createForm.data.name}
-                                    onChange={(e) => createForm.setData('name', e.target.value)}
-                                    required
-                                />
-                                {createForm.errors.name && (
-                                    <p className="text-red-400 text-xs">{createForm.errors.name}</p>
-                                )}
-                            </div>
-                            <Button type="submit" className="w-full" disabled={createForm.processing}>
-                                Create City
-                            </Button>
-                        </form>
-                    </div>
-
-                    {/* Edit City */}
-                    {editingCity && (
-                        <div className="rounded-xl border border-gold/30 bg-gold/5 p-6">
-                            <h3 className="font-semibold text-gold mb-4">Edit City</h3>
-                            <form onSubmit={handleUpdate} className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="edit-city-name">City Name</Label>
-                                    <Input
-                                        id="edit-city-name"
-                                        value={editForm.data.name}
-                                        onChange={(e) => editForm.setData('name', e.target.value)}
-                                        required
-                                    />
-                                    {editForm.errors.name && (
-                                        <p className="text-red-400 text-xs">{editForm.errors.name}</p>
-                                    )}
-                                </div>
-                                <div className="flex gap-2">
-                                    <Button type="submit" className="flex-1" disabled={editForm.processing}>
-                                        Save
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        className="flex-1"
-                                        onClick={() => setEditingCity(null)}
-                                    >
-                                        Cancel
-                                    </Button>
-                                </div>
-                            </form>
-                        </div>
-                    )}
-                </div>
+                <Link href="/admin/cities/create">
+                    <Button className="bg-gold text-black hover:bg-gold/90">
+                        <Plus className="mr-2 h-4 w-4" /> Add City
+                    </Button>
+                </Link>
             </div>
+
+            <DataTable
+                data={cities}
+                columns={columns}
+                searchQuery={filters.search}
+                onSearch={handleSearch}
+                onSort={handleSort}
+                currentSort={{ field: filters.sortField || 'id', direction: filters.sortDirection || 'desc' }}
+            />
         </AdminLayout>
     );
 }

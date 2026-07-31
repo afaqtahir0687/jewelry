@@ -78,11 +78,11 @@ export default function CategoryPage({ category, products, cities, categories, f
                 </div>
             </section>
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in-up">
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     
                     <div class="lg:col-span-1">
-                        <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-6">
+                        <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-6 transition-all duration-300 hover:shadow-md">
                             <h3 class="font-luxury text-base font-bold text-[#0f172a] border-b border-gray-100 pb-2">Filter Catalog</h3>
                             
                             <form onSubmit={handleFilterSubmit} class="space-y-4">
@@ -140,10 +140,10 @@ export default function CategoryPage({ category, products, cities, categories, f
                                 </div>
 
                                 <div class="pt-4 flex gap-2">
-                                    <button type="submit" class="w-full bg-[#d4af37] hover:bg-[#bda030] text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded shadow shadow-[#d4af37]/10">Filter</button>
-                                    <Link href={`/${category.slug}`} class="w-full text-center border border-[#0f172a]/20 hover:bg-[#faf9f6] text-[#0f172a] text-xs font-bold uppercase tracking-wider py-2.5 rounded">Clear</Link>
-                                </div>
-                            </form>
+                                     <button type="submit" class="w-full bg-[#d4af37] hover:bg-[#bda030] text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded shadow shadow-[#d4af37]/10 transition-all duration-300 hover-shine active:scale-[0.98]">Filter</button>
+                                     <Link href={`/${category.slug}`} class="w-full text-center border border-[#0f172a]/20 hover:bg-[#faf9f6] text-[#0f172a] text-xs font-bold uppercase tracking-wider py-2.5 rounded transition-all duration-300 active:scale-[0.98]">Clear</Link>
+                                 </div>
+                             </form>
                         </div>
                     </div>
 
@@ -159,9 +159,9 @@ export default function CategoryPage({ category, products, cities, categories, f
                                 {products.data.map((p) => {
                                     const parsedImages = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
                                     return (
-                                        <div key={p.id} class="bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col justify-between hover:shadow-md transition-shadow">
-                                            <div class="h-48 bg-gray-100 relative">
-                                                <img src={parsedImages[0]} alt={p.title} class="w-full h-full object-cover" />
+                                        <div key={p.id} class="bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col justify-between hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 hover-shine">
+                                            <div class="h-48 bg-gray-100 relative overflow-hidden group">
+                                                <img src={parsedImages[0]} alt={p.title} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                                                 <span class="absolute top-3 right-3 bg-[#0f172a]/80 text-[#d4af37] text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded">
                                                     {p.status.replace('_', ' ')}
                                                 </span>
@@ -177,7 +177,7 @@ export default function CategoryPage({ category, products, cities, categories, f
                                                     <span class="text-[#d4af37] font-bold text-sm">
                                                         {p.price_on_request ? 'Price on Request' : `Rs. ${p.price}`}
                                                     </span>
-                                                    <Link href={`/custom-jewellery?jeweller_id=${p.jeweller.id}`} class="bg-[#d4af37] hover:bg-[#bda030] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded">
+                                                    <Link href={`/custom-jewellery?jeweller_id=${p.jeweller.id}`} class="bg-[#d4af37] hover:bg-[#bda030] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded transition-all duration-300 hover-shine active:scale-[0.98]">
                                                         Inquire
                                                     </Link>
                                                 </div>

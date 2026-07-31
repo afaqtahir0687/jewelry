@@ -18,11 +18,10 @@ class LeadController extends Controller
         private readonly LeadService $leadService,
     ) {}
 
-    public function index(): Response
+    public function index(\Illuminate\Http\Request $request): Response
     {
-        $leads = Lead::with(['jeweller', 'city', 'category'])
-            ->latest()
-            ->paginate(20)
+        $filters = $request->only(['search', 'sortField', 'sortDirection']);
+        $leads = $this->leadService->getPaginatedList($filters)
             ->through(fn ($lead) => [
                 'id'              => $lead->id,
                 'lead_id'         => $lead->lead_id,
@@ -42,6 +41,7 @@ class LeadController extends Controller
 
         return Inertia::render('Admin/Leads/Index', [
             'leads' => $leads,
+            'filters' => $filters
         ]);
     }
 

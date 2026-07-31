@@ -14,6 +14,26 @@ class LeadService
         $this->leadRepository = $leadRepository;
     }
 
+    public function getPaginatedList(array $filters = [], int $perPage = 15)
+    {
+        return $this->leadRepository->getPaginatedList($filters, $perPage);
+    }
+
+    public function updateLead(int $id, array $data)
+    {
+        return $this->leadRepository->update($data, $id);
+    }
+
+    public function deleteLead(int $id)
+    {
+        return $this->leadRepository->delete($id);
+    }
+
+    public function findLead(int $id)
+    {
+        return $this->leadRepository->findOrFail($id);
+    }
+
     public function createLead(array $data, $imageFile = null)
     {
         if ($imageFile) {

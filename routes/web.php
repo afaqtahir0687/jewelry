@@ -63,16 +63,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/appointments/{appointment}', [Admin\AppointmentController::class, 'destroy'])->name('appointments.destroy');
 
         // Categories
-        Route::get('/categories', [Admin\CategoryController::class, 'index'])->name('categories.index');
-        Route::post('/categories', [Admin\CategoryController::class, 'store'])->name('categories.store');
-        Route::patch('/categories/{category}', [Admin\CategoryController::class, 'update'])->name('categories.update');
-        Route::delete('/categories/{category}', [Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
+        Route::resource('categories', Admin\CategoryController::class)->except(['show']);
 
         // Cities
-        Route::get('/cities', [Admin\CityController::class, 'index'])->name('cities.index');
-        Route::post('/cities', [Admin\CityController::class, 'store'])->name('cities.store');
-        Route::patch('/cities/{city}', [Admin\CityController::class, 'update'])->name('cities.update');
-        Route::delete('/cities/{city}', [Admin\CityController::class, 'destroy'])->name('cities.destroy');
+        Route::resource('cities', Admin\CityController::class)->except(['show']);
 
         // Reviews
         Route::get('/reviews', [Admin\ReviewController::class, 'index'])->name('reviews.index');
@@ -80,9 +74,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/reviews/{review}', [Admin\ReviewController::class, 'destroy'])->name('reviews.destroy');
 
         // Users
-        Route::get('/users', [Admin\UserController::class, 'index'])->name('users.index');
-        Route::post('/users', [Admin\UserController::class, 'store'])->name('users.store');
-        Route::delete('/users/{user}', [Admin\UserController::class, 'destroy'])->name('users.destroy');
+        Route::resource('users', Admin\UserController::class)->except(['show']);
+
+        // Roles
+        Route::resource('roles', Admin\RoleController::class)->except(['show']);
+
+        // Permissions
+        Route::resource('permissions', Admin\PermissionController::class)->except(['show']);
+
+        // Profile
+        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     });
 });
 
@@ -118,6 +120,10 @@ Route::prefix('seller')->name('seller.')->group(function () {
         // Appointments (read + update status only)
         Route::get('/appointments', [Seller\AppointmentController::class, 'index'])->name('appointments.index');
         Route::patch('/appointments/{appointment}', [Seller\AppointmentController::class, 'update'])->name('appointments.update');
+
+        // Profile
+        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     });
 });
 

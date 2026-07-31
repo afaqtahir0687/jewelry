@@ -7,6 +7,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import type { PageProps } from '@/types';
+import { Toaster, toast } from 'sonner';
 
 interface NavItem {
     label: string;
@@ -34,7 +35,17 @@ interface AdminLayoutProps {
 
 export default function AdminLayout({ children, title }: AdminLayoutProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const { auth, url } = usePage<PageProps & { url: string }>().props;
+    const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+    const { auth, url, flash } = usePage<PageProps & { url: string }>().props;
+
+    React.useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+        if (flash?.error) {
+            toast.error(flash.error);
+        }
+    }, [flash]);
 
     const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
 
@@ -96,7 +107,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
 
             {/* User Profile */}
             <div className="px-4 py-4">
-                <div className="flex items-center gap-3 mb-3">
+                <Link href="/admin/profile" className="flex items-center gap-3 mb-3 p-2 rounded-lg hover:bg-white/5 transition-all">
                     <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center">
                         <span className="text-gold text-xs font-bold uppercase">
                             {auth.user?.name?.[0] ?? 'A'}
@@ -106,7 +117,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
                         <p className="text-sm font-medium text-white truncate">{auth.user?.name}</p>
                         <p className="text-xs text-gray-500 truncate">{auth.user?.email}</p>
                     </div>
-                </div>
+                </Link>
                 <button
                     onClick={handleLogout}
                     className="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
@@ -163,10 +174,41 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
                         >
                             View Site ↗
                         </a>
-                        <div className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center">
-                            <span className="text-gold text-xs font-bold uppercase">
-                                {auth.user?.name?.[0] ?? 'A'}
-                            </span>
+                        <div className="relative">
+                            <button
+                                onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                                className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center cursor-pointer hover:bg-gold/30 transition-all focus:outline-none"
+                            >
+                                <span className="text-gold text-xs font-bold uppercase">
+                                    {auth.user?.name?.[0] ?? 'A'}
+                                </span>
+                            </button>
+                            {userDropdownOpen && (
+                                <>
+                                    <div className="fixed inset-0 z-40" onClick={() => setUserDropdownOpen(false)} />
+                                    <div className="absolute right-0 mt-2 w-48 bg-[#0f172a] border border-white/10 rounded-lg shadow-xl py-2 z-50 animate-fade-in-up">
+                                        <div className="px-4 py-2 border-b border-white/5">
+                                            <p className="text-sm font-medium text-white truncate">{auth.user?.name}</p>
+                                            <p className="text-xs text-gray-500 truncate">{auth.user?.email}</p>
+                                        </div>
+                                        <Link
+                                            href="/admin/profile"
+                                            onClick={() => setUserDropdownOpen(false)}
+                                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-all"
+                                        >
+                                            <Users size={14} className="text-gold" />
+                                            My Profile
+                                        </Link>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-all"
+                                        >
+                                            <LogOut size={14} />
+                                            Sign out
+                                        </button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </header>
@@ -176,6 +218,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
                     {children}
                 </main>
             </div>
+            <Toaster richColors theme="dark" position="top-right" closeButton />
         </div>
     );
 }

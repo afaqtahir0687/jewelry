@@ -8,45 +8,59 @@ use App\Models\City;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use App\Services\CityService;
 
 class CityController extends Controller
 {
-    public function index(): Response
+    protected CityService $cityService;
+
+    public function __construct(CityService $cityService)
     {
-        $cities = City::withCount('jewellers')
-            ->orderBy('name')
-            ->paginate(20)
-            ->through(fn ($c) => [
-                'id'              => $c->id,
-                'name'            => $c->name,
-                'slug'            => $c->slug,
-                'jewellers_count' => $c->jewellers_count,
-                'created_at'      => $c->created_at->format('Y-m-d'),
-            ]);
+        $this->cityService = $cityService;
+    }
+
+    public function index(Request $request): Response
+    {
+        $filters = $request->only(['search', 'sortField', 'sortDirection']);
+        $cities = $this->cityService->getPaginatedList($filters);
 
         return Inertia::render('Admin/Cities/Index', [
             'cities' => $cities,
+            'filters' => $filters
         ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Admin/Cities/Create');
     }
 
     public function store(StoreCityRequest $request): RedirectResponse
     {
-        City::create($request->validated());
+        $this->cityService->createCity($request->validated());
 
-        return back()->with('success', 'City created.');
+        return redirect()->route('admin.cities.index')->with('success', 'City created.');
+    }
+
+    public function edit(City $city): Response
+    {
+        return Inertia::render('Admin/Cities/Edit', [
+            'city' => $city
+        ]);
     }
 
     public function update(StoreCityRequest $request, City $city): RedirectResponse
     {
-        $city->update($request->validated());
+        $this->cityService->updateCity($city->id, $request->validated());
 
-        return back()->with('success', 'City updated.');
+        return redirect()->route('admin.cities.index')->with('success', 'City updated.');
     }
 
     public function destroy(City $city): RedirectResponse
     {
-        $city->delete();
+        $this->cityService->deleteCity($city->id);
 
-        return back()->with('success', 'City deleted.');
+        return redirect()->route('admin.cities.index')->with('success', 'City deleted.');
     }
 }

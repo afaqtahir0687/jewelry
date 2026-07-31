@@ -45,4 +45,21 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
         return $query->paginate(12);
     }
+
+    public function getPaginatedList(array $filters = [], int $perPage = 15)
+    {
+        $query = $this->model->with(['jeweller', 'category']);
+
+        if (!empty($filters['search'])) {
+            $query->where('title', 'like', '%' . $filters['search'] . '%');
+        }
+
+        if (!empty($filters['sortField']) && !empty($filters['sortDirection'])) {
+            $query->orderBy($filters['sortField'], $filters['sortDirection']);
+        } else {
+            $query->latest();
+        }
+
+        return $query->paginate($perPage);
+    }
 }

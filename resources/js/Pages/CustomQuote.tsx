@@ -48,10 +48,10 @@ export default function CustomQuote({ cities, categories, selectedJeweller }: Cu
         <AppLayout>
             <Head title="Request Custom Quote" />
 
-            <section class="py-16 bg-[#faf9f6]">
+            <section class="py-16 bg-[#faf9f6] animate-fade-in-up">
                 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-8">
-                        <span class="text-[#d4af37] tracking-widest uppercase font-semibold text-xs"><i class="fa-solid fa-gem mr-1"></i> Bespoke Craftsmanship</span>
+                        <span class="text-[#d4af37] tracking-widest uppercase font-semibold text-xs"><i class="fa-solid fa-gem mr-1 animate-spin" style={{ animationDuration: '3s' }}></i> Bespoke Craftsmanship</span>
                         <h1 class="font-luxury text-3xl md:text-4xl text-[#0f172a] font-bold mt-2">Request Custom Jewellery Quote</h1>
                         <p class="text-gray-500 text-sm mt-2 max-w-lg mx-auto">
                             Fill out the form below. We will generate a unique Lead ID, route your requirement to verified local partners, and get you quotes.
@@ -59,7 +59,7 @@ export default function CustomQuote({ cities, categories, selectedJeweller }: Cu
                         <div class="w-16 h-0.5 bg-[#d4af37] mx-auto mt-4"></div>
                     </div>
 
-                    <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-8">
+                    <div class="bg-white rounded-lg border border-gray-200 shadow-xl p-8 transition-all duration-300 hover:shadow-2xl">
                         <form onSubmit={handleSubmit} class="space-y-6">
                             
                             {selectedJeweller && (
@@ -189,7 +189,7 @@ export default function CustomQuote({ cities, categories, selectedJeweller }: Cu
                             <button 
                                 type="submit" 
                                 disabled={processing}
-                                class="w-full bg-[#d4af37] hover:bg-[#bda030] text-white font-bold uppercase tracking-widest text-xs py-3.5 rounded shadow shadow-[#d4af37]/25 transition-all"
+                                class="w-full bg-[#d4af37] hover:bg-[#bda030] text-white font-bold uppercase tracking-widest text-xs py-3.5 rounded shadow shadow-[#d4af37]/25 transition-all duration-300 active:scale-[0.98] hover-shine"
                             >
                                 {processing ? 'Submitting...' : 'Submit Quotation Request'}
                             </button>

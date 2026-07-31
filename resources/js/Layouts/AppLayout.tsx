@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
+import type { PageProps } from '@/types';
+import { Toaster, toast } from 'sonner';
 
 interface AppLayoutProps {
     children: React.ReactNode;
@@ -7,6 +9,16 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { flash } = usePage<PageProps>().props;
+
+    React.useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+        if (flash?.error) {
+            toast.error(flash.error);
+        }
+    }, [flash]);
 
     return (
         <div class="bg-[#faf9f6] font-sans text-[#0f172a] min-h-screen flex flex-col antialiased">
@@ -35,27 +47,27 @@ export default function AppLayout({ children }: AppLayoutProps) {
                             <Link href="/find-a-jeweller" class="hover:text-[#d4af37] transition-colors duration-200">Verified Jewellers</Link>
                             
                             {/* Cities Dropdown */}
-                            <div class="relative group">
-                                <button class="hover:text-[#d4af37] flex items-center gap-1 transition-colors duration-200">
-                                    Shop by City <i class="fa-solid fa-chevron-down text-xs"></i>
+                            <div class="relative group flex items-center">
+                                <button class="hover:text-[#d4af37] flex items-center gap-1.5 transition-colors duration-300 focus:outline-none cursor-pointer">
+                                    Shop by City <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300 group-hover:rotate-180"></i>
                                 </button>
-                                <div class="absolute hidden group-hover:block bg-white border border-gray-100 rounded-md shadow-lg py-2 w-48 mt-1 z-50">
-                                    <Link href="/jewellers/lahore" class="block px-4 py-2 hover:bg-[#faf9f6] hover:text-[#d4af37] transition-colors">Lahore</Link>
-                                    <Link href="/jewellers/karachi" class="block px-4 py-2 hover:bg-[#faf9f6] hover:text-[#d4af37] transition-colors">Karachi</Link>
-                                    <Link href="/jewellers/islamabad" class="block px-4 py-2 hover:bg-[#faf9f6] hover:text-[#d4af37] transition-colors">Islamabad</Link>
+                                <div class="absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-3 group-hover:translate-y-0 bg-white/95 backdrop-blur-md border border-[#d4af37]/20 rounded-md shadow-xl py-2.5 w-52 transition-all duration-300 z-50">
+                                    <Link href="/jewellers/lahore" class="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0f172a] hover:bg-[#faf9f6] hover:text-[#d4af37] hover:pl-6 transition-all duration-300">Lahore</Link>
+                                    <Link href="/jewellers/karachi" class="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0f172a] hover:bg-[#faf9f6] hover:text-[#d4af37] hover:pl-6 transition-all duration-300">Karachi</Link>
+                                    <Link href="/jewellers/islamabad" class="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0f172a] hover:bg-[#faf9f6] hover:text-[#d4af37] hover:pl-6 transition-all duration-300">Islamabad</Link>
                                 </div>
                             </div>
 
                             {/* Categories Dropdown */}
-                            <div class="relative group">
-                                <button class="hover:text-[#d4af37] flex items-center gap-1 transition-colors duration-200">
-                                    Categories <i class="fa-solid fa-chevron-down text-xs"></i>
+                            <div class="relative group flex items-center">
+                                <button class="hover:text-[#d4af37] flex items-center gap-1.5 transition-colors duration-300 focus:outline-none cursor-pointer">
+                                    Categories <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-300 group-hover:rotate-180"></i>
                                 </button>
-                                <div class="absolute hidden group-hover:block bg-white border border-gray-100 rounded-md shadow-lg py-2 w-48 mt-1 z-50">
-                                    <Link href="/gold-jewellery" class="block px-4 py-2 hover:bg-[#faf9f6] hover:text-[#d4af37] transition-colors">Gold Jewellery</Link>
-                                    <Link href="/diamond-jewellery" class="block px-4 py-2 hover:bg-[#faf9f6] hover:text-[#d4af37] transition-colors">Diamond Jewellery</Link>
-                                    <Link href="/bridal-jewellery" class="block px-4 py-2 hover:bg-[#faf9f6] hover:text-[#d4af37] transition-colors">Bridal Sets</Link>
-                                    <Link href="/engagement-rings" class="block px-4 py-2 hover:bg-[#faf9f6] hover:text-[#d4af37] transition-colors">Engagement Rings</Link>
+                                <div class="absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-3 group-hover:translate-y-0 bg-white/95 backdrop-blur-md border border-[#d4af37]/20 rounded-md shadow-xl py-2.5 w-52 transition-all duration-300 z-50">
+                                    <Link href="/gold-jewellery" class="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0f172a] hover:bg-[#faf9f6] hover:text-[#d4af37] hover:pl-6 transition-all duration-300">Gold Jewellery</Link>
+                                    <Link href="/diamond-jewellery" class="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0f172a] hover:bg-[#faf9f6] hover:text-[#d4af37] hover:pl-6 transition-all duration-300">Diamond Jewellery</Link>
+                                    <Link href="/bridal-jewellery" class="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0f172a] hover:bg-[#faf9f6] hover:text-[#d4af37] hover:pl-6 transition-all duration-300">Bridal Sets</Link>
+                                    <Link href="/engagement-rings" class="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0f172a] hover:bg-[#faf9f6] hover:text-[#d4af37] hover:pl-6 transition-all duration-300">Engagement Rings</Link>
                                 </div>
                             </div>
 
@@ -204,7 +216,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                     <span class="text-[10px] font-bold">Get Quote</span>
                 </Link>
             </div>
-
+            <Toaster richColors theme="light" position="top-right" closeButton />
         </div>
     );
 }

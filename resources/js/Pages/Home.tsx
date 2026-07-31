@@ -74,12 +74,12 @@ export default function Home({ cities, categories, featuredJewellers, latestProd
                     <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500 rounded-full filter blur-3xl"></div>
                 </div>
 
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                    <span class="text-[#d4af37] tracking-widest uppercase font-semibold text-xs mb-3 block">Premium Lead Generation Network</span>
-                    <h1 class="font-luxury text-4xl sm:text-5xl lg:text-6xl text-white font-bold leading-tight max-w-4xl mx-auto mb-6">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center animate-fade-in-up">
+                    <span class="text-[#d4af37] tracking-widest uppercase font-semibold text-xs mb-3 block animate-pulse">Premium Lead Generation Network</span>
+                    <h1 class="font-luxury text-4xl sm:text-5xl lg:text-6xl text-white font-bold leading-tight max-w-4xl mx-auto mb-6 transition-transform duration-500 hover:scale-[1.01]">
                         Find Trusted Gold & Diamond Jewellers Across Pakistan
                     </h1>
-                    <p class="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+                    <p class="text-gray-300 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed opacity-90">
                         Browse exclusive designs, locate top physical stores in your city, request direct custom orders, or get quotes directly from verified artisans.
                     </p>
 
@@ -133,7 +133,7 @@ export default function Home({ cities, categories, featuredJewellers, latestProd
 
                             <div class="pt-4 md:pt-0">
                                 <label class="hidden md:block text-xs font-bold text-transparent mb-1">Search</label>
-                                <button type="submit" class="w-full bg-[#d4af37] hover:bg-[#bda030] text-white font-bold py-3.5 px-4 rounded text-sm uppercase tracking-wider transition-colors duration-200 shadow-md">
+                                <button type="submit" class="w-full bg-[#d4af37] hover:bg-[#bda030] text-white font-bold py-3.5 px-4 rounded text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-md hover:shadow-lg hover-shine">
                                     <i class="fa-solid fa-magnifying-glass mr-2"></i> Find Jeweller
                                 </button>
                             </div>
@@ -160,17 +160,17 @@ export default function Home({ cities, categories, featuredJewellers, latestProd
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {categories.map((cat) => (
-                            <Link key={cat.id} href={`/${cat.slug}`} class="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col">
+                            <Link key={cat.id} href={`/${cat.slug}`} class="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col hover-shine">
                                 <div class="h-64 overflow-hidden relative">
-                                    <img src={cat.image} alt={cat.name} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                    <div class="absolute inset-0 bg-[#0f172a]/20 group-hover:bg-[#0f172a]/10 transition-colors"></div>
+                                    <img src={cat.image} alt={cat.name} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
+                                    <div class="absolute inset-0 bg-[#0f172a]/20 group-hover:bg-[#0f172a]/30 transition-colors duration-300"></div>
                                 </div>
                                 <div class="p-6 flex-grow flex flex-col justify-between">
                                     <div>
-                                        <h3 class="font-luxury text-xl font-bold text-[#0f172a] group-hover:text-[#d4af37] transition-colors">{cat.name}</h3>
+                                        <h3 class="font-luxury text-xl font-bold text-[#0f172a] group-hover:text-[#d4af37] transition-colors duration-300">{cat.name}</h3>
                                         <p class="text-gray-500 text-sm mt-2 leading-relaxed">{cat.description}</p>
                                     </div>
-                                    <span class="text-[#d4af37] font-semibold text-xs tracking-wider uppercase mt-4 block">View Designs <i class="fa-solid fa-arrow-right ml-1 group-hover:translate-x-1 transition-transform"></i></span>
+                                    <span class="text-[#d4af37] font-semibold text-xs tracking-wider uppercase mt-4 block">View Designs <i class="fa-solid fa-arrow-right ml-1 group-hover:translate-x-2 transition-transform duration-300"></i></span>
                                 </div>
                             </Link>
                         ))}
@@ -189,12 +189,12 @@ export default function Home({ cities, categories, featuredJewellers, latestProd
 
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                         {cities.map((city) => (
-                            <Link key={city.id} href={`/jewellers/${city.slug}`} class="group bg-[#faf9f6] hover:bg-[#0f172a] border border-gray-100 hover:border-[#d4af37] p-6 text-center rounded-lg shadow-sm hover:shadow-lg transition-all duration-300">
-                                <div class="w-12 h-12 bg-[#d4af37]/10 group-hover:bg-[#d4af37]/20 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
+                            <Link key={city.id} href={`/jewellers/${city.slug}`} class="group bg-[#faf9f6] hover:bg-[#0f172a] border border-gray-100 hover:border-[#d4af37] p-6 text-center rounded-lg shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500">
+                                <div class="w-12 h-12 bg-[#d4af37]/10 group-hover:bg-[#d4af37]/30 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:scale-110">
                                     <i class="fa-solid fa-location-dot text-[#d4af37] text-lg"></i>
                                 </div>
-                                <h3 class="font-luxury text-lg font-bold text-[#0f172a] group-hover:text-white transition-colors">{city.name}</h3>
-                                <span class="text-gray-400 text-xs block mt-1 group-hover:text-[#d4af37] font-semibold">View Partners</span>
+                                <h3 class="font-luxury text-lg font-bold text-[#0f172a] group-hover:text-white transition-colors duration-300">{city.name}</h3>
+                                <span class="text-gray-400 text-xs block mt-1 group-hover:text-[#d4af37] font-semibold transition-colors duration-300">View Partners</span>
                             </Link>
                         ))}
                     </div>
@@ -212,19 +212,19 @@ export default function Home({ cities, categories, featuredJewellers, latestProd
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {featuredJewellers.map((j) => (
-                            <div key={j.id} class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col justify-between">
+                            <div key={j.id} class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col justify-between hover-shine">
                                 <div>
-                                    <div class="h-44 overflow-hidden relative">
-                                        <img src={j.cover_image} alt={`${j.business_name} Cover`} class="w-full h-full object-cover" />
-                                        <div class="absolute inset-0 bg-[#0f172a]/40"></div>
+                                    <div class="h-44 overflow-hidden relative group/cover">
+                                        <img src={j.cover_image} alt={`${j.business_name} Cover`} class="w-full h-full object-cover group-hover/cover:scale-105 transition-transform duration-700" />
+                                        <div class="absolute inset-0 bg-[#0f172a]/40 group-hover/cover:bg-[#0f172a]/50 transition-colors duration-300"></div>
                                         
                                         <div class="absolute bottom-4 left-4 flex items-center gap-3">
-                                            <div class="w-12 h-12 rounded-full border-2 border-white bg-white overflow-hidden shadow">
+                                            <div class="w-12 h-12 rounded-full border-2 border-white bg-white overflow-hidden shadow transition-transform duration-500 group-hover/cover:scale-110">
                                                 <img src={j.logo} alt={`${j.business_name} Logo`} class="w-full h-full object-cover" />
                                             </div>
                                             <div class="text-white">
-                                                <h3 class="font-luxury text-lg font-bold shadow-sm leading-tight">{j.business_name}</h3>
-                                                <span class="text-[10px] tracking-wider font-semibold text-[#d4af37] bg-[#0f172a]/80 px-2 py-0.5 rounded-full"><i class="fa-solid fa-circle-check mr-1"></i> Verified</span>
+                                                <h3 class="font-luxury text-lg font-bold shadow-sm leading-tight transition-colors duration-300 group-hover/cover:text-[#d4af37]">{j.business_name}</h3>
+                                                <span class="text-[10px] tracking-wider font-semibold text-[#d4af37] bg-[#0f172a]/80 px-2 py-0.5 rounded-full inline-flex items-center"><i class="fa-solid fa-circle-check mr-1 animate-pulse"></i> Verified</span>
                                             </div>
                                         </div>
                                     </div>
@@ -239,7 +239,7 @@ export default function Home({ cities, categories, featuredJewellers, latestProd
                                             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Specialities</span>
                                             <div class="flex flex-wrap gap-1.5">
                                                 {j.specialities?.map((spec, i) => (
-                                                    <span key={i} class="text-[10px] bg-[#faf9f6] text-[#0f172a]/80 px-2 py-1 rounded border border-gray-200">{spec}</span>
+                                                    <span key={i} class="text-[10px] bg-[#faf9f6] text-[#0f172a]/80 px-2 py-1 rounded border border-gray-200 hover:border-[#d4af37] transition-colors">{spec}</span>
                                                 ))}
                                             </div>
                                         </div>
@@ -247,10 +247,10 @@ export default function Home({ cities, categories, featuredJewellers, latestProd
                                 </div>
 
                                 <div class="p-6 pt-0 border-t border-gray-100 mt-auto flex gap-3">
-                                    <Link href={`/jeweller/${j.slug}`} class="flex-1 text-center border border-[#0f172a]/30 hover:border-[#d4af37] hover:text-[#d4af37] text-xs font-bold uppercase tracking-wider py-2.5 rounded transition-all">
+                                    <Link href={`/jeweller/${j.slug}`} class="flex-1 text-center border border-[#0f172a]/30 hover:border-[#d4af37] hover:text-[#d4af37] text-xs font-bold uppercase tracking-wider py-2.5 rounded transition-all duration-300 active:scale-[0.98]">
                                         View Profile
                                     </Link>
-                                    <Link href={`/custom-jewellery?jeweller_id=${j.id}`} class="flex-1 text-center bg-[#d4af37] hover:bg-[#bda030] text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded transition-all shadow shadow-[#d4af37]/20">
+                                    <Link href={`/custom-jewellery?jeweller_id=${j.id}`} class="flex-1 text-center bg-[#d4af37] hover:bg-[#bda030] text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded transition-all duration-300 hover-shine shadow shadow-[#d4af37]/20 active:scale-[0.98]">
                                         Book Visit
                                     </Link>
                                 </div>

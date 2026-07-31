@@ -8,45 +8,59 @@ use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use App\Services\CategoryService;
 
 class CategoryController extends Controller
 {
-    public function index(): Response
+    protected CategoryService $categoryService;
+
+    public function __construct(CategoryService $categoryService)
     {
-        $categories = Category::withCount('products')
-            ->orderBy('name')
-            ->paginate(20)
-            ->through(fn ($c) => [
-                'id'             => $c->id,
-                'name'           => $c->name,
-                'slug'           => $c->slug,
-                'products_count' => $c->products_count,
-                'created_at'     => $c->created_at->format('Y-m-d'),
-            ]);
+        $this->categoryService = $categoryService;
+    }
+
+    public function index(Request $request): Response
+    {
+        $filters = $request->only(['search', 'sortField', 'sortDirection']);
+        $categories = $this->categoryService->getPaginatedList($filters);
 
         return Inertia::render('Admin/Categories/Index', [
             'categories' => $categories,
+            'filters' => $filters
         ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('Admin/Categories/Create');
     }
 
     public function store(StoreCategoryRequest $request): RedirectResponse
     {
-        Category::create($request->validated());
+        $this->categoryService->createCategory($request->validated());
 
-        return back()->with('success', 'Category created.');
+        return redirect()->route('admin.categories.index')->with('success', 'Category created.');
+    }
+
+    public function edit(Category $category): Response
+    {
+        return Inertia::render('Admin/Categories/Edit', [
+            'category' => $category
+        ]);
     }
 
     public function update(StoreCategoryRequest $request, Category $category): RedirectResponse
     {
-        $category->update($request->validated());
+        $this->categoryService->updateCategory($category->id, $request->validated());
 
-        return back()->with('success', 'Category updated.');
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated.');
     }
 
     public function destroy(Category $category): RedirectResponse
     {
-        $category->delete();
+        $this->categoryService->deleteCategory($category->id);
 
-        return back()->with('success', 'Category deleted.');
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted.');
     }
 }

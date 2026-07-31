@@ -74,7 +74,7 @@ export default function Search({ jewellers, cities, categories, filters }: Searc
                 </div>
             </section>
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in-up">
                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     
                     {/* Filter Sidebar */}
@@ -148,9 +148,9 @@ export default function Search({ jewellers, cities, categories, filters }: Searc
                                 </div>
 
                                 <div class="pt-4 flex gap-2">
-                                    <button type="submit" class="w-full bg-[#d4af37] hover:bg-[#bda030] text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded shadow shadow-[#d4af37]/10">Apply</button>
-                                    <Link href="/find-a-jeweller" class="w-full text-center border border-[#0f172a]/20 hover:bg-[#faf9f6] text-[#0f172a] text-xs font-bold uppercase tracking-wider py-2.5 rounded">Clear</Link>
-                                </div>
+                                     <button type="submit" class="w-full bg-[#d4af37] hover:bg-[#bda030] text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded shadow shadow-[#d4af37]/10 transition-all duration-300 hover-shine active:scale-[0.98]">Apply</button>
+                                     <Link href="/find-a-jeweller" class="w-full text-center border border-[#0f172a]/20 hover:bg-[#faf9f6] text-[#0f172a] text-xs font-bold uppercase tracking-wider py-2.5 rounded transition-all duration-300 active:scale-[0.98]">Clear</Link>
+                                 </div>
                             </form>
                         </div>
                     </div>
@@ -165,45 +165,45 @@ export default function Search({ jewellers, cities, categories, filters }: Searc
                             </div>
                         ) : (
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {jewellers.data.map((j) => (
-                                    <div key={j.id} class="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between">
-                                        <div>
-                                            <div class="h-32 bg-[#faf9f6] relative">
-                                                <img src={j.cover_image} alt="Cover" class="w-full h-full object-cover" />
-                                                <div class="absolute inset-0 bg-[#0f172a]/30"></div>
-                                                <div class="absolute bottom-3 left-3 flex items-center gap-2">
-                                                    <div class="w-10 h-10 rounded-full bg-white p-0.5 border shadow overflow-hidden">
-                                                        <img src={j.logo} alt="Logo" class="w-full h-full object-cover" />
-                                                    </div>
-                                                    <div class="text-white">
-                                                        <h3 class="font-luxury font-bold text-sm leading-tight">{j.business_name}</h3>
-                                                        <span class="text-[9px] bg-[#0f172a]/80 text-[#d4af37] px-1.5 py-0.5 rounded-full"><i class="fa-solid fa-circle-check"></i> Verified</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="p-5">
-                                                <div class="text-xxs text-gray-400 mb-2">
-                                                    <i class="fa-solid fa-location-dot text-[#d4af37] mr-1"></i> {j.area}, {j.city.name}
-                                                </div>
-                                                <div class="flex flex-wrap gap-1">
-                                                    {j.specialities?.map((spec, i) => (
-                                                        <span key={i} class="text-[9px] bg-[#faf9f6] text-[#0f172a]/80 px-1.5 py-0.5 rounded border border-gray-200">{spec}</span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-5 pt-0 border-t border-gray-100 mt-auto flex gap-2">
-                                            <Link href={`/jeweller/${j.slug}`} class="flex-1 text-center border border-[#0f172a]/20 hover:border-[#d4af37] hover:text-[#d4af37] text-[10px] font-bold uppercase tracking-wider py-2 rounded transition-colors">
-                                                Profile
-                                            </Link>
-                                            <Link href={`/custom-jewellery?jeweller_id=${j.id}`} class="flex-1 text-center bg-[#d4af37] hover:bg-[#bda030] text-white text-[10px] font-bold uppercase tracking-wider py-2 rounded transition-colors shadow">
-                                                Book Visit
-                                            </Link>
-                                        </div>
-                                    </div>
-                                ))}
+                                 {jewellers.data.map((j) => (
+                                     <div key={j.id} class="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 flex flex-col justify-between hover-shine">
+                                         <div>
+                                             <div class="h-32 bg-[#faf9f6] relative overflow-hidden group/cover">
+                                                 <img src={j.cover_image} alt="Cover" class="w-full h-full object-cover group-hover/cover:scale-105 transition-transform duration-700" />
+                                                 <div class="absolute inset-0 bg-[#0f172a]/30 group-hover/cover:bg-[#0f172a]/45 transition-colors duration-300"></div>
+                                                 <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                                                     <div class="w-10 h-10 rounded-full bg-white p-0.5 border shadow overflow-hidden transition-transform duration-500 group-hover/cover:scale-110">
+                                                         <img src={j.logo} alt="Logo" class="w-full h-full object-cover" />
+                                                     </div>
+                                                     <div class="text-white">
+                                                         <h3 class="font-luxury font-bold text-sm leading-tight group-hover/cover:text-[#d4af37] transition-colors duration-300">{j.business_name}</h3>
+                                                         <span class="text-[9px] bg-[#0f172a]/80 text-[#d4af37] px-1.5 py-0.5 rounded-full inline-flex items-center"><i class="fa-solid fa-circle-check mr-1 animate-pulse"></i> Verified</span>
+                                                     </div>
+                                                 </div>
+                                             </div>
+ 
+                                             <div class="p-5">
+                                                 <div class="text-xxs text-gray-400 mb-2">
+                                                     <i class="fa-solid fa-location-dot text-[#d4af37] mr-1"></i> {j.area}, {j.city.name}
+                                                 </div>
+                                                 <div class="flex flex-wrap gap-1">
+                                                     {j.specialities?.map((spec, i) => (
+                                                         <span key={i} class="text-[9px] bg-[#faf9f6] text-[#0f172a]/80 px-1.5 py-0.5 rounded border border-gray-200 hover:border-[#d4af37] transition-colors">{spec}</span>
+                                                     ))}
+                                                 </div>
+                                             </div>
+                                         </div>
+ 
+                                         <div class="p-5 pt-0 border-t border-gray-100 mt-auto flex gap-2">
+                                             <Link href={`/jeweller/${j.slug}`} class="flex-1 text-center border border-[#0f172a]/20 hover:border-[#d4af37] hover:text-[#d4af37] text-[10px] font-bold uppercase tracking-wider py-2 rounded transition-all duration-300 active:scale-[0.98]">
+                                                 Profile
+                                             </Link>
+                                             <Link href={`/custom-jewellery?jeweller_id=${j.id}`} class="flex-1 text-center bg-[#d4af37] hover:bg-[#bda030] text-white text-[10px] font-bold uppercase tracking-wider py-2 rounded transition-all duration-300 hover-shine active:scale-[0.98] shadow">
+                                                 Book Visit
+                                             </Link>
+                                         </div>
+                                     </div>
+                                 ))}
                             </div>
                         )}
                     </div>

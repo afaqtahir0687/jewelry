@@ -10,13 +10,22 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use Illuminate\Http\Request;
+use App\Services\ProductService;
+
 class ProductController extends Controller
 {
-    public function index(): Response
+    protected ProductService $productService;
+
+    public function __construct(ProductService $productService)
     {
-        $products = Product::with(['jeweller', 'category'])
-            ->latest()
-            ->paginate(20)
+        $this->productService = $productService;
+    }
+
+    public function index(Request $request): Response
+    {
+        $filters = $request->only(['search', 'sortField', 'sortDirection']);
+        $products = $this->productService->getPaginatedList($filters)
             ->through(fn ($p) => [
                 'id'             => $p->id,
                 'title'          => $p->title,
@@ -32,12 +41,13 @@ class ProductController extends Controller
 
         return Inertia::render('Admin/Products/Index', [
             'products' => $products,
+            'filters' => $filters
         ]);
     }
 
     public function destroy(Product $product): RedirectResponse
     {
-        $product->delete();
+        $this->productService->deleteProduct($product->id);
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted.');
     }

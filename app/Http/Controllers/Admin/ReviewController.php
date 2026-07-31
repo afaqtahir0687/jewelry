@@ -8,13 +8,22 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use Illuminate\Http\Request;
+use App\Services\ReviewService;
+
 class ReviewController extends Controller
 {
-    public function index(): Response
+    protected ReviewService $reviewService;
+
+    public function __construct(ReviewService $reviewService)
     {
-        $reviews = Review::with(['jeweller'])
-            ->latest()
-            ->paginate(20)
+        $this->reviewService = $reviewService;
+    }
+
+    public function index(Request $request): Response
+    {
+        $filters = $request->only(['search', 'sortField', 'sortDirection']);
+        $reviews = $this->reviewService->getPaginatedList($filters)
             ->through(fn ($r) => [
                 'id'            => $r->id,
                 'jeweller'      => $r->jeweller?->business_name,
@@ -27,20 +36,21 @@ class ReviewController extends Controller
 
         return Inertia::render('Admin/Reviews/Index', [
             'reviews' => $reviews,
+            'filters' => $filters
         ]);
     }
 
     public function update(Review $review): RedirectResponse
     {
         $status = request()->input('status');
-        $review->update(['is_approved' => ($status === 'approved')]);
+        $this->reviewService->updateReview($review->id, ['is_approved' => ($status === 'approved')]);
 
         return back()->with('success', 'Review status updated.');
     }
 
     public function destroy(Review $review): RedirectResponse
     {
-        $review->delete();
+        $this->reviewService->deleteReview($review->id);
 
         return back()->with('success', 'Review deleted.');
     }

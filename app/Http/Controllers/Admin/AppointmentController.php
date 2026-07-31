@@ -9,13 +9,22 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use Illuminate\Http\Request;
+use App\Services\AppointmentService;
+
 class AppointmentController extends Controller
 {
-    public function index(): Response
+    protected AppointmentService $appointmentService;
+
+    public function __construct(AppointmentService $appointmentService)
     {
-        $appointments = Appointment::with(['jeweller', 'lead'])
-            ->latest('appointment_date')
-            ->paginate(20)
+        $this->appointmentService = $appointmentService;
+    }
+
+    public function index(Request $request): Response
+    {
+        $filters = $request->only(['search', 'sortField', 'sortDirection']);
+        $appointments = $this->appointmentService->getPaginatedList($filters)
             ->through(fn ($a) => [
                 'id'               => $a->id,
                 'lead_id'          => $a->lead?->lead_id,
@@ -30,19 +39,20 @@ class AppointmentController extends Controller
 
         return Inertia::render('Admin/Appointments/Index', [
             'appointments' => $appointments,
+            'filters' => $filters
         ]);
     }
 
     public function update(UpdateAppointmentRequest $request, Appointment $appointment): RedirectResponse
     {
-        $appointment->update($request->validated());
+        $this->appointmentService->updateAppointment($appointment->id, $request->validated());
 
         return back()->with('success', 'Appointment updated.');
     }
 
     public function destroy(Appointment $appointment): RedirectResponse
     {
-        $appointment->delete();
+        $this->appointmentService->deleteAppointment($appointment->id);
 
         return redirect()->route('admin.appointments.index')->with('success', 'Appointment deleted.');
     }

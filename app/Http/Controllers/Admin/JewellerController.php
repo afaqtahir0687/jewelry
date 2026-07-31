@@ -11,31 +11,37 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use App\Services\JewellerService;
 
 class JewellerController extends Controller
 {
-    public function index(): Response
+    protected JewellerService $jewellerService;
+
+    public function __construct(JewellerService $jewellerService)
     {
-        $jewellers = Jeweller::with(['city', 'user'])
-            ->withCount(['leads', 'products', 'reviews'])
-            ->latest()
-            ->paginate(20)
+        $this->jewellerService = $jewellerService;
+    }
+
+    public function index(Request $request): Response
+    {
+        $filters = $request->only(['search', 'sortField', 'sortDirection']);
+        $jewellers = $this->jewellerService->getPaginatedList($filters)
             ->through(fn ($j) => [
-                'id'            => $j->id,
+                'id' => $j->id,
                 'business_name' => $j->business_name,
-                'slug'          => $j->slug,
-                'city'          => $j->city?->name,
-                'phone'         => $j->phone,
-                'is_verified'   => $j->is_verified,
-                'leads_count'   => $j->leads_count,
+                'city' => $j->city?->name,
+                'phone' => $j->phone,
+                'is_verified' => $j->is_verified,
+                'leads_count' => $j->leads_count,
                 'products_count' => $j->products_count,
                 'reviews_count' => $j->reviews_count,
-                'user_email'    => $j->user?->email,
-                'created_at'    => $j->created_at->format('Y-m-d'),
+                'user_email' => $j->user?->email,
             ]);
 
         return Inertia::render('Admin/Jewellers/Index', [
             'jewellers' => $jewellers,
+            'filters' => $filters
         ]);
     }
 
@@ -49,7 +55,7 @@ class JewellerController extends Controller
 
     public function store(StoreJewellerRequest $request): RedirectResponse
     {
-        Jeweller::create($request->validated());
+        $this->jewellerService->createJeweller($request->validated());
 
         return redirect()->route('admin.jewellers.index')->with('success', 'Jeweller created successfully.');
     }
@@ -67,14 +73,14 @@ class JewellerController extends Controller
 
     public function update(UpdateJewellerRequest $request, Jeweller $jeweller): RedirectResponse
     {
-        $jeweller->update($request->validated());
+        $this->jewellerService->updateJeweller($jeweller->id, $request->validated());
 
-        return back()->with('success', 'Jeweller updated successfully.');
+        return redirect()->route('admin.jewellers.index')->with('success', 'Jeweller updated successfully.');
     }
 
     public function destroy(Jeweller $jeweller): RedirectResponse
     {
-        $jeweller->delete();
+        $this->jewellerService->deleteJeweller($jeweller->id);
 
         return redirect()->route('admin.jewellers.index')->with('success', 'Jeweller deleted.');
     }

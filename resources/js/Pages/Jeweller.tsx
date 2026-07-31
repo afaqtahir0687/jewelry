@@ -62,16 +62,16 @@ export default function JewellerPage({ jeweller }: JewellerProps) {
                     <div class="absolute inset-0 bg-[#0f172a]/70 backdrop-blur-sm"></div>
                 </div>
 
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 animate-fade-in-up">
                     <div class="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-                        <div class="w-28 h-28 rounded-full border-4 border-white bg-white overflow-hidden shadow-lg">
+                        <div class="w-28 h-28 rounded-full border-4 border-white bg-white overflow-hidden shadow-lg transition-transform duration-500 hover:scale-105">
                             <img src={jeweller.logo} alt={jeweller.business_name} class="w-full h-full object-cover" />
                         </div>
                         <div>
                             <div class="flex flex-col md:flex-row md:items-center gap-3 justify-center md:justify-start mb-2">
                                 <h1 class="font-luxury text-3xl sm:text-4xl font-bold">{jeweller.business_name}</h1>
                                 <div>
-                                    <span class="bg-green-600 text-white text-xxs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"><i class="fa-solid fa-circle-check mr-1"></i> Verified</span>
+                                    <span class="bg-green-600 text-white text-xxs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full inline-flex items-center"><i class="fa-solid fa-circle-check mr-1 animate-pulse"></i> Verified</span>
                                 </div>
                             </div>
                             <p class="text-sm text-gray-300"><i class="fa-solid fa-location-dot text-[#d4af37] mr-1.5"></i> {jeweller.area}, {jeweller.city.name}</p>
@@ -81,7 +81,7 @@ export default function JewellerPage({ jeweller }: JewellerProps) {
             </section>
 
             {/* Profile Grid */}
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in-up">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     
                     <div class="lg:col-span-2 space-y-12">
@@ -109,9 +109,9 @@ export default function JewellerPage({ jeweller }: JewellerProps) {
                                     {jeweller.products.map((p) => {
                                         const parsedImages = typeof p.images === 'string' ? JSON.parse(p.images) : p.images;
                                         return (
-                                            <div key={p.id} class="bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col justify-between">
-                                                <div class="h-56 bg-gray-100">
-                                                    <img src={parsedImages[0]} alt={p.title} class="w-full h-full object-cover" />
+                                            <div key={p.id} class="bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col justify-between hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500 hover-shine">
+                                                <div class="h-56 bg-gray-100 overflow-hidden group">
+                                                    <img src={parsedImages[0]} alt={p.title} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                                                 </div>
                                                 <div class="p-5 flex-grow flex flex-col justify-between">
                                                     <div>
@@ -122,7 +122,7 @@ export default function JewellerPage({ jeweller }: JewellerProps) {
                                                         <span class="text-[#d4af37] font-bold text-sm">
                                                             {p.price_on_request ? 'Price on Request' : `Rs. ${p.price}`}
                                                         </span>
-                                                        <Link href={`/custom-jewellery?jeweller_id=${jeweller.id}`} class="bg-[#d4af37] text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded">
+                                                        <Link href={`/custom-jewellery?jeweller_id=${jeweller.id}`} class="bg-[#d4af37] text-white text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded transition-all duration-300 hover-shine active:scale-[0.98]">
                                                             Get Quote
                                                         </Link>
                                                     </div>
@@ -137,12 +137,12 @@ export default function JewellerPage({ jeweller }: JewellerProps) {
 
                     {/* Sidebar lead capture */}
                     <div class="space-y-8">
-                        <div class="bg-white rounded-lg border border-gray-200 p-6 sticky top-24">
+                        <div class="bg-white rounded-lg border border-gray-200 p-6 sticky top-24 transition-all duration-300 hover:shadow-lg">
                             <h3 class="font-luxury text-xl font-bold text-[#0f172a] border-b border-gray-100 pb-3 mb-4 text-center">Contact Showroom</h3>
-                            <a href={`https://wa.me/${jeweller.whatsapp}`} class="w-full block text-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded shadow mb-4">
+                            <a href={`https://wa.me/${jeweller.whatsapp}`} class="w-full block text-center bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded shadow mb-4 transition-all duration-300 active:scale-[0.98]">
                                 <i class="fa-brands fa-whatsapp mr-1.5"></i> Chat on WhatsApp
                             </a>
-                            <Link href={`/custom-jewellery?jeweller_id=${jeweller.id}`} class="w-full block text-center bg-[#d4af37] hover:bg-[#bda030] text-white font-bold py-3 rounded shadow">
+                            <Link href={`/custom-jewellery?jeweller_id=${jeweller.id}`} class="w-full block text-center bg-[#d4af37] hover:bg-[#bda030] text-white font-bold py-3 rounded shadow transition-all duration-300 hover-shine active:scale-[0.98]">
                                 Book Showroom Visit
                             </Link>
                         </div>
