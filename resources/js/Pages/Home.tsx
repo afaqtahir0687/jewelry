@@ -197,63 +197,7 @@ export default function Home({ cities, categories, featuredJewellers, latestProd
             </section>
 
             {/* Featured Partners */}
-            <section className="py-20 bg-[#faf9f6]">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-12">
-                        <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Vetted & Recommended</span>
-                        <h2 className="font-luxury text-3xl md:text-4xl text-[#0f172a] font-bold mt-2">Featured Partner Jewellers</h2>
-                        <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4"></div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {featuredJewellers.map((j) => (
-                            <div key={j.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col justify-between hover-shine">
-                                <div>
-                                    <div className="h-44 overflow-hidden relative group/cover">
-                                        <img src={j.cover_image} alt={`${j.business_name} Cover`} className="w-full h-full object-cover group-hover/cover:scale-105 transition-transform duration-700" />
-                                        <div className="absolute inset-0 bg-[#0f172a]/40 group-hover/cover:bg-[#0f172a]/50 transition-colors duration-300"></div>
-
-                                        <div className="absolute bottom-4 left-4 flex items-center gap-3">
-                                            <div className="w-12 h-12 rounded-full border-2 border-white bg-white overflow-hidden shadow transition-transform duration-500 group-hover/cover:scale-110">
-                                                <img src={j.logo} alt={`${j.business_name} Logo`} className="w-full h-full object-cover" />
-                                            </div>
-                                            <div className="text-white">
-                                                <h3 className="font-luxury text-lg font-bold shadow-sm leading-tight transition-colors duration-300 group-hover/cover:text-[#d4af37]">{j.business_name}</h3>
-                                                <span className="text-[10px] tracking-wider font-semibold text-[#d4af37] bg-[#0f172a]/80 px-2 py-0.5 rounded-full inline-flex items-center"><i className="fa-solid fa-circle-check mr-1 animate-pulse"></i> Verified</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="p-6">
-                                        <div className="flex items-center justify-between text-xs text-gray-500 mb-4 border-b border-gray-100 pb-3">
-                                            <span><i className="fa-solid fa-location-dot text-[#d4af37] mr-1"></i> {j.area}, {j.city.name}</span>
-                                            <span><i className="fa-solid fa-award text-[#d4af37] mr-1"></i> {j.years_in_business} Years</span>
-                                        </div>
-
-                                        <div className="mb-4">
-                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Specialities</span>
-                                            <div className="flex flex-wrap gap-1.5">
-                                                {j.specialities?.map((spec, i) => (
-                                                    <span key={i} className="text-[10px] bg-[#faf9f6] text-[#0f172a]/80 px-2 py-1 rounded border border-gray-200 hover:border-[#d4af37] transition-colors">{spec}</span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="p-6 pt-0 border-t border-gray-100 mt-auto flex gap-3">
-                                    <Link href={`/jeweller/${j.slug}`} className="flex-1 text-center border border-[#0f172a]/30 hover:border-[#d4af37] hover:text-[#d4af37] text-xs font-bold uppercase tracking-wider py-2.5 rounded transition-all duration-300 active:scale-[0.98]">
-                                        View Profile
-                                    </Link>
-                                    <Link href={`/custom-jewellery?jeweller_id=${j.id}`} className="flex-1 text-center bg-[#d4af37] hover:bg-[#bda030] text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded transition-all duration-300 hover-shine shadow shadow-[#d4af37]/20 active:scale-[0.98]">
-                                        Book Visit
-                                    </Link>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
         </AppLayout>
     );
 }
