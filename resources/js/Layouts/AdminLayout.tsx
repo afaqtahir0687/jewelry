@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import {
     LayoutDashboard, Users, Store, Package, ClipboardList,
-    Calendar, Tag, MapPin, Star, LogOut, Menu, X, ChevronRight, Gem
+    Calendar, Tag, MapPin, Star, LogOut, Menu, X, ChevronRight, Gem,
+    FileText, MessageSquare, Globe
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
@@ -24,8 +25,11 @@ const navItems: NavItem[] = [
     { label: 'Appointments', href: '/admin/appointments', icon: <Calendar size={18} />,       routeKey: 'admin.appointments' },
     { label: 'Categories',   href: '/admin/categories',   icon: <Tag size={18} />,            routeKey: 'admin.categories' },
     { label: 'Cities',       href: '/admin/cities',       icon: <MapPin size={18} />,         routeKey: 'admin.cities' },
+    { label: 'SEO Meta Tags',href: '/admin/seo-metas',    icon: <Globe size={18} />,          routeKey: 'admin.seo-metas' },
     { label: 'Reviews',      href: '/admin/reviews',      icon: <Star size={18} />,           routeKey: 'admin.reviews' },
     { label: 'Users',        href: '/admin/users',        icon: <Users size={18} />,          routeKey: 'admin.users' },
+    { label: 'Pages',        href: '/admin/pages',        icon: <FileText size={18} />,       routeKey: 'admin.pages' },
+    { label: 'Inquiries',    href: '/admin/contact-messages', icon: <MessageSquare size={18} />, routeKey: 'admin.contact-messages' },
 ];
 
 interface AdminLayoutProps {
@@ -130,7 +134,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
     );
 
     return (
-        <div className="flex h-screen overflow-hidden bg-[#060d1a] text-white">
+        <div className="flex h-screen overflow-hidden bg-[#0f172a] text-slate-100">
             {/* Desktop Sidebar */}
             <div className="hidden lg:flex lg:flex-shrink-0">
                 <Sidebar />
@@ -152,17 +156,17 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
             {/* Main Content */}
             <div className="flex flex-1 flex-col overflow-hidden">
                 {/* Top Header */}
-                <header className="flex items-center gap-4 px-6 py-4 border-b border-white/10 bg-[#0a1628]/80 backdrop-blur-sm">
+                <header className="flex items-center gap-4 px-6 py-4 border-b border-white/10 bg-[#1e293b]/90 backdrop-blur-sm shadow-md">
                     <button
                         onClick={() => setSidebarOpen(true)}
-                        className="lg:hidden text-gray-400 hover:text-white"
+                        className="lg:hidden text-slate-300 hover:text-white"
                     >
                         <Menu size={22} />
                     </button>
 
                     <div className="flex-1">
                         {title && (
-                            <h1 className="text-lg font-semibold text-white">{title}</h1>
+                            <h1 className="text-lg font-semibold text-white tracking-wide">{title}</h1>
                         )}
                     </div>
 
@@ -170,14 +174,14 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
                         <a
                             href="/"
                             target="_blank"
-                            className="text-xs text-gray-400 hover:text-gold transition-colors border border-white/10 rounded-md px-3 py-1.5"
+                            className="text-xs text-slate-300 hover:text-gold hover:border-gold/50 transition-colors border border-white/10 rounded-md px-3 py-1.5 bg-white/5 font-medium"
                         >
                             View Site ↗
                         </a>
                         <div className="relative">
                             <button
                                 onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                                className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center cursor-pointer hover:bg-gold/30 transition-all focus:outline-none"
+                                className="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center cursor-pointer hover:bg-gold/30 transition-all focus:outline-none border border-gold/35"
                             >
                                 <span className="text-gold text-xs font-bold uppercase">
                                     {auth.user?.name?.[0] ?? 'A'}
@@ -186,22 +190,22 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
                             {userDropdownOpen && (
                                 <>
                                     <div className="fixed inset-0 z-40" onClick={() => setUserDropdownOpen(false)} />
-                                    <div className="absolute right-0 mt-2 w-48 bg-[#0f172a] border border-white/10 rounded-lg shadow-xl py-2 z-50 animate-fade-in-up">
+                                    <div className="absolute right-0 mt-2 w-48 bg-[#1e293b] border border-white/10 rounded-lg shadow-2xl py-2 z-50 animate-fade-in-up">
                                         <div className="px-4 py-2 border-b border-white/5">
-                                            <p className="text-sm font-medium text-white truncate">{auth.user?.name}</p>
-                                            <p className="text-xs text-gray-500 truncate">{auth.user?.email}</p>
+                                            <p className="text-sm font-semibold text-white truncate">{auth.user?.name}</p>
+                                            <p className="text-xs text-slate-400 truncate">{auth.user?.email}</p>
                                         </div>
                                         <Link
                                             href="/admin/profile"
                                             onClick={() => setUserDropdownOpen(false)}
-                                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-all"
+                                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-all"
                                         >
                                             <Users size={14} className="text-gold" />
                                             My Profile
                                         </Link>
                                         <button
                                             onClick={handleLogout}
-                                            className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-all"
+                                            className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-all text-left"
                                         >
                                             <LogOut size={14} />
                                             Sign out
@@ -214,7 +218,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
                 </header>
 
                 {/* Page Content */}
-                <main className="flex-1 overflow-y-auto p-6">
+                <main className="flex-1 overflow-y-auto p-6 bg-[#0f172a]">
                     {children}
                 </main>
             </div>

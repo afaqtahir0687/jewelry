@@ -166,6 +166,12 @@ export interface PageProps {
         success?: string | null;
         error?: string | null;
     };
+    seo_meta?: {
+        title: string;
+        description?: string | null;
+        keywords?: string | null;
+        og_image?: string | null;
+    } | null;
     [key: string]: unknown;
 }
 

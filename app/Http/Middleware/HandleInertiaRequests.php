@@ -49,6 +49,18 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error'   => fn () => $request->session()->get('error'),
             ],
+            'seo_meta' => function () use ($request) {
+                // Ignore admin/seller routes for SEO
+                if ($request->is('admin*') || $request->is('seller*')) {
+                    return null;
+                }
+                
+                // Get path with a leading slash to match how it's usually entered
+                $path = '/' . ltrim($request->path(), '/');
+                
+                $seoService = app(\App\Services\SeoMetaService::class);
+                return $seoService->getSeoForPath($path);
+            },
         ];
     }
 }

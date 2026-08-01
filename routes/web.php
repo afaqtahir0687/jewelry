@@ -5,6 +5,8 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\JewellerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\SellerAuthController;
 use App\Http\Controllers\Admin;
@@ -82,6 +84,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Permissions
         Route::resource('permissions', Admin\PermissionController::class)->except(['show']);
 
+        // Pages
+        Route::resource('pages', Admin\PageController::class)->except(['show']);
+
+        // SEO Meta Tags
+        Route::resource('seo-metas', Admin\SeoMetaController::class)->except(['show']);
+
+        // Contact Messages
+        Route::resource('contact-messages', Admin\ContactMessageController::class)->only(['index', 'show', 'destroy']);
+
         // Profile
         Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
@@ -126,6 +137,14 @@ Route::prefix('seller')->name('seller.')->group(function () {
         Route::patch('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Static & Dynamic Pages
+// ─────────────────────────────────────────────────────────────────────────────
+
+Route::get('/contact-us', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Dynamic category page (must be last to avoid conflicts)

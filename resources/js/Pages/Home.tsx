@@ -173,32 +173,156 @@ export default function Home({ cities, categories, featuredJewellers, latestProd
                 </div>
             </section>
 
-            {/* Browse by City */}
-            <section className="py-20 bg-white">
+
+
+            {/* Customer Reviews Section */}
+            <section className="py-20 bg-white overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12">
-                        <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Local Directories</span>
-                        <h2 className="font-luxury text-3xl md:text-4xl text-[#0f172a] font-bold mt-2">Select Your City</h2>
+                        <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Customer Stories</span>
+                        <h2 className="font-luxury text-3xl md:text-4xl text-[#0f172a] font-bold mt-2">What Our Clients Say</h2>
                         <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4"></div>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                        {cities.map((city) => (
-                            <Link key={city.id} href={`/jewellers/${city.slug}`} className="group bg-[#faf9f6] hover:bg-[#0f172a] border border-gray-100 hover:border-[#d4af37] p-6 text-center rounded-lg shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-500">
-                                <div className="w-12 h-12 bg-[#d4af37]/10 group-hover:bg-[#d4af37]/30 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:scale-110">
-                                    <i className="fa-solid fa-location-dot text-[#d4af37] text-lg"></i>
-                                </div>
-                                <h3 className="font-luxury text-lg font-bold text-[#0f172a] group-hover:text-white transition-colors duration-300">{city.name}</h3>
-                                <span className="text-gray-400 text-xs block mt-1 group-hover:text-[#d4af37] font-semibold transition-colors duration-300">View Partners</span>
-                            </Link>
-                        ))}
-                    </div>
+                    <ReviewsCarousel />
                 </div>
             </section>
 
             {/* Featured Partners */}
 
         </AppLayout>
+    );
+}
+
+// Sub-component for auto-rotating testimonials/reviews (Shows 2 cards at a time)
+function ReviewsCarousel() {
+    const reviews = [
+        {
+            id: 1,
+            name: "Ayesha Khan",
+            city: "Lahore",
+            rating: 5,
+            review: "I ordered my bridal set through Online Jewelry Shop. The design process was super smooth, and the craftsmanship of the 22K gold set is absolutely breath-taking! Highly recommended for premium orders.",
+            date: "1 week ago"
+        },
+        {
+            id: 2,
+            name: "Muhammad Ali",
+            city: "Karachi",
+            rating: 5,
+            review: "Amazing platform! Was looking for an authentic diamond engagement ring. Got direct quotes from top verified jewellers in Karachi and bought the perfect solitaire. Transparency at its best.",
+            date: "3 days ago"
+        },
+        {
+            id: 3,
+            name: "Zainab Bibi",
+            city: "Islamabad",
+            rating: 5,
+            review: "Ordered custom gold bangles for my daughter's wedding. The jeweler was extremely professional, provided proper certification, and delivered exactly what was promised. 10/10 service!",
+            date: "2 weeks ago"
+        },
+        {
+            id: 4,
+            name: "Faisal Qureshi",
+            city: "Faisalabad",
+            rating: 5,
+            review: "The easiest way to find reliable jewelry shops in Pakistan. Got my gold rate locked and received the shipment safely with complete insurance. Will definitely buy again.",
+            date: "5 days ago"
+        }
+    ];
+
+    // Since we show 2 cards at a time, we will have 2 pages (Page 0: Reviews 1 & 2, Page 1: Reviews 3 & 4)
+    const [currentPage, setCurrentPage] = React.useState(0);
+    const totalPages = Math.ceil(reviews.length / 2);
+
+    const handleNext = () => {
+        setCurrentPage((prev) => (prev + 1) % totalPages);
+    };
+
+    const handlePrev = () => {
+        setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
+    };
+
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            handleNext();
+        }, 6000); // Rotate pages every 6 seconds
+        return () => clearInterval(interval);
+    }, [totalPages]);
+
+    // Get the two reviews for the current page
+    const visibleReviews = [
+        reviews[currentPage * 2],
+        reviews[currentPage * 2 + 1]
+    ].filter(Boolean);
+
+    return (
+        <div className="max-w-6xl mx-auto relative px-12 group">
+            {/* Left Arrow */}
+            <button
+                onClick={handlePrev}
+                className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-[#d4af37]/30 hover:border-[#d4af37] text-[#0f172a] hover:text-[#d4af37] flex items-center justify-center shadow-md hover:shadow-lg transition-all z-10 cursor-pointer"
+                title="Previous"
+            >
+                <i className="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+
+            {/* Reviews Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-500 ease-in-out">
+                {visibleReviews.map((rev) => (
+                    <div
+                        key={rev.id}
+                        className="bg-[#faf9f6] border border-[#d4af37]/25 rounded-2xl p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 relative hover:-translate-y-1"
+                    >
+                        {/* Quote icon background */}
+                        <span className="absolute top-4 right-6 text-6xl text-[#d4af37]/10 font-serif">“</span>
+
+                        {/* Stars */}
+                        <div className="flex gap-1 mb-3 text-[#d4af37]">
+                            {[...Array(rev.rating)].map((_, i) => (
+                                <i key={i} className="fa-solid fa-star text-xs"></i>
+                            ))}
+                        </div>
+
+                        {/* Feedback Text */}
+                        <p className="text-gray-600 italic text-sm md:text-base leading-relaxed mb-6">
+                            "{rev.review}"
+                        </p>
+
+                        {/* User details */}
+                        <div className="flex items-center justify-between border-t border-gray-200/50 pt-4">
+                            <div>
+                                <h4 className="font-luxury font-bold text-[#0f172a] text-sm tracking-wide">{rev.name}</h4>
+                                <p className="text-xs text-gray-400">{rev.city}, Pakistan</p>
+                            </div>
+                            <span className="text-xs text-[#d4af37] font-semibold">{rev.date}</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Right Arrow */}
+            <button
+                onClick={handleNext}
+                className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-[#d4af37]/30 hover:border-[#d4af37] text-[#0f172a] hover:text-[#d4af37] flex items-center justify-center shadow-md hover:shadow-lg transition-all z-10 cursor-pointer"
+                title="Next"
+            >
+                <i className="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+
+            {/* Slider dots */}
+            <div className="flex justify-center gap-2 mt-8">
+                {[...Array(totalPages)].map((_, idx) => (
+                    <button
+                        key={idx}
+                        onClick={() => setCurrentPage(idx)}
+                        className={`h-2.5 rounded-full transition-all duration-300 ${
+                            idx === currentPage ? 'w-8 bg-[#d4af37]' : 'w-2.5 bg-gray-300 hover:bg-gray-400'
+                        }`}
+                    />
+                ))}
+            </div>
+        </div>
     );
 }
 

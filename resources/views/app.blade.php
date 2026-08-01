@@ -12,6 +12,25 @@
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    @php
+        $seoMeta = $page['props']['seo_meta'] ?? null;
+    @endphp
+
+    @if($seoMeta)
+        <title inertia>{{ $seoMeta['title'] }}</title>
+        @if(!empty($seoMeta['description']))
+            <meta name="description" content="{{ $seoMeta['description'] }}" inertia>
+        @endif
+        @if(!empty($seoMeta['keywords']))
+            <meta name="keywords" content="{{ $seoMeta['keywords'] }}" inertia>
+        @endif
+        @if(!empty($seoMeta['og_image']))
+            <meta property="og:image" content="{{ $seoMeta['og_image'] }}" inertia>
+        @endif
+    @else
+        <title inertia>Online Jewelry Shop</title>
+    @endif
+
     @viteReactRefresh
     @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
     @inertiaHead
