@@ -1,10 +1,6 @@
 import React from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import { Head, useForm } from '@inertiajs/react';
-import { Label } from '@/Components/ui/label';
-import { Input } from '@/Components/ui/input';
-import { Textarea } from '@/Components/ui/textarea';
-import { Button } from '@/Components/ui/button';
 
 export default function ContactUs() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -82,67 +78,66 @@ export default function ContactUs() {
                         
                         <h2 className="text-2xl font-luxury text-[#0f172a] mb-6">Send a Message</h2>
                         
-                        <form onSubmit={submit} className="space-y-4">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className="space-y-1.5">
-                                    <Label htmlFor="name">Full Name *</Label>
-                                    <Input
-                                        id="name"
+                        <form onSubmit={submit} className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="flex flex-col">
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Full Name *</label>
+                                    <input
                                         type="text"
+                                        required
                                         value={data.name}
                                         onChange={(e) => setData('name', e.target.value)}
-                                        className="focus:ring-[#d4af37] focus:border-[#d4af37]"
                                         placeholder="John Doe"
+                                        className="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
                                     />
                                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                                 </div>
-                                <div className="space-y-1.5">
-                                    <Label htmlFor="email">Email Address *</Label>
-                                    <Input
-                                        id="email"
+                                <div className="flex flex-col">
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Email Address *</label>
+                                    <input
                                         type="email"
+                                        required
                                         value={data.email}
                                         onChange={(e) => setData('email', e.target.value)}
-                                        className="focus:ring-[#d4af37] focus:border-[#d4af37]"
                                         placeholder="john@example.com"
+                                        className="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
                                     />
                                     {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                                 </div>
                             </div>
                             
-                            <div className="space-y-1.5">
-                                <Label htmlFor="subject">Subject</Label>
-                                <Input
-                                    id="subject"
+                            <div className="flex flex-col">
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Subject</label>
+                                <input
                                     type="text"
                                     value={data.subject}
                                     onChange={(e) => setData('subject', e.target.value)}
-                                    className="focus:ring-[#d4af37] focus:border-[#d4af37]"
                                     placeholder="How can we help?"
+                                    className="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
                                 />
                                 {errors.subject && <p className="text-red-500 text-xs mt-1">{errors.subject}</p>}
                             </div>
 
-                            <div className="space-y-1.5">
-                                <Label htmlFor="message">Your Message *</Label>
-                                <Textarea
-                                    id="message"
+                            <div className="flex flex-col">
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Your Message *</label>
+                                <textarea
+                                    required
                                     rows={5}
                                     value={data.message}
                                     onChange={(e) => setData('message', e.target.value)}
-                                    className="focus:ring-[#d4af37] focus:border-[#d4af37]"
                                     placeholder="Write your message here..."
-                                />
+                                    className="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37] resize-y"
+                                ></textarea>
                                 {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
                             </div>
 
-                            <Button 
+                            <button 
                                 type="submit" 
                                 disabled={processing}
-                                className="w-full bg-[#d4af37] hover:bg-[#bda030] text-white font-semibold py-6 shadow-md transition-all uppercase tracking-wider text-sm mt-4"
+                                className="w-full bg-[#d4af37] hover:bg-[#bda030] text-white font-bold py-3 rounded shadow transition-all duration-300 active:scale-[0.98] uppercase tracking-wider text-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {processing ? 'Sending...' : 'Send Message'}
-                            </Button>
+                            </button>
                         </form>
                     </div>
                 </div>

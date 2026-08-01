@@ -1,11 +1,11 @@
-import AdminLayout from '@/Layouts/AdminLayout';
+import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { PaginatedData, PageProps } from '@/types';
+import AdminLayout from '@/Layouts/AdminLayout';
+import { DataTable, Column } from '@/components/ui/DataTable';
 import { Button } from '@/components/ui/button';
-import { Plus, Edit, Trash2, Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { useState } from 'react';
-import Swal from 'sweetalert2';
+import { Pencil, Trash2, Plus } from 'lucide-react';
+import { confirmDelete } from '@/lib/swal';
+import { PaginatedData, PageProps } from '@/types';
 
 interface SeoMeta {
     id: number;
@@ -14,138 +14,86 @@ interface SeoMeta {
     description: string | null;
 }
 
-export default function Index({ seoMetas, filters }: PageProps & { seoMetas: PaginatedData<SeoMeta>, filters: { search?: string } }) {
-    const [search, setSearch] = useState(filters.search || '');
+interface SeoMetasIndexProps extends PageProps {
+    seoMetas: PaginatedData<SeoMeta>;
+    filters: { search?: string; sortField?: string; sortDirection?: 'asc' | 'desc' };
+}
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        router.get('/admin/seo-metas', { search }, { preserveState: true, preserveScroll: true });
+export default function Index({ seoMetas, filters }: SeoMetasIndexProps) {
+    const handleSearch = (query: string) => {
+        router.get('/admin/seo-metas', { ...filters, search: query }, { preserveState: true, preserveScroll: true });
     };
 
-    const handleDelete = (id: number) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#64748b',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                router.delete(`/admin/seo-metas/${id}`, {
-                    preserveScroll: true,
-                });
-            }
-        });
+    const handleSort = (field: string, direction: 'asc' | 'desc') => {
+        router.get('/admin/seo-metas', { ...filters, sortField: field, sortDirection: direction }, { preserveState: true, preserveScroll: true });
     };
+
+    const handleDelete = (id: number, path: string) => {
+        confirmDelete(
+            'Delete SEO Meta?',
+            `Are you sure you want to delete SEO meta for "${path}"? This action cannot be undone.`,
+            () => router.delete(`/admin/seo-metas/${id}`)
+        );
+    };
+
+    const columns: Column<SeoMeta>[] = [
+        { header: 'ID', accessorKey: 'id', sortable: true },
+        { header: 'URL Path', accessorKey: 'url_path', sortable: true },
+        { header: 'Meta Title', accessorKey: 'title', sortable: true },
+        {
+            header: 'Meta Description',
+            cell: (seo) => (
+                <span className="max-w-xs truncate block" title={seo.description || ''}>
+                    {seo.description || <span className="text-gray-500 italic">None</span>}
+                </span>
+            )
+        },
+        {
+            header: 'Actions',
+            cell: (seo) => (
+                <div className="flex items-center gap-2">
+                    <Link href={`/admin/seo-metas/${seo.id}/edit`}>
+                        <Button size="icon" variant="ghost" className="h-8 w-8 hover:text-gold text-gray-400">
+                            <Pencil size={14} />
+                        </Button>
+                    </Link>
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-8 w-8 hover:text-red-400 text-gray-400"
+                        onClick={() => handleDelete(seo.id, seo.url_path)}
+                    >
+                        <Trash2 size={14} />
+                    </Button>
+                </div>
+            )
+        }
+    ];
 
     return (
-        <AdminLayout>
-            <Head title="SEO Meta Tags" />
+        <AdminLayout title="SEO Meta Tags">
+            <Head title="SEO Meta Tags — Admin" />
 
-            <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">SEO Meta Tags</h1>
-                    <p className="text-sm text-gray-500 mt-1">Manage SEO title and description tags for all pages.</p>
+                    <h2 className="text-2xl font-bold text-white">SEO Meta Tags</h2>
+                    <p className="text-gray-400 text-sm mt-1">Manage SEO title and description tags for all pages.</p>
                 </div>
                 <Link href="/admin/seo-metas/create">
-                    <Button className="bg-[#d4af37] hover:bg-[#b5952f] text-white">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add SEO Tag
+                    <Button className="bg-gold text-black hover:bg-gold/90">
+                        <Plus className="mr-2 h-4 w-4" /> Add SEO Tag
                     </Button>
                 </Link>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                <div className="p-4 border-b border-gray-200 bg-gray-50/50">
-                    <form onSubmit={handleSearch} className="flex max-w-md relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                        <Input 
-                            type="text" 
-                            placeholder="Search by URL path or title..." 
-                            value={search}
-                            onChange={e => setSearch(e.target.value)}
-                            className="pl-9 bg-white"
-                        />
-                    </form>
-                </div>
-
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left">
-                        <thead className="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
-                            <tr>
-                                <th className="px-6 py-4 font-medium">URL Path</th>
-                                <th className="px-6 py-4 font-medium">Meta Title</th>
-                                <th className="px-6 py-4 font-medium">Meta Description</th>
-                                <th className="px-6 py-4 font-medium text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {seoMetas.data.map((seo) => (
-                                <tr key={seo.id} className="hover:bg-gray-50/50 transition-colors">
-                                    <td className="px-6 py-4 font-medium text-gray-900">
-                                        <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-mono">
-                                            {seo.url_path}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 text-gray-600">{seo.title}</td>
-                                    <td className="px-6 py-4 text-gray-500 max-w-xs truncate">
-                                        {seo.description || <span className="text-gray-300 italic">None</span>}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <Link href={`/admin/seo-metas/${seo.id}/edit`}>
-                                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
-                                                    <Edit className="h-4 w-4" />
-                                                </Button>
-                                            </Link>
-                                            <Button 
-                                                variant="ghost" 
-                                                size="sm" 
-                                                className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
-                                                onClick={() => handleDelete(seo.id)}
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                            
-                            {seoMetas.data.length === 0 && (
-                                <tr>
-                                    <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
-                                        <div className="flex flex-col items-center justify-center">
-                                            <div className="h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center mb-3">
-                                                <Search className="h-6 w-6 text-gray-400" />
-                                            </div>
-                                            <p className="text-base font-medium text-gray-900">No SEO Meta Tags found</p>
-                                            <p className="mt-1">Try adjusting your search or add a new one.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            {/* Pagination would go here if we extracted it, but we can just use simple nav for now */}
-            {seoMetas.last_page > 1 && (
-                <div className="mt-6 flex justify-center gap-2">
-                    {seoMetas.prev_page_url && (
-                        <Link href={seoMetas.prev_page_url}>
-                            <Button variant="outline" size="sm">Previous</Button>
-                        </Link>
-                    )}
-                    {seoMetas.next_page_url && (
-                        <Link href={seoMetas.next_page_url}>
-                            <Button variant="outline" size="sm">Next</Button>
-                        </Link>
-                    )}
-                </div>
-            )}
+            <DataTable
+                data={seoMetas}
+                columns={columns}
+                searchQuery={filters?.search}
+                onSearch={handleSearch}
+                onSort={handleSort}
+                currentSort={{ field: filters?.sortField || 'id', direction: filters?.sortDirection || 'desc' }}
+            />
         </AdminLayout>
     );
 }
