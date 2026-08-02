@@ -124,59 +124,6 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                 </div>
             </section>
 
-            {/* ── Browse by Category ────────────────────────────────────── */}
-            <section className="py-20 bg-[#faf9f6]">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-12">
-                        <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Exquisite Collections</span>
-                        <h2 className="font-luxury text-4xl md:text-5xl text-[#0f172a] font-bold mt-2">Browse by Jewellery Type</h2>
-                        <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {categories.map((cat) => (
-                            <Link
-                                key={cat.id}
-                                href={`/${cat.slug}`}
-                                className="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col hover-shine">
-                                <div className="h-64 overflow-hidden relative">
-                                    {cat.image ? (
-                                        <img 
-                                            src={cat.image.startsWith('http') ? cat.image : `/storage/${cat.image}`} 
-                                            alt={cat.name} 
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" 
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                                            <i className="fa-solid fa-gem text-5xl text-gray-300" />
-                                        </div>
-                                    )}
-                                    <div className="absolute inset-0 bg-[#0f172a]/20 group-hover:bg-[#0f172a]/30 transition-colors duration-300" />
-                                </div>
-                                <div className="p-6 flex-grow flex flex-col justify-between">
-                                    <div>
-                                        <h3 className="font-luxury text-xl font-bold text-[#0f172a] group-hover:text-[#d4af37] transition-colors duration-300">{cat.name}</h3>
-                                        <p className="text-gray-500 text-sm mt-2 leading-relaxed">{cat.description}</p>
-                                    </div>
-                                    <span className="text-[#d4af37] font-semibold text-xs tracking-wider uppercase mt-4 block">
-                                        View Designs <i className="fa-solid fa-arrow-right ml-1 group-hover:translate-x-2 transition-transform duration-300" />
-                                    </span>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-
-                    {/* All Categories CTA */}
-                    <div className="text-center mt-12">
-                        <Link
-                            href="/categories"
-                            className="inline-flex items-center gap-2 border-2 border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-white px-8 py-3 rounded-sm font-bold text-xs uppercase tracking-widest transition-all duration-300 hover-shine">
-                            <i className="fa-solid fa-grid-2" /> View All Categories
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
             {/* ── Latest Arrivals ───────────────────────────────────────── */}
             {latestArrivals.length > 0 && (
                 <section className="py-20 bg-white">
