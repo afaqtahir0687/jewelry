@@ -12,23 +12,38 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         parent::__construct($model);
     }
 
-    public function getLatestProducts($limit = 6)
+    public function getLatestArrivals(int $limit = 8)
     {
-        return $this->model->with(['jeweller', 'category'])
-            ->latest()
+        return $this->model
+            ->where('is_latest_arrival', true)
+            ->with(['productImages' => fn($q) => $q->orderBy('sort_order'), 'category'])
+            ->orderBy('sort_order')
+            ->orderBy('created_at', 'desc')
+            ->take($limit)
+            ->get();
+    }
+
+    public function getFeaturedProducts(int $limit = 8)
+    {
+        return $this->model
+            ->where('is_featured', true)
+            ->with(['productImages' => fn($q) => $q->orderBy('sort_order'), 'category'])
+            ->orderBy('sort_order')
             ->take($limit)
             ->get();
     }
 
     public function getCategoryProductsPaginated($categoryId, array $filters)
     {
-        $query = $this->model->where('category_id', $categoryId)
-            ->with(['jeweller.city']);
+        $query = $this->model
+            ->where('category_id', $categoryId)
+            ->with([
+                'productImages' => fn($q) => $q->orderBy('sort_order'),
+                'subcategory',
+            ]);
 
-        if (!empty($filters['city_id'])) {
-            $query->whereHas('jeweller', function ($q) use ($filters) {
-                $q->where('city_id', $filters['city_id']);
-            });
+        if (!empty($filters['subcategory_id'])) {
+            $query->where('subcategory_id', $filters['subcategory_id']);
         }
 
         if (!empty($filters['status'])) {
@@ -40,18 +55,24 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
 
         if (!empty($filters['budget_max'])) {
-            $query->where('price', '<=', $filters['budget_max']);
+            $query->where('price', '<=', $filters['budget_max'])
+                  ->where('price_on_request', false);
         }
 
-        return $query->paginate(12);
+        return $query->orderBy('sort_order')->orderBy('created_at', 'desc')->paginate(12);
     }
 
     public function getPaginatedList(array $filters = [], int $perPage = 15)
     {
-        $query = $this->model->with(['jeweller', 'category']);
+        $query = $this->model->with(['category', 'subcategory'])
+            ->withCount('productImages');
 
         if (!empty($filters['search'])) {
             $query->where('title', 'like', '%' . $filters['search'] . '%');
+        }
+
+        if (!empty($filters['category_id'])) {
+            $query->where('category_id', $filters['category_id']);
         }
 
         if (!empty($filters['sortField']) && !empty($filters['sortDirection'])) {
@@ -61,5 +82,34 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
 
         return $query->paginate($perPage);
+    }
+
+    public function findBySlug(string $slug)
+    {
+        return $this->model
+            ->where('slug', $slug)
+            ->with([
+                'productImages' => fn($q) => $q->orderBy('sort_order'),
+                'category',
+                'subcategory',
+            ])
+            ->firstOrFail();
+    }
+
+    public function getRelatedProducts(int $categoryId, int $excludeProductId, int $limit = 8)
+    {
+        return $this->model
+            ->where('category_id', $categoryId)
+            ->where('id', '!=', $excludeProductId)
+            ->with(['productImages' => fn($q) => $q->orderBy('sort_order')])
+            ->inRandomOrder()
+            ->take($limit)
+            ->get();
+    }
+
+    // Legacy method kept for backward compatibility
+    public function getLatestProducts($limit = 6)
+    {
+        return $this->getLatestArrivals($limit);
     }
 }

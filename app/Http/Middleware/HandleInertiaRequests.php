@@ -61,6 +61,18 @@ class HandleInertiaRequests extends Middleware
                 $seoService = app(\App\Services\SeoMetaService::class);
                 return $seoService->getSeoForPath($path);
             },
+            // Share active categories for dynamic nav/footer (cached per request)
+            'nav_categories' => function () use ($request) {
+                if ($request->is('admin*') || $request->is('seller*')) {
+                    return [];
+                }
+                return \App\Models\Category::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->orderBy('name')
+                    ->get(['id', 'name', 'slug'])
+                    ->map(fn ($c) => ['id' => $c->id, 'name' => $c->name, 'slug' => $c->slug])
+                    ->values();
+            },
         ];
     }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Pencil, Plus } from 'lucide-react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import StatusBadge from '@/components/admin/StatusBadge';
 import { DataTable, Column } from '@/components/ui/DataTable';
@@ -33,17 +33,21 @@ export default function AdminProductsIndex({ products, filters }: ProductsIndexP
     const columns: Column<Product>[] = [
         {
             header: 'Image',
-            cell: (p) => (
-                p.images && p.images[0] ? (
+            cell: (p) => {
+                // If backend uses product_images (objects) or images (strings)
+                const firstImage = p.product_images && p.product_images[0]
+                    ? (p.product_images[0].url || `/storage/${p.product_images[0].path}`)
+                    : null;
+                return firstImage ? (
                     <img
-                        src={p.images[0].startsWith('http') ? p.images[0] : `/storage/${p.images[0]}`}
+                        src={firstImage.startsWith('http') ? firstImage : firstImage}
                         alt={p.title}
                         className="w-10 h-10 rounded-lg object-cover"
                     />
                 ) : (
                     <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-gray-500 text-xs">—</div>
-                )
-            )
+                );
+            }
         },
         { header: 'Title', accessorKey: 'title', sortable: true, cell: (p) => <span className="font-medium max-w-[200px] truncate block">{p.title}</span> },
         { header: 'Jeweller', cell: (p) => p.jeweller ?? '—' },
@@ -65,6 +69,11 @@ export default function AdminProductsIndex({ products, filters }: ProductsIndexP
             header: 'Actions',
             cell: (p) => (
                 <div className="flex items-center justify-end gap-2">
+                    <Link href={`/admin/products/${p.id}/edit`}>
+                        <Button size="icon" variant="ghost" className="h-8 w-8 hover:text-gold text-gray-400">
+                            <Pencil size={14} />
+                        </Button>
+                    </Link>
                     <Button
                         size="icon"
                         variant="ghost"
@@ -87,6 +96,11 @@ export default function AdminProductsIndex({ products, filters }: ProductsIndexP
                     <h2 className="text-2xl font-bold text-white">Products</h2>
                     <p className="text-gray-400 text-sm mt-1">Manage jeweller products</p>
                 </div>
+                <Link href="/admin/products/create">
+                    <Button className="bg-gold text-black hover:bg-gold/90">
+                        <Plus className="mr-2 h-4 w-4" /> Add Product
+                    </Button>
+                </Link>
             </div>
 
             <DataTable

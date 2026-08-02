@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\JewellerController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ContactController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\SellerAuthController;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Seller;
+use App\Models\ProductImage;
 use Illuminate\Support\Facades\Route;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -20,11 +22,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/login', fn () => redirect()->route('admin.login'))->name('login');
 Route::get('/find-a-jeweller', [JewellerController::class, 'index'])->name('search.index');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/custom-jewellery', [LeadController::class, 'custom'])->name('lead.custom');
 Route::post('/custom-jewellery', [LeadController::class, 'store'])->name('lead.store');
 Route::get('/custom-jewellery/success', [LeadController::class, 'success'])->name('lead.success');
 Route::get('/jewellers/{city:slug}', [CityController::class, 'show'])->name('city.show');
 Route::get('/jeweller/{jeweller:slug}', [JewellerController::class, 'show'])->name('jeweller.show');
+
+// Product detail page (SEO-friendly slug)
+Route::get('/products/{product}/{slug}', [ProductController::class, 'show'])->name('product.show');
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Admin Portal
@@ -55,17 +61,28 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('/jewellers/{jeweller}', [Admin\JewellerController::class, 'update'])->name('jewellers.update');
         Route::delete('/jewellers/{jeweller}', [Admin\JewellerController::class, 'destroy'])->name('jewellers.destroy');
 
-        // Products
+        // Products (full CRUD + image management)
         Route::get('/products', [Admin\ProductController::class, 'index'])->name('products.index');
+        Route::get('/products/create', [Admin\ProductController::class, 'create'])->name('products.create');
+        Route::post('/products', [Admin\ProductController::class, 'store'])->name('products.store');
+        Route::get('/products/{product}/edit', [Admin\ProductController::class, 'edit'])->name('products.edit');
+        Route::post('/products/{product}', [Admin\ProductController::class, 'update'])->name('products.update');
         Route::delete('/products/{product}', [Admin\ProductController::class, 'destroy'])->name('products.destroy');
+        Route::delete('/products/images/{image}', [Admin\ProductController::class, 'deleteImage'])->name('products.images.destroy');
+        Route::post('/products/{product}/reorder-images', [Admin\ProductController::class, 'reorderImages'])->name('products.images.reorder');
 
         // Appointments
         Route::get('/appointments', [Admin\AppointmentController::class, 'index'])->name('appointments.index');
         Route::patch('/appointments/{appointment}', [Admin\AppointmentController::class, 'update'])->name('appointments.update');
         Route::delete('/appointments/{appointment}', [Admin\AppointmentController::class, 'destroy'])->name('appointments.destroy');
 
-        // Categories
+        // Categories (resource + toggle actions)
         Route::resource('categories', Admin\CategoryController::class)->except(['show']);
+        Route::patch('/categories/{category}/toggle-featured', [Admin\CategoryController::class, 'toggleFeatured'])->name('categories.toggle-featured');
+        Route::patch('/categories/{category}/toggle-active', [Admin\CategoryController::class, 'toggleActive'])->name('categories.toggle-active');
+
+        // SubCategories
+        Route::resource('subcategories', Admin\SubCategoryController::class)->except(['show']);
 
         // Cities
         Route::resource('cities', Admin\CityController::class)->except(['show']);

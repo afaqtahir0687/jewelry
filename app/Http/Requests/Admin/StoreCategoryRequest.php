@@ -14,9 +14,17 @@ class StoreCategoryRequest extends FormRequest
 
     public function rules(): array
     {
+        $categoryId = $this->route('category')?->id;
+
         return [
-            'name' => ['required', 'string', 'max:100', 'unique:categories,name,'.$this->route('category')?->id],
-            'slug' => ['required', 'string', 'max:150', 'unique:categories,slug,'.$this->route('category')?->id],
+            'name'         => ['required', 'string', 'max:100', 'unique:categories,name,' . $categoryId],
+            'slug'         => ['required', 'string', 'max:150', 'unique:categories,slug,' . $categoryId],
+            'description'  => ['nullable', 'string'],
+            'image'        => ['nullable', 'sometimes'],
+            'banner_image' => ['nullable', 'sometimes'],
+            'is_active'    => ['boolean'],
+            'is_featured'  => ['boolean'],
+            'sort_order'   => ['nullable', 'integer', 'min:0'],
         ];
     }
 

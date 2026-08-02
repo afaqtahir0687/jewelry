@@ -4,36 +4,73 @@ namespace App\Http\Controllers;
 
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\CityRepositoryInterface;
-use App\Repositories\Contracts\JewellerRepositoryInterface;
-use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Services\CategoryService;
+use App\Services\ProductService;
 use Inertia\Inertia;
 
 class HomeController extends Controller
 {
-    protected CategoryRepositoryInterface $categoryRepo;
+    protected CategoryService $categoryService;
     protected CityRepositoryInterface $cityRepo;
-    protected JewellerRepositoryInterface $jewellerRepo;
-    protected ProductRepositoryInterface $productRepo;
+    protected ProductService $productService;
 
     public function __construct(
-        CategoryRepositoryInterface $categoryRepo,
+        CategoryService $categoryService,
         CityRepositoryInterface $cityRepo,
-        JewellerRepositoryInterface $jewellerRepo,
-        ProductRepositoryInterface $productRepo
+        ProductService $productService
     ) {
-        $this->categoryRepo = $categoryRepo;
-        $this->cityRepo = $cityRepo;
-        $this->jewellerRepo = $jewellerRepo;
-        $this->productRepo = $productRepo;
+        $this->categoryService = $categoryService;
+        $this->cityRepo        = $cityRepo;
+        $this->productService  = $productService;
     }
 
     public function index()
     {
+        $latestArrivals    = $this->productService->getLatestArrivals(10);
+        $featuredCategories = $this->categoryService->getFeaturedCategories(4);
+
         return Inertia::render('Home', [
-            'categories' => $this->categoryRepo->getActiveCategories(),
-            'cities' => $this->cityRepo->getActiveCities(),
-            'featuredJewellers' => $this->jewellerRepo->getFeaturedJewellers(6),
-            'latestProducts' => $this->productRepo->getLatestProducts(6),
+            'categories'         => $this->categoryService->getActiveCategories(),
+            'cities'             => $this->cityRepo->getActiveCities(),
+            'latestArrivals'     => $latestArrivals->map(fn ($p) => $this->formatProductForCard($p)),
+            'featuredCategories' => $featuredCategories->map(fn ($cat) => [
+                'id'          => $cat->id,
+                'name'        => $cat->name,
+                'slug'        => $cat->slug,
+                'description' => $cat->description,
+                'image'       => $cat->image,
+                'products'    => $cat->products->map(fn ($p) => $this->formatProductForCard($p)),
+                'total_products' => $cat->products()->count(),
+            ]),
         ]);
+    }
+
+    private function formatProductForCard($product): array
+    {
+        $images = $product->productImages;
+        $legacyImages = $product->images ?? [];
+
+        $primaryImage = $images->first()?->url
+            ?? (is_array($legacyImages) ? ($legacyImages[0] ?? null) : null);
+        $hoverImage   = $images->skip(1)->first()?->url ?? $primaryImage;
+
+        return [
+            'id'               => $product->id,
+            'title'            => $product->title,
+            'slug'             => $product->slug,
+            'price'            => $product->price,
+            'discount_price'   => $product->discount_price,
+            'price_on_request' => $product->price_on_request,
+            'status'           => $product->status,
+            'is_featured'      => $product->is_featured,
+            'is_latest_arrival'=> $product->is_latest_arrival,
+            'primary_image'    => $primaryImage,
+            'hover_image'      => $hoverImage,
+            'category'         => [
+                'id'   => $product->category?->id,
+                'name' => $product->category?->name,
+                'slug' => $product->category?->slug,
+            ],
+        ];
     }
 }

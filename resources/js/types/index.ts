@@ -26,12 +26,36 @@ export interface City {
     created_at?: string;
 }
 
+export interface ProductImage {
+    id: number | null;
+    url: string;
+    path?: string;
+    sort_order?: number;
+}
+
+export interface SubCategory {
+    id: number;
+    category_id: number;
+    name: string;
+    slug: string;
+    description?: string;
+    image?: string;
+    is_active: boolean;
+    sort_order?: number;
+    category?: string;
+    created_at?: string;
+}
+
 export interface Category {
     id: number;
     name: string;
     slug: string;
     description?: string;
     image?: string;
+    banner_image?: string;
+    is_active?: boolean;
+    is_featured?: boolean;
+    sort_order?: number;
     products_count?: number;
     created_at?: string;
 }
@@ -104,20 +128,49 @@ export interface Product {
     jeweller_id?: number;
     jeweller?: string;
     category_id?: number;
-    category?: string;
+    category?: { id: number; name: string; slug: string } | string | null;
+    subcategory_id?: number | null;
+    subcategory?: { id: number; name: string } | string | null;
+    /** Legacy JSON images column — kept for backward compatibility */
     images?: string[];
+    /** New normalized images */
+    product_images?: ProductImage[];
+    /** Computed primary image URL (first product_image or first legacy image) */
+    primary_image?: string | null;
+    /** Computed hover image URL (second product_image or same as primary) */
+    hover_image?: string | null;
     description?: string;
     price_on_request: boolean;
     price?: number | null;
+    discount_price?: number | null;
     gold_purity?: string | null;
     approximate_weight?: string | null;
     stone_info?: string | null;
     status: ProductStatus;
     customisation_options?: string | null;
+    is_featured?: boolean;
+    is_latest_arrival?: boolean;
+    sort_order?: number;
     created_at?: string;
 }
 
 export type ProductStatus = 'available' | 'made_to_order' | 'design_inspiration';
+
+/** Lightweight product shape used in product cards */
+export interface ProductCard {
+    id: number;
+    title: string;
+    slug: string;
+    price: number | null;
+    discount_price?: number | null;
+    price_on_request: boolean;
+    status: ProductStatus;
+    primary_image: string | null;
+    hover_image: string | null;
+    is_featured?: boolean;
+    is_latest_arrival?: boolean;
+    category?: { id: number; name: string; slug: string } | null;
+}
 
 export interface Appointment {
     id: number;
@@ -156,6 +209,7 @@ export interface PaginatedData<T> {
     per_page: number;
     to: number | null;
     total: number;
+    links?: { url: string | null; label: string; active: boolean }[];
 }
 
 export interface PageProps {
@@ -172,6 +226,8 @@ export interface PageProps {
         keywords?: string | null;
         og_image?: string | null;
     } | null;
+    /** Shared active categories for nav/footer */
+    nav_categories?: Pick<Category, 'id' | 'name' | 'slug'>[];
     [key: string]: unknown;
 }
 

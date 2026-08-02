@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\City;
 use App\Models\Category;
+use App\Models\SubCategory;
 use App\Models\Jeweller;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\Review;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -16,260 +18,470 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create Spatie roles
+        // 1. Roles & Users
         $adminRole  = Role::firstOrCreate(['name' => 'admin']);
         $sellerRole = Role::firstOrCreate(['name' => 'seller']);
 
-        // Default Admin User
         $admin = User::updateOrCreate(
             ['email' => 'admin@jewelry.com'],
-            [
-                'name'     => 'Admin',
-                'password' => bcrypt('admin1234'),
-            ]
+            ['name' => 'Admin', 'password' => bcrypt('admin1234')]
         );
         $admin->syncRoles([$adminRole]);
 
-        // Seed Cities
+        // 2. Cities
         $cities = [
-            ['name' => 'Lahore', 'slug' => 'lahore'],
+            ['name' => 'Lahore', 'slug' => 'slug-lahore'],
             ['name' => 'Karachi', 'slug' => 'karachi'],
             ['name' => 'Islamabad', 'slug' => 'islamabad'],
-            ['name' => 'Faisalabad', 'slug' => 'faisalabad'],
-            ['name' => 'Multan', 'slug' => 'multan'],
         ];
-
         foreach ($cities as $city) {
-            City::updateOrCreate(['slug' => $city['slug']], $city);
+            City::updateOrCreate(['slug' => $city['slug']], [
+                'name' => $city['name']
+            ]);
         }
 
-        // Seed Categories
-        $categories = [
+        // 3. Categories & SubCategories
+        $categoryData = [
             [
-                'name' => 'Gold Jewellery',
-                'slug' => 'gold-jewellery',
-                'description' => 'Browse fine gold jewelry crafted in 22K and 21K gold by pakistans best artisans.',
-                'image' => 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=600&auto=format&fit=crop',
+                'name' => 'Earrings',
+                'description' => 'Beautiful lotus floral, zircon dangles, and heritage pearl tops.',
+                'image' => 'https://zeesy.pk/cdn/shop/files/SilverLotusFloralClusterEarrings-S-Whit-2.webp?v=1785396160&width=720',
+                'is_featured' => true,
+                'subcategories' => ['Studs', 'Dangles', 'Heritage']
             ],
             [
-                'name' => 'Diamond Jewellery',
-                'slug' => 'diamond-jewellery',
-                'description' => 'Exquisite diamond necklaces, certified solitaire rings, and fine diamond bracelets.',
-                'image' => 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=600&auto=format&fit=crop',
+                'name' => 'Bracelets & Bangles',
+                'description' => 'Modern zircon chain bracelets, minimalist delicate cuffs, and traditional bangles.',
+                'image' => 'https://zeesy.pk/cdn/shop/files/SweetheartCharmModernChainBracelet-G-3_d4c72910-02e4-4e51-b229-5d599fb8fb93.webp?v=1785395757&width=720',
+                'is_featured' => true,
+                'subcategories' => ['Charm Bracelets', 'Delicate Bracelets', 'Chain Bracelets']
             ],
             [
-                'name' => 'Bridal Jewellery',
-                'slug' => 'bridal-jewellery',
-                'description' => 'Traditional Pakistani bridal sets, Chokers, Jhumkas, and complete wedding sets.',
-                'image' => 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&auto=format&fit=crop',
+                'name' => 'Necklace Sets',
+                'description' => 'Luxury Turkish pearl malla sets, choker sets, and traditional wedding harams.',
+                'image' => 'https://zeesy.pk/cdn/shop/files/MirabellaTurkishPearlMallaSet-G-Pearl-3.webp?v=1785393835&width=720',
+                'is_featured' => true,
+                'subcategories' => ['Malla Sets', 'Choker Sets', 'Pendant Sets']
             ],
             [
-                'name' => 'Engagement Rings',
-                'slug' => 'engagement-rings',
-                'description' => 'Beautiful proposal rings, diamond solitaires, and luxury wedding bands.',
-                'image' => 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&auto=format&fit=crop',
-            ],
-            [
-                'name' => 'Necklaces & Pendants',
-                'slug' => 'necklaces',
-                'description' => 'Gold lockets, layered chain necklaces, and traditional bridal harams.',
-                'image' => 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&auto=format&fit=crop',
-            ],
-            [
-                'name' => 'Custom Designs',
-                'slug' => 'custom-jewellery',
-                'description' => 'Upload your own reference image and get custom quotes from top jewellers.',
-                'image' => 'https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=600&auto=format&fit=crop',
-            ],
+                'name' => 'Finger Rings',
+                'description' => 'Bold stone statement rings, leaf rings, and sterling pave bands.',
+                'image' => 'https://zeesy.pk/cdn/shop/files/GoldenPrettyBoldStoneRing-G-Whit-3.webp?v=1784696326&width=720',
+                'is_featured' => true,
+                'subcategories' => ['Solitaire Rings', 'Statement Rings', 'Pave Rings']
+            ]
         ];
 
-        foreach ($categories as $cat) {
-            Category::updateOrCreate(['slug' => $cat['slug']], $cat);
+        foreach ($categoryData as $idx => $cat) {
+            $category = Category::updateOrCreate(
+                ['slug' => Str::slug($cat['name'])],
+                [
+                    'name' => $cat['name'],
+                    'description' => $cat['description'],
+                    'image' => $cat['image'],
+                    'is_featured' => $cat['is_featured'],
+                    'sort_order' => $idx + 1,
+                    'is_active' => true
+                ]
+            );
+
+            foreach ($cat['subcategories'] as $subIdx => $subName) {
+                SubCategory::updateOrCreate(
+                    ['slug' => Str::slug($subName), 'category_id' => $category->id],
+                    [
+                        'name' => $subName,
+                        'sort_order' => $subIdx + 1,
+                        'is_active' => true
+                    ]
+                );
+            }
         }
 
-        // Get created instances
-        $lahore = City::where('slug', 'lahore')->first();
-        $karachi = City::where('slug', 'karachi')->first();
-        $islamabad = City::where('slug', 'islamabad')->first();
-
-        $goldCat = Category::where('slug', 'gold-jewellery')->first();
-        $diamondCat = Category::where('slug', 'diamond-jewellery')->first();
-        $bridalCat = Category::where('slug', 'bridal-jewellery')->first();
-        $ringCat = Category::where('slug', 'engagement-rings')->first();
-
-        // Seed Jeweller Users first
-        $alHaramUser = User::updateOrCreate(
-            ['email' => 'alharam@jewelry.com'],
-            ['name' => 'Al-Haram Seller', 'password' => bcrypt('seller1234')]
-        );
-        $alHaramUser->syncRoles([$sellerRole]);
-
-        $kundanUser = User::updateOrCreate(
-            ['email' => 'kundan@jewelry.com'],
-            ['name' => 'Kundan Seller', 'password' => bcrypt('seller1234')]
-        );
-        $kundanUser->syncRoles([$sellerRole]);
-
-        $goharUser = User::updateOrCreate(
-            ['email' => 'gohar@jewelry.com'],
-            ['name' => 'Gohar Seller', 'password' => bcrypt('seller1234')]
-        );
-        $goharUser->syncRoles([$sellerRole]);
-
-        // Seed Jewellers
-        $jewellers = [
+        // 4. Jewellers
+        $jewellerData = [
             [
-                'user_id' => $alHaramUser->id,
+                'email' => 'alharam@jewelry.com',
+                'name' => 'Al-Haram Seller',
                 'business_name' => 'Al-Haram Jewellers',
-                'slug' => 'al-haram-jewellers',
-                'logo' => 'https://images.unsplash.com/photo-1541535881962-e668f2244a26?w=150&auto=format&fit=crop',
-                'cover_image' => 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1200&auto=format&fit=crop',
-                'shop_gallery' => [
-                    'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&auto=format&fit=crop',
-                    'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=600&auto=format&fit=crop'
-                ],
-                'city_id' => $lahore->id,
+                'city_slug' => 'slug-lahore',
                 'area' => 'DHA Phase 5',
-                'full_address' => 'Building 45-CCA, Block Block-C, DHA Phase 5, Lahore, Pakistan',
-                'google_maps_link' => 'https://maps.google.com/?q=Al-Haram+Jewellers+DHA+Lahore',
-                'phone' => '+92 42 35698711',
-                'whatsapp' => '+92 300 1234567',
-                'business_timings' => '11:00 AM - 9:00 PM',
-                'years_in_business' => 15,
-                'specialities' => ['22K Gold', 'Heritage Bridal Sets', 'Gold Bangles'],
-                'custom_order_available' => true,
-                'delivery_available' => true,
-                'repair_services_available' => true,
-                'payment_methods' => ['Cash', 'Bank Transfer', 'Credit Card'],
-                'return_policy' => 'Exchange within 7 days with original invoice. Making charges are non-refundable.',
-                'is_verified' => true,
-                'verified_at' => now(),
+                'full_address' => 'Building 45-CCA, Block Block-C, DHA Phase 5, Lahore, Pakistan'
             ],
             [
-                'user_id' => $kundanUser->id,
+                'email' => 'kundan@jewelry.com',
+                'name' => 'Kundan Seller',
                 'business_name' => 'Kundan Gold & Diamond',
-                'slug' => 'kundan-gold-and-diamond',
-                'logo' => 'https://images.unsplash.com/photo-1541535881962-e668f2244a26?w=150&auto=format&fit=crop',
-                'cover_image' => 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1200&auto=format&fit=crop',
-                'shop_gallery' => [
-                    'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&auto=format&fit=crop'
-                ],
-                'city_id' => $karachi->id,
+                'city_slug' => 'karachi',
                 'area' => 'Clifton Block 4',
-                'full_address' => 'Shop 12, Giga Mall Clifton, Karachi, Pakistan',
-                'google_maps_link' => 'https://maps.google.com/?q=Kundan+Jewellers+Clifton+Karachi',
-                'phone' => '+92 21 35831200',
-                'whatsapp' => '+92 321 9876543',
-                'business_timings' => '12:00 PM - 10:00 PM',
-                'years_in_business' => 8,
-                'specialities' => ['Solitaire Diamond Rings', 'Certified Diamonds', 'Modern Chokers'],
-                'custom_order_available' => true,
-                'delivery_available' => false,
-                'repair_services_available' => true,
-                'payment_methods' => ['Cash', 'Credit Card'],
-                'return_policy' => '100% cashback on diamond value inside 15 days.',
-                'is_verified' => true,
-                'verified_at' => now(),
-            ],
-            [
-                'user_id' => $goharUser->id,
-                'business_name' => 'Gohar Jewellers',
-                'slug' => 'gohar-jewellers',
-                'logo' => 'https://images.unsplash.com/photo-1541535881962-e668f2244a26?w=150&auto=format&fit=crop',
-                'cover_image' => 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1200&auto=format&fit=crop',
-                'shop_gallery' => [],
-                'city_id' => $islamabad->id,
-                'area' => 'F-7 Markaz',
-                'full_address' => 'Plaza 24, F-7 Markaz, Islamabad, Pakistan',
-                'google_maps_link' => 'https://maps.google.com/?q=Gohar+Jewellers+F-7+Islamabad',
-                'phone' => '+92 51 2276541',
-                'whatsapp' => '+92 333 4567890',
-                'business_timings' => '11:00 AM - 8:30 PM',
-                'years_in_business' => 20,
-                'specialities' => ['Kundan Jewellery', 'Pola Work', 'Polki Bridal Sets'],
-                'custom_order_available' => true,
-                'delivery_available' => true,
-                'repair_services_available' => false,
-                'payment_methods' => ['Cash', 'Bank Transfer'],
-                'return_policy' => 'No returns. Standard exchange policy applies.',
-                'is_verified' => true,
-                'verified_at' => now(),
-            ],
+                'full_address' => 'Shop 12, Giga Mall Clifton, Karachi, Pakistan'
+            ]
         ];
 
-        foreach ($jewellers as $j) {
-            $createdJeweller = Jeweller::updateOrCreate(['slug' => $j['slug']], $j);
+        $jewellerModels = [];
+        foreach ($jewellerData as $jd) {
+            $user = User::updateOrCreate(
+                ['email' => $jd['email']],
+                ['name' => $jd['name'], 'password' => bcrypt('seller1234')]
+            );
+            $user->syncRoles([$sellerRole]);
 
-            // Seed Products for each Jeweller
-            if ($createdJeweller->business_name === 'Al-Haram Jewellers') {
-                Product::create([
-                    'title' => '22K Gold Royal Bridal Haram Set',
-                    'slug' => '22k-gold-royal-bridal-haram-set',
-                    'jeweller_id' => $createdJeweller->id,
-                    'category_id' => $bridalCat->id,
-                    'images' => ['https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=600&auto=format&fit=crop'],
-                    'description' => 'A beautifully designed heritage 22K gold necklace set featuring intricate filigree work and premium gemstones. Perfect for brides who want a royal traditional look.',
-                    'price_on_request' => true,
-                    'price' => null,
-                    'gold_purity' => '22K Gold',
-                    'approximate_weight' => '85 grams',
-                    'stone_info' => 'Red Rubies and Emerald embellishments',
-                    'status' => 'made_to_order',
-                    'customisation_options' => 'Weight can be adjusted between 60 to 110 grams. Gemstones can be custom selected.',
-                ]);
+            $city = City::where('slug', $jd['city_slug'])->first();
 
-                Product::create([
-                    'title' => 'Classic Gold Bangles Set of 4',
-                    'slug' => 'classic-gold-bangles-set-of-4',
-                    'jeweller_id' => $createdJeweller->id,
-                    'category_id' => $goldCat->id,
-                    'images' => ['https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=600&auto=format&fit=crop'],
-                    'description' => 'Traditional Pakistani style 22K gold bangles with detailed floral carvings. A perfect anniversary or wedding gift.',
-                    'price_on_request' => false,
-                    'price' => 380000.00,
-                    'gold_purity' => '22K Gold',
-                    'approximate_weight' => '32 grams',
-                    'stone_info' => 'Solid gold, no stones',
-                    'status' => 'available',
-                    'customisation_options' => 'Available in sizes 2.4, 2.6, and 2.8. Width can be customized.',
-                ]);
+            $jewellerModels[] = Jeweller::updateOrCreate(
+                ['slug' => Str::slug($jd['business_name'])],
+                [
+                    'user_id' => $user->id,
+                    'business_name' => $jd['business_name'],
+                    'logo' => 'https://images.unsplash.com/photo-1541535881962-e668f2244a26?w=150&auto=format&fit=crop',
+                    'cover_image' => 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1200&auto=format&fit=crop',
+                    'city_id' => $city ? $city->id : 1,
+                    'area' => $jd['area'],
+                    'full_address' => $jd['full_address'],
+                    'phone' => '+92 300 1234567',
+                    'is_verified' => true,
+                    'verified_at' => now(),
+                ]
+            );
+        }
+
+        // 5. Scraped products from Zeesy.pk (40 products - 10 per category)
+        $scrapedProducts = [
+            // Earrings
+            [
+                "title" => "Jasmine Cut Heritage Pearl Earrings",
+                "price" => 3500,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/JasmineCutHeritagePearlEarrings-G-2.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/JasmineCutHeritagePearlEarrings-G-1.webp",
+                "category" => "Earrings"
+            ],
+            [
+                "title" => "Tatiana Glam Crystal Studs Earrings",
+                "price" => 2000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/TatianaGlamCrystalStudsEarrings-G-5.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/TatianaGlamCrystalStudsEarrings-G-4.webp",
+                "category" => "Earrings"
+            ],
+            [
+                "title" => "Leaf Zircon Dangle Earrings",
+                "price" => 999,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/LeafZirconDangleEarrings-S-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/LeafZirconDangleEarrings-S-2.webp",
+                "category" => "Earrings"
+            ],
+            [
+                "title" => "Lotus Floral Beads Earrings",
+                "price" => 1400,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/LotusFloralBeadsBridalEarrings-Red-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/LotusFloralBeadsBridalEarrings-Red-4.webp",
+                "category" => "Earrings"
+            ],
+            [
+                "title" => "Moon Pearl Stone Chandbali Earrings",
+                "price" => 1400,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/MoonPearlStoneChandbaliEarrings-GR-3.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/MoonPearlStoneChandbaliEarrings-GG-2.webp",
+                "category" => "Earrings"
+            ],
+            [
+                "title" => "Floral Square Stone Pave Earrings",
+                "price" => 4250,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/FloralSquareStoneBridalEarrings-GG-2.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/FloralSquareStoneBridalEarrings-GR-1.webp",
+                "category" => "Earrings"
+            ],
+            [
+                "title" => "Regal Drop Stone Jhumka Earrings",
+                "price" => 2000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/RegalDropStoneJhumkaEarrings-GR-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/RegalDropStoneJhumkaEarrings-GG-2.webp",
+                "category" => "Earrings"
+            ],
+            [
+                "title" => "Flora Petite Studs Earrings",
+                "price" => 999,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/FloraPetiteStudsEarrings-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/FloraPetiteStudsEarrings-4.webp",
+                "category" => "Earrings"
+            ],
+            [
+                "title" => "Elegant Vertex Minimal Earring",
+                "price" => 699,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/ElegantVertexMinimalEarrings-5_2ace4fb4-2d3a-403b-9b84-bf63aadc0044.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/ElegantVertexMinimalEarrings-1_1bb934de-eb8e-4512-99a2-4fa88588d85e.webp",
+                "category" => "Earrings"
+            ],
+            [
+                "title" => "Bella Triple Layers Earring Sahara",
+                "price" => 1890,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/BellaTripleLayersEarringSahara-G-R-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/BellaTripleLayersEarringSahara-G-1.webp",
+                "category" => "Earrings"
+            ],
+
+            // Finger Rings
+            [
+                "title" => "Silver Vintage Uncut Stone Ring",
+                "price" => 1590,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/SilverVintageUncutStoneRing-S-Mint_Pink-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/SilverVintageUncutStoneRing-S-Whit-1.webp",
+                "category" => "Finger Rings"
+            ],
+            [
+                "title" => "Silver Stunning Circle Crystal Ring",
+                "price" => 2970,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/SilverStunningCircleCrystalRing-S-Whit-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/SilverStunningCircleCrystalRing-S-Mint_Pink-2.webp",
+                "category" => "Finger Rings"
+            ],
+            [
+                "title" => "Royal Azure Cluster Ring",
+                "price" => 3750,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/RoyalAzureClusterRing-G-Ruby-2.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/RoyalAzureClusterRing-G-Ruby-3.webp",
+                "category" => "Finger Rings"
+            ],
+            [
+                "title" => "Elegant Center Stone Ring",
+                "price" => 3750,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/ElegantCenterStoneRing-G-Gree-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/ElegantCenterStoneRing-G-Red-1.webp",
+                "category" => "Finger Rings"
+            ],
+            [
+                "title" => "Golden Stunning Circle Crystal Ring",
+                "price" => 2970,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/GoldenStunningCircleCrystalRing-G-Ruby-2.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/GoldenStunningCircleCrystalRing-G-Cham-1.webp",
+                "category" => "Finger Rings"
+            ],
+            [
+                "title" => "Golden Pretty Bold Stone Ring",
+                "price" => 1390,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/GoldenPrettyBoldStoneRing-G-Whit-3.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/GoldenPrettyBoldStoneRing-G-Whit-2.webp",
+                "category" => "Finger Rings"
+            ],
+            [
+                "title" => "Golden Bloom Leaf Stone Ring",
+                "price" => 1680,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/GoldenBloomLeafStoneRing-G-Blue-2.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/GoldenBloomLeafStoneRing-G-Cham-2.webp",
+                "category" => "Finger Rings"
+            ],
+            [
+                "title" => "Velora Circle Bold Stone Ring",
+                "price" => 3750,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/VeloraCircleBoldStoneRing-G-Ruby_Red-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/VeloraCircleBoldStoneRing-G-Ruby_Blue-2_040212dc-2bf2-4aba-8e25-c561da6fb45c.webp",
+                "category" => "Finger Rings"
+            ],
+            [
+                "title" => "Silver Bloom Leaf Stone Ring",
+                "price" => 1680,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/SilverBloomLeafStoneRing-S-Mint_Gree-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/SilverBloomLeafStoneRing-S-Gree-1.webp",
+                "category" => "Finger Rings"
+            ],
+            [
+                "title" => "Metallic Statement Gemstone Ring",
+                "price" => 1590,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/MetallicStatementGemstoneRing-M-Multi-2.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/MetallicStatementGemstoneRing-M-Ruby-2.webp",
+                "category" => "Finger Rings"
+            ],
+
+            // Necklace Sets
+            [
+                "title" => "Square Bold Stone Necklace Set",
+                "price" => 3000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/SquareBoldStoneNecklaceSet-GP-3.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/SquareBoldStoneNecklaceSet-GR-3.webp",
+                "category" => "Necklace Sets"
+            ],
+            [
+                "title" => "Moon Pearl Stone Necklace Set",
+                "price" => 2700,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/MoonPearlStoneNecklaceSet-G_R-2.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/MoonPearlStoneNecklaceSet-S_W-2.webp",
+                "category" => "Necklace Sets"
+            ],
+            [
+                "title" => "Ethereal Gemstone Beads Necklace Set",
+                "price" => 4000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/EtherealGemstoneBeadsNecklaceSet-G-R-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/EtherealGemstoneBeadsNecklaceSet-G-W-3.webp",
+                "category" => "Necklace Sets"
+            ],
+            [
+                "title" => "Heritage Stone Beads Necklace Set",
+                "price" => 4000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/HeritageStoneBeadsNecklaceSet-G-3.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/HeritageStoneBeadsNecklaceSet-M_P-2.webp",
+                "category" => "Necklace Sets"
+            ],
+            [
+                "title" => "Gulnar Baroque Pearl Choker Set",
+                "price" => 5000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/GulnarBaroquePearlChokerSet-GR-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/GulnarBaroquePearlChokerSet-F-1_5ff419c3-88ba-41ee-9bfe-61c3f60ab0fb.webp",
+                "category" => "Necklace Sets"
+            ],
+            [
+                "title" => "Geometric Bold Kundan Necklace Set",
+                "price" => 6000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/GeometricBoldKundanNecklaceSet-G-W-4.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/GeometricBoldKundanNecklaceSet-G-5.webp",
+                "category" => "Necklace Sets"
+            ],
+            [
+                "title" => "Crimson Wave Pearl Choker Set",
+                "price" => 5000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/CrimsonWavePearlChokerSet-G-2.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/CrimsonWavePearlChokerSet-Multi-1.webp",
+                "category" => "Necklace Sets"
+            ],
+            [
+                "title" => "Glow Baroque Pearl Choker Set",
+                "price" => 5000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/GlowBaroquePearlChokerSet-R-3.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/GlowBaroquePearlChokerSet-M-2.webp",
+                "category" => "Necklace Sets"
+            ],
+            [
+                "title" => "Crimson Gemstone Hasli Necklace Set",
+                "price" => 5600,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/CrimsonGemstoneHasliNecklaceSet-R-2.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/CrimsonGemstoneHasliNecklaceSet-B-3.webp",
+                "category" => "Necklace Sets"
+            ],
+            [
+                "title" => "Mosaic Pearl Royale Malla Set",
+                "price" => 7000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/MosaicPearlRoyaleMallaSet-TP-3.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/MosaicPearlRoyaleMallaSet-M-1.webp",
+                "category" => "Necklace Sets"
+            ],
+
+            // Bracelets & Bangles
+            [
+                "title" => "Sweetheart Charm Modern Chain Bracelet",
+                "price" => 1099,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/SweetheartCharmModernChainBracelet-G-3_d4c72910-02e4-4e51-b229-5d599fb8fb93.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/SweetheartCharmModernChainBracelet-G-1_931c457e-c5a1-4dda-8d76-a4903f4035e5.webp",
+                "category" => "Bracelets & Bangles"
+            ],
+            [
+                "title" => "Orchid Petal Minimal Delicate Bracelet",
+                "price" => 1199,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/OrchidPetalMinimalDelicateBracelet-G-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/OrchidPetalMinimalDelicateBracelet-G-5.webp",
+                "category" => "Bracelets & Bangles"
+            ],
+            [
+                "title" => "Heart Bezel Modern Zircon Bracelet",
+                "price" => 1199,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/HeartBezelModernZirconBracelet-G-4.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/HeartBezelModernZirconBracelet-G-3.webp",
+                "category" => "Bracelets & Bangles"
+            ],
+            [
+                "title" => "Dawn Link Minimal Delicate Bracelet",
+                "price" => 899,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/DawnLinkMinimalDelicateBracelet-G-3.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/DawnLinkMinimalDelicateBracelet-G-2.webp",
+                "category" => "Bracelets & Bangles"
+            ],
+            [
+                "title" => "Daisy Minimalist Pearl Bracelet",
+                "price" => 1099,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/DaisyMinimalistPearlBracelet-G-1.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/DaisyMinimalistPearlBracelet-G-3.webp",
+                "category" => "Bracelets & Bangles"
+            ],
+            [
+                "title" => "Celestial Layered Minimal Delicate Bracelet",
+                "price" => 1499,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/AsterBowZirconiaStrandBracelet-G-4_9354a247-a005-4ef2-957d-e30e34020d77.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/CelestialLayeredMinimalDelicateBracelet-G-2.webp",
+                "category" => "Bracelets & Bangles"
+            ],
+            [
+                "title" => "Aster Bow Zirconia Strand Bracelet",
+                "price" => 800,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/AsterBowZirconiaStrandBracelet-G-4_148f9afa-b8bc-42f8-80ef-669c6941d3e8.webp",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/AsterBowZirconiaStrandBracelet-G-3.webp",
+                "category" => "Bracelets & Bangles"
+            ],
+            [
+                "title" => "Stardust Delicate Zircon Bangle",
+                "price" => 2500,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/OrnatePetalMedallionBangles.webp?v=1785322796",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/OrnatePetalMedallionBangles.webp?v=1785322796",
+                "category" => "Bracelets & Bangles"
+            ],
+            [
+                "title" => "Gilded Dual Tone Dewdrop Bangles",
+                "price" => 4000,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/GildedDualToneDewdropBangles.webp?v=1785322796",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/GildedDualToneDewdropBangles.webp?v=1785322796",
+                "category" => "Bracelets & Bangles"
+            ],
+            [
+                "title" => "Gulaal Flora Ruby Stone Bangles",
+                "price" => 38600,
+                "primaryImg" => "https://zeesy.pk/cdn/shop/files/GulaalFloraRubyStoneBangles.webp?v=1783335128",
+                "hoverImg" => "https://zeesy.pk/cdn/shop/files/GulaalFloraRubyStoneBangles.webp?v=1783335128",
+                "category" => "Bracelets & Bangles"
+            ]
+        ];
+
+        foreach ($scrapedProducts as $pData) {
+            $category = Category::where('name', $pData['category'])->first();
+            if (!$category) {
+                continue;
             }
 
-            if ($createdJeweller->business_name === 'Kundan Gold & Diamond') {
-                Product::create([
-                    'title' => 'Solitaire Diamond Engagement Ring',
-                    'slug' => 'solitaire-diamond-engagement-ring',
-                    'jeweller_id' => $createdJeweller->id,
-                    'category_id' => $ringCat->id,
-                    'images' => ['https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&auto=format&fit=crop'],
-                    'description' => 'A stunning 1.0 carat certified solitaire diamond ring mounted on an 18K white gold band. A timeless choice for proposal.',
-                    'price_on_request' => true,
-                    'price' => null,
-                    'gold_purity' => '18K White Gold',
-                    'approximate_weight' => '3.5 grams',
-                    'stone_info' => '1.0 carat round cut diamond, GIA certified, VVS2 clarity, H color',
-                    'status' => 'available',
-                    'customisation_options' => 'Can be set in platinum or yellow gold. Solitaire size range from 0.5 to 2.5 carats.',
-                ]);
-            }
+            $sub = $category->subCategories->random();
+            $jeweller = $jewellerModels[array_rand($jewellerModels)];
+            
+            // Randomly flag some as featured / latest arrivals
+            $isFeatured = rand(1, 10) > 4; // high percentage to show up
+            $isLatest = rand(1, 10) > 3;
 
-            // Seed Reviews
-            Review::create([
-                'jeweller_id' => $createdJeweller->id,
-                'customer_name' => 'Ayesha Khan',
-                'rating' => 5,
-                'comment' => 'Ordered my bridal set from them and they delivered exactly what was promised. Highly recommended for premium designs!',
-                'is_approved' => true,
+            // Calculate a random discount on 30% of the products
+            $hasDiscount = rand(1, 10) > 7;
+            $discountPrice = $hasDiscount ? round($pData['price'] * 0.85) : null; // 15% off
+
+            $product = Product::create([
+                'jeweller_id' => $jeweller->id,
+                'category_id' => $category->id,
+                'subcategory_id' => $sub ? $sub->id : null,
+                'title' => $pData['title'],
+                'slug' => Str::slug($pData['title'] . '-' . Str::random(4)),
+                'description' => "A beautifully crafted piece from Zeesy. Elegant, modern, and lightweight.",
+                'price_on_request' => false,
+                'price' => $pData['price'],
+                'discount_price' => $discountPrice,
+                'gold_purity' => '22K Gold',
+                'approximate_weight' => rand(3, 45) . ' grams',
+                'status' => 'available',
+                'is_featured' => $isFeatured,
+                'is_latest_arrival' => $isLatest,
+                'sort_order' => rand(1, 100),
             ]);
 
-            Review::create([
-                'jeweller_id' => $createdJeweller->id,
-                'customer_name' => 'Muhammad Bilal',
-                'rating' => 4,
-                'comment' => 'Great customer support and high quality diamond finish. Very happy with the engagement ring purchase.',
-                'is_approved' => true,
+            // Save the two product images (Primary and Hover)
+            ProductImage::create([
+                'product_id' => $product->id,
+                'path' => $pData['primaryImg'],
+                'sort_order' => 0
+            ]);
+
+            ProductImage::create([
+                'product_id' => $product->id,
+                'path' => $pData['hoverImg'],
+                'sort_order' => 1
             ]);
         }
     }
 }
-
