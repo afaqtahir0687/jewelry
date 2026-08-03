@@ -37,10 +37,29 @@ class LeadController extends Controller
             $selectedJeweller = Jeweller::with('city')->find($request->jeweller_id);
         }
 
+        $productTitle = $request->query('product_title');
+        $productId = $request->query('product_id');
+        $productImage = null;
+
+        if ($productId) {
+            $product = \App\Models\Product::with('productImages')->find($productId);
+            if ($product) {
+                $productImage = $product->primary_image_url;
+                $categoryId = $product->category_id;
+                if (!$productTitle) {
+                    $productTitle = $product->title;
+                }
+            }
+        }
+
         return Inertia::render('CustomQuote', [
             'cities' => $this->cityRepo->getActiveCities(),
             'categories' => $this->categoryRepo->getActiveCategories(),
             'selectedJeweller' => $selectedJeweller,
+            'productTitle' => $productTitle,
+            'productId' => $productId,
+            'categoryId' => $categoryId ?? null,
+            'productImage' => $productImage,
         ]);
     }
 

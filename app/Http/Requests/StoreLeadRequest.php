@@ -18,6 +18,7 @@ class StoreLeadRequest extends FormRequest
             'customer_phone' => 'required|string|max:20',
             'city_id' => 'required|exists:cities,id',
             'category_id' => 'nullable|exists:categories,id',
+            'product_id' => 'nullable|exists:products,id',
             'jeweller_id' => 'nullable|exists:jewellers,id',
             'requirement_description' => 'nullable|string|max:1000',
             'budget' => 'nullable|string|max:100',

@@ -114,6 +114,7 @@ export interface Lead {
     payment_status?: PaymentStatus;
     notes?: string | null;
     appointments?: Appointment[];
+    product?: { title: string; image?: string | null } | null;
     created_at?: string;
 }
 

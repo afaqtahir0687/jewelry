@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, useForm, Link } from '@inertiajs/react';
 import AppLayout from '../Layouts/AppLayout';
 
@@ -24,20 +24,37 @@ interface CustomQuoteProps {
     cities: City[];
     categories: Category[];
     selectedJeweller: Jeweller | null;
+    productTitle?: string;
+    productId?: string;
+    categoryId?: string;
+    productImage?: string;
 }
 
-export default function CustomQuote({ cities, categories, selectedJeweller }: CustomQuoteProps) {
+export default function CustomQuote({ cities, categories, selectedJeweller, productTitle, productId, categoryId, productImage }: CustomQuoteProps) {
     const { data, setData, post, processing, errors } = useForm({
         customer_name: '',
         customer_phone: '',
         city_id: selectedJeweller ? String(selectedJeweller.city.id) : '',
-        category_id: '',
+        category_id: categoryId ? String(categoryId) : '',
+        product_id: productId ? String(productId) : '',
         jeweller_id: selectedJeweller ? String(selectedJeweller.id) : '',
-        requirement_description: '',
+        requirement_description: productTitle ? `I would like to request a custom quote similar to: ${productTitle}.\n\nMy additional requirements are:\n` : '',
         budget: '',
         reference_image: null as File | null,
         preferred_contact_time: '',
     });
+
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (data.reference_image) {
+            const url = URL.createObjectURL(data.reference_image);
+            setPreviewUrl(url);
+            return () => URL.revokeObjectURL(url);
+        } else {
+            setPreviewUrl(null);
+        }
+    }, [data.reference_image]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,6 +79,25 @@ export default function CustomQuote({ cities, categories, selectedJeweller }: Cu
                     <div class="bg-white rounded-lg border border-gray-200 shadow-xl p-8 transition-all duration-300 hover:shadow-2xl">
                         <form onSubmit={handleSubmit} class="space-y-6">
                             
+                            {productTitle && (
+                                <div class="bg-[#0f172a] rounded border border-[#d4af37]/30 p-4 flex items-center justify-between shadow-md">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center bg-[#d4af37]/20 text-[#d4af37] flex-shrink-0">
+                                            <i class="fa-solid fa-ring text-lg"></i>
+                                        </div>
+                                        <div class="text-xs text-white">
+                                            <span class="text-[10px] text-gray-400 block font-bold uppercase tracking-wider">Inquiring About Product</span>
+                                            <strong class="font-luxury text-sm md:text-base text-[#d4af37]">{productTitle}</strong>
+                                        </div>
+                                    </div>
+                                    {productImage && (
+                                        <div class="w-16 h-16 rounded overflow-hidden border border-[#d4af37]/50 shadow-md ml-4 flex-shrink-0 bg-white">
+                                            <img src={productImage} alt={productTitle} class="w-full h-full object-contain" />
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                             {selectedJeweller && (
                                 <div class="bg-[#d4af37]/5 rounded border border-[#d4af37]/20 p-4 flex items-center justify-between">
                                     <div class="flex items-center gap-3">
@@ -120,33 +156,24 @@ export default function CustomQuote({ cities, categories, selectedJeweller }: Cu
                                     {errors.city_id && <span class="text-red-500 text-xs mt-1">{errors.city_id}</span>}
                                 </div>
 
-                                <div class="flex flex-col">
-                                    <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Category</label>
-                                    <select 
-                                        value={data.category_id} 
-                                        onChange={(e) => setData('category_id', e.target.value)}
-                                        class="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
-                                    >
-                                        <option value="">Select Category</option>
-                                        {categories.map((cat) => (
-                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
+                                {!categoryId && (
+                                    <div class="flex flex-col">
+                                        <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Category *</label>
+                                        <select 
+                                            required
+                                            value={data.category_id} 
+                                            onChange={(e) => setData('category_id', e.target.value)}
+                                            class="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
+                                        >
+                                            <option value="">Select Category</option>
+                                            {categories.map((cat) => (
+                                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                            ))}
+                                        </select>
+                                        {errors.category_id && <span class="text-red-500 text-xs mt-1">{errors.category_id}</span>}
+                                    </div>
+                                )}
 
-                            <div class="flex flex-col">
-                                <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Specifications</label>
-                                <textarea 
-                                    rows={4} 
-                                    value={data.requirement_description} 
-                                    onChange={(e) => setData('requirement_description', e.target.value)}
-                                    placeholder="Detail your requirements (e.g. Ring size, gold weight)" 
-                                    class="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37] resize-vertical"
-                                />
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="flex flex-col">
                                     <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Approximate Budget (PKR)</label>
                                     <input 
@@ -171,17 +198,37 @@ export default function CustomQuote({ cities, categories, selectedJeweller }: Cu
                             </div>
 
                             <div class="flex flex-col">
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Specifications</label>
+                                <textarea 
+                                    rows={4} 
+                                    value={data.requirement_description} 
+                                    onChange={(e) => setData('requirement_description', e.target.value)}
+                                    placeholder="Detail your requirements (e.g. Ring size, gold weight)" 
+                                    class="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37] resize-vertical"
+                                />
+                            </div>
+
+                            <div class="flex flex-col">
                                 <label class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5">Upload Reference Image</label>
-                                <div class="bg-[#faf9f6] border-2 border-dashed border-gray-300 hover:border-[#d4af37] rounded-lg p-6 text-center cursor-pointer relative">
+                                <div class="bg-[#faf9f6] border-2 border-dashed border-gray-300 hover:border-[#d4af37] rounded-lg p-6 text-center cursor-pointer relative transition-colors overflow-hidden">
                                     <input 
                                         type="file" 
                                         onChange={(e) => setData('reference_image', e.target.files ? e.target.files[0] : null)}
-                                        class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" 
+                                        class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" 
                                     />
-                                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-400 mb-2"></i>
-                                    <span class="text-xs text-gray-500 block">
-                                        {data.reference_image ? data.reference_image.name : 'Click to upload reference design'}
-                                    </span>
+                                    {previewUrl ? (
+                                        <div class="flex flex-col items-center justify-center">
+                                            <img src={previewUrl} alt="Preview" class="max-h-32 object-contain rounded mb-2 shadow-sm" />
+                                            <span class="text-xs text-[#d4af37] font-semibold">Change Image</span>
+                                        </div>
+                                    ) : (
+                                        <div class="pointer-events-none">
+                                            <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-400 mb-2 group-hover:text-[#d4af37]"></i>
+                                            <span class="text-xs text-gray-500 block">
+                                                Click to upload reference design
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                                 {errors.reference_image && <span class="text-red-500 text-xs mt-1">{errors.reference_image}</span>}
                             </div>

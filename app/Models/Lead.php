@@ -17,6 +17,7 @@ class Lead extends Model
         'customer_phone',
         'city_id',
         'category_id',
+        'product_id',
         'jeweller_id',
         'requirement_description',
         'budget',
@@ -48,6 +49,11 @@ class Lead extends Model
     public function jeweller(): BelongsTo
     {
         return $this->belongsTo(Jeweller::class);
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 
     public function appointments(): HasMany

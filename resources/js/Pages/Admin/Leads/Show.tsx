@@ -31,7 +31,9 @@ export default function AdminLeadShow({ lead }: LeadShowProps) {
     };
 
     const jeweller = typeof lead.jeweller === 'object' ? lead.jeweller : null;
-    const whatsappMsg = `Hi ${lead.customer_name}, I am reaching out from Online Jewelry Shop regarding your custom jewellery request (Lead ID: ${lead.lead_id}). How can we assist you today?`;
+    const productDetail = lead.product ? ` regarding your inquiry for ${lead.product.title}` : ' regarding your custom jewellery request';
+    const whatsappMsg = `Hi ${lead.customer_name}, I am reaching out from Online Jewelry Shop${productDetail} (Lead ID: ${lead.lead_id}). How can we assist you today?`;
+    const jewellerMsg = jeweller ? `Hi ${jeweller.business_name}, we have a new lead for you (Lead ID: ${lead.lead_id}). Please check your dashboard for details.` : '';
 
     return (
         <AdminLayout title={`Lead: ${lead.lead_id}`}>
@@ -57,10 +59,38 @@ export default function AdminLeadShow({ lead }: LeadShowProps) {
                                 <StatusBadge status={lead.status} />
                             </div>
 
+                            {lead.product && (
+                                <div className="mb-6 bg-white/5 rounded-lg border border-white/10 p-4 flex items-center gap-4">
+                                    {lead.product.image ? (
+                                        <div className="w-16 h-16 rounded overflow-hidden border border-white/10 bg-white flex-shrink-0">
+                                            <img src={lead.product.image} alt={lead.product.title} className="w-full h-full object-contain" />
+                                        </div>
+                                    ) : (
+                                        <div className="w-16 h-16 rounded flex items-center justify-center bg-white/10 border border-white/10 text-white flex-shrink-0">
+                                            <i className="fa-solid fa-ring text-xl text-gold"></i>
+                                        </div>
+                                    )}
+                                    <div>
+                                        <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Inquiring About Product</p>
+                                        <p className="text-white font-medium">{lead.product.title}</p>
+                                    </div>
+                                </div>
+                            )}
+
                             <div className="grid grid-cols-2 gap-4 text-sm">
                                 <div>
                                     <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Phone</p>
-                                    <p className="text-white">{lead.customer_phone}</p>
+                                    <p className="text-white flex items-center gap-2">
+                                        {lead.customer_phone}
+                                        <a
+                                            href={`https://wa.me/${lead.customer_phone.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMsg)}`}
+                                            target="_blank"
+                                            className="text-green-400 hover:text-green-300"
+                                            title="Message on WhatsApp"
+                                        >
+                                            <MessageCircle size={14} />
+                                        </a>
+                                    </p>
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">City</p>
@@ -103,7 +133,7 @@ export default function AdminLeadShow({ lead }: LeadShowProps) {
                                         )}
                                         {jeweller.whatsapp && (
                                             <a
-                                                href={`https://wa.me/${jeweller.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(whatsappMsg)}`}
+                                                href={`https://wa.me/${jeweller.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(jewellerMsg)}`}
                                                 target="_blank"
                                                 className="text-sm text-green-400 hover:text-green-300 flex items-center gap-1"
                                             >

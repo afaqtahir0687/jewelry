@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '../Layouts/AppLayout';
 import ProductCard from '@/components/ProductCard';
+import DiscountBadge from '@/components/DiscountBadge';
 import type { Category, ProductCard as ProductCardType } from '@/types';
 
 interface City {
@@ -54,13 +55,9 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center animate-fade-in-up flex flex-col md:block items-center">
                     
-                    {/* Spinning Circular Badge Image (Above text on mobile, right side on desktop) */}
-                    <div className="relative md:absolute md:top-0 lg:top-4 md:right-0 lg:-right-8 xl:-right-12 mb-6 md:mb-0 z-20 flex justify-center opacity-90 hover:opacity-100 transition-opacity cursor-pointer hover:scale-105 duration-300 group">
-                        <img
-                            src="/images/badge_40_off.png"
-                            alt="Up to 40% OFF"
-                            className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-48 lg:h-48 xl:w-56 xl:h-56 object-cover rounded-full animate-[spin_12s_linear_infinite] group-hover:[animation-play-state:paused] shadow-[0_0_25px_rgba(212,175,55,0.4)]"
-                        />
+                    {/* Luxury Spinning Circular Badge */}
+                    <div className="relative md:absolute md:top-0 lg:top-4 md:right-0 lg:-right-8 xl:-right-12 mb-6 md:mb-0 z-20 flex justify-center w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72">
+                        <DiscountBadge />
                     </div>
 
                     <h1 className="font-luxury text-3xl sm:text-4xl lg:text-5xl text-white font-bold leading-tight max-w-4xl mx-auto mb-10 transition-transform duration-500 hover:scale-[1.01]">

@@ -47,7 +47,7 @@ class LeadController extends Controller
 
     public function show(Lead $lead): Response
     {
-        $lead->load(['jeweller.city', 'city', 'category', 'appointments']);
+        $lead->load(['jeweller.city', 'city', 'category', 'appointments', 'product.productImages']);
 
         return Inertia::render('Admin/Leads/Show', [
             'lead' => [
@@ -67,6 +67,10 @@ class LeadController extends Controller
                 'notes'                    => $lead->notes,
                 'city'                     => $lead->city?->name,
                 'category'                 => $lead->category?->name,
+                'product'                  => $lead->product ? [
+                    'title' => $lead->product->title,
+                    'image' => $lead->product->primary_image_url,
+                ] : null,
                 'jeweller'                 => $lead->jeweller ? [
                     'id'            => $lead->jeweller->id,
                     'business_name' => $lead->jeweller->business_name,
