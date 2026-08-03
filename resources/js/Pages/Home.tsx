@@ -29,15 +29,15 @@ interface HomeProps {
 
 export default function Home({ cities, categories, latestArrivals, featuredCategories }: HomeProps) {
     const [searchSpeciality, setSearchSpeciality] = useState('');
-    const [searchCityId, setSearchCityId]         = useState('');
-    const [searchBudget, setSearchBudget]         = useState('');
+    const [searchCityId, setSearchCityId] = useState('');
+    const [searchBudget, setSearchBudget] = useState('');
 
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         router.get('/find-a-jeweller', {
             speciality: searchSpeciality,
-            city_id:    searchCityId,
-            budget:     searchBudget,
+            city_id: searchCityId,
+            budget: searchBudget,
         });
     };
 
@@ -52,7 +52,17 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                     <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500 rounded-full filter blur-3xl" />
                 </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center animate-fade-in-up">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center animate-fade-in-up flex flex-col md:block items-center">
+                    
+                    {/* Spinning Circular Badge Image (Above text on mobile, right side on desktop) */}
+                    <div className="relative md:absolute md:top-0 lg:top-4 md:right-0 lg:-right-8 xl:-right-12 mb-6 md:mb-0 z-20 flex justify-center opacity-90 hover:opacity-100 transition-opacity cursor-pointer hover:scale-105 duration-300 group">
+                        <img
+                            src="/images/badge_40_off.png"
+                            alt="Up to 40% OFF"
+                            className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-48 lg:h-48 xl:w-56 xl:h-56 object-cover rounded-full animate-[spin_12s_linear_infinite] group-hover:[animation-play-state:paused] shadow-[0_0_25px_rgba(212,175,55,0.4)]"
+                        />
+                    </div>
+
                     <h1 className="font-luxury text-3xl sm:text-4xl lg:text-5xl text-white font-bold leading-tight max-w-4xl mx-auto mb-10 transition-transform duration-500 hover:scale-[1.01]">
                         Find Trusted Gold &amp; Diamond Jewellers Across Pakistan
                     </h1>
@@ -234,7 +244,7 @@ function ReviewsCarousel() {
     ];
 
     const [currentPage, setCurrentPage] = React.useState(0);
-    const totalPages                    = Math.ceil(reviews.length / 2);
+    const totalPages = Math.ceil(reviews.length / 2);
 
     const handleNext = () => setCurrentPage((prev) => (prev + 1) % totalPages);
     const handlePrev = () => setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
