@@ -167,4 +167,4 @@ Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 // Dynamic category page (must be last to avoid conflicts)
 // ─────────────────────────────────────────────────────────────────────────────
 
-Route::get('/{category:slug}', [CategoryController::class, 'show'])->name('category.show');
+Route::get('/{category:slug}/{group?}/{type?}', [CategoryController::class, 'show'])->name('category.show');

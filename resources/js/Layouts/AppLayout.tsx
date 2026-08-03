@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, usePage, Head } from '@inertiajs/react';
 import type { PageProps } from '@/types';
 import { Toaster, toast } from 'sonner';
+import Navbar from '@/Components/Navbar/Navbar';
 
 interface AppLayoutProps {
     children: React.ReactNode;
 }
 
 export default function AppLayout({ children }: AppLayoutProps) {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { flash, seo_meta, nav_categories = [] } = usePage<PageProps>().props;
 
     React.useEffect(() => {
@@ -31,115 +31,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             </div>
 
             {/* Main Navigation Bar */}
-            <header className="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-gray-200 shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between h-20 items-center">
-
-                        {/* Brand Logo */}
-                        <div className="flex-shrink-0 flex items-center">
-                            <Link href="/" className="flex flex-col">
-                                <span className="font-luxury font-bold text-2xl tracking-wide text-[#0f172a]">ONLINE JEWELRY</span>
-                                <span className="text-xs font-semibold tracking-widest text-[#d4af37] text-right uppercase -mt-1">SHOP</span>
-                            </Link>
-                        </div>
-
-                        {/* Desktop Navigation Menu */}
-                        <nav className="hidden md:flex space-x-6 lg:space-x-8 font-medium text-sm text-[#0f172a]/80">
-                            <Link href="/" className="hover:text-[#d4af37] transition-colors duration-200">Home</Link>
-
-                            {/* Categories Dropdown — dynamic */}
-                            <div className="relative group flex items-center">
-                                <button className="hover:text-[#d4af37] flex items-center gap-1.5 transition-colors duration-300 focus:outline-none cursor-pointer">
-                                    Categories <i className="fa-solid fa-chevron-down text-[10px] transition-transform duration-300 group-hover:rotate-180" />
-                                </button>
-                                <div className="absolute top-full left-0 opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-3 group-hover:translate-y-0 bg-white/95 backdrop-blur-md border border-[#d4af37]/20 rounded-md shadow-xl py-2.5 w-56 transition-all duration-300 z-50">
-                                    {nav_categories.map((cat) => (
-                                        <Link
-                                            key={cat.id}
-                                            href={`/${cat.slug}`}
-                                            className="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0f172a] hover:bg-[#faf9f6] hover:text-[#d4af37] hover:pl-6 transition-all duration-300">
-                                            {cat.name}
-                                        </Link>
-                                    ))}
-                                    <div className="border-t border-gray-100 mt-1 pt-1">
-                                        <Link
-                                            href="/categories"
-                                            className="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#d4af37] hover:bg-[#faf9f6] hover:pl-6 transition-all duration-300">
-                                            <i className="fa-solid fa-grid-2 mr-1" /> All Categories
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <Link href="/custom-jewellery" className="hover:text-[#d4af37] transition-colors duration-200">Custom Order</Link>
-                        </nav>
-
-                        {/* Desktop CTA Buttons */}
-                        <div className="hidden md:flex items-center space-x-4">
-                            <a href="https://wa.me/923017730687" target="_blank" className="text-[#0f172a] hover:text-[#d4af37] text-lg px-2" title="WhatsApp">
-                                <i className="fa-brands fa-whatsapp text-2xl text-green-500 hover:scale-110 transition-transform" />
-                            </a>
-                            <a href="tel:+923017730687" className="flex items-center gap-1.5 text-[#0f172a] hover:text-[#d4af37] transition-all duration-200 group" title="Call us">
-                                <i className="fa-solid fa-phone text-lg group-hover:scale-110 transition-transform" />
-                                <span className="text-xs font-semibold tracking-wide">03017730687</span>
-                            </a>
-                            <Link href="/find-a-jeweller" className="border border-[#0f172a]/30 hover:border-[#d4af37] hover:text-[#d4af37] px-4 py-2 text-xs font-semibold uppercase tracking-wider rounded-sm transition-all duration-300">
-                                Find a Jeweller
-                            </Link>
-                            <Link href="/custom-jewellery" className="bg-[#d4af37] hover:bg-[#bda030] text-white px-5 py-2.5 text-xs font-semibold uppercase tracking-wider rounded-sm transition-all duration-300 shadow-md">
-                                Get a Quote
-                            </Link>
-                        </div>
-
-                        {/* Mobile menu toggle */}
-                        <div className="md:hidden flex items-center gap-4">
-                            <a href="https://wa.me/923017730687" target="_blank" title="WhatsApp">
-                                <i className="fa-brands fa-whatsapp text-2xl text-green-500" />
-                            </a>
-                            <a href="tel:+923017730687" className="text-[#0f172a] hover:text-[#d4af37] transition-colors" title="Call us">
-                                <i className="fa-solid fa-phone text-xl" />
-                            </a>
-                            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-[#0f172a] hover:text-[#d4af37] focus:outline-none">
-                                <i className={`fa-solid ${mobileMenuOpen ? 'fa-xmark' : 'fa-bars'} text-xl`} />
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-
-                {/* Mobile Dropdown Navigation */}
-                {mobileMenuOpen && (
-                    <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4 space-y-3 shadow-md animate-fade-in">
-                        <Link href="/" className="block font-medium hover:text-[#d4af37]" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-
-                        <div className="border-t border-gray-100 my-2 pt-2">
-                            <span className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Categories</span>
-                            {nav_categories.map((cat) => (
-                                <Link
-                                    key={cat.id}
-                                    href={`/${cat.slug}`}
-                                    className="block pl-4 py-1 hover:text-[#d4af37]"
-                                    onClick={() => setMobileMenuOpen(false)}>
-                                    {cat.name}
-                                </Link>
-                            ))}
-                            <Link href="/categories" className="block pl-4 py-1 text-[#d4af37] font-semibold" onClick={() => setMobileMenuOpen(false)}>
-                                All Categories →
-                            </Link>
-                        </div>
-
-                        <Link href="/custom-jewellery" className="block font-medium hover:text-[#d4af37]" onClick={() => setMobileMenuOpen(false)}>Custom Order</Link>
-                        <div className="pt-2 flex flex-col gap-2">
-                            <Link href="/find-a-jeweller" className="text-center border border-[#0f172a]/30 px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-sm" onClick={() => setMobileMenuOpen(false)}>
-                                Find a Jeweller
-                            </Link>
-                            <Link href="/custom-jewellery" className="text-center bg-[#d4af37] text-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded-sm shadow-md" onClick={() => setMobileMenuOpen(false)}>
-                                Get a Quote
-                            </Link>
-                        </div>
-                    </div>
-                )}
-            </header>
+            <Navbar />
 
             {/* Main Content */}
             <main className="flex-grow">

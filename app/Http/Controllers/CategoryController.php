@@ -39,13 +39,25 @@ class CategoryController extends Controller
     /**
      * Display products for a specific category.
      */
-    public function show(Request $request, Category $category)
+    public function show(Request $request, Category $category, $group = null, $type = null)
     {
         if (!$category->is_active) {
             abort(404);
         }
 
         $filters = $request->only(['subcategory_id', 'status', 'purity', 'budget_max']);
+
+        // Support for SEO friendly URLs (e.g., /gold/women/rings)
+        if ($group && $type) {
+            $slug = $group . '-' . $type;
+            $subCategory = \App\Models\SubCategory::where('slug', $slug)
+                ->where('category_id', $category->id)
+                ->first();
+                
+            if ($subCategory) {
+                $filters['subcategory_id'] = $subCategory->id;
+            }
+        }
 
         $category->load('subcategories');
 

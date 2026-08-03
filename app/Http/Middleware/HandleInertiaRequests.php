@@ -73,6 +73,12 @@ class HandleInertiaRequests extends Middleware
                     ->map(fn ($c) => ['id' => $c->id, 'name' => $c->name, 'slug' => $c->slug])
                     ->values();
             },
+            'navigation' => function () use ($request) {
+                if ($request->is('admin*') || $request->is('seller*')) {
+                    return [];
+                }
+                return config('navigation', []);
+            },
         ];
     }
 }

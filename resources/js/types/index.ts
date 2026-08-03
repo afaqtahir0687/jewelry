@@ -213,6 +213,22 @@ export interface PaginatedData<T> {
     links?: { url: string | null; label: string; active: boolean }[];
 }
 
+export interface MegaMenuLink {
+    label: string;
+    href: string;
+}
+
+export interface MegaMenuGroup {
+    heading: string;
+    links: MegaMenuLink[];
+}
+
+export interface MegaMenuItem {
+    label: string;
+    href?: string;
+    groups?: MegaMenuGroup[];
+}
+
 export interface PageProps {
     auth: {
         user: User | null;
@@ -229,6 +245,8 @@ export interface PageProps {
     } | null;
     /** Shared active categories for nav/footer */
     nav_categories?: Pick<Category, 'id' | 'name' | 'slug'>[];
+    /** Shared global navigation (mega menu) */
+    navigation?: MegaMenuItem[];
     [key: string]: unknown;
 }
 
