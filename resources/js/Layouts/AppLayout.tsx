@@ -13,7 +13,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
     React.useEffect(() => {
         if (flash?.success) toast.success(flash.success);
-        if (flash?.error)   toast.error(flash.error);
+        if (flash?.error) toast.error(flash.error);
     }, [flash]);
 
     return (
@@ -21,7 +21,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             {seo_meta && (
                 <Head title={seo_meta.title}>
                     {seo_meta.description && <meta name="description" content={seo_meta.description} />}
-                    {seo_meta.keywords    && <meta name="keywords"    content={seo_meta.keywords} />}
+                    {seo_meta.keywords && <meta name="keywords" content={seo_meta.keywords} />}
                 </Head>
             )}
 
@@ -169,8 +169,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
                         <div>
                             <h3 className="font-luxury text-white font-semibold text-lg mb-4 tracking-wider">Top Cities</h3>
                             <ul className="space-y-2 text-sm">
-                                <li><Link href="/jewellers/lahore"    className="hover:text-[#d4af37] transition-colors">Lahore Jewellers</Link></li>
-                                <li><Link href="/jewellers/karachi"   className="hover:text-[#d4af37] transition-colors">Karachi Jewellers</Link></li>
+                                <li><Link href="/jewellers/lahore" className="hover:text-[#d4af37] transition-colors">Lahore Jewellers</Link></li>
+                                <li><Link href="/jewellers/karachi" className="hover:text-[#d4af37] transition-colors">Karachi Jewellers</Link></li>
                                 <li><Link href="/jewellers/islamabad" className="hover:text-[#d4af37] transition-colors">Islamabad Jewellers</Link></li>
                             </ul>
                         </div>
@@ -199,11 +199,11 @@ export default function AppLayout({ children }: AppLayoutProps) {
                         <div>
                             <h3 className="font-luxury text-white font-semibold text-lg mb-4 tracking-wider">Quick Links</h3>
                             <ul className="space-y-2 text-sm">
-                                <li><Link href="/page/about-us"             className="hover:text-[#d4af37] transition-colors">About Us</Link></li>
-                                <li><Link href="/contact-us"                className="hover:text-[#d4af37] transition-colors">Contact Us</Link></li>
-                                <li><Link href="/page/faqs"                 className="hover:text-[#d4af37] transition-colors">FAQs</Link></li>
+                                <li><Link href="/page/about-us" className="hover:text-[#d4af37] transition-colors">About Us</Link></li>
+                                <li><Link href="/contact-us" className="hover:text-[#d4af37] transition-colors">Contact Us</Link></li>
+                                <li><Link href="/page/faqs" className="hover:text-[#d4af37] transition-colors">FAQs</Link></li>
                                 <li><Link href="/page/terms-and-conditions" className="hover:text-[#d4af37] transition-colors">Terms &amp; Conditions</Link></li>
-                                <li><Link href="/page/privacy-policy"       className="hover:text-[#d4af37] transition-colors">Privacy Policy</Link></li>
+                                <li><Link href="/page/privacy-policy" className="hover:text-[#d4af37] transition-colors">Privacy Policy</Link></li>
                             </ul>
                         </div>
 

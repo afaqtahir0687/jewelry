@@ -201,12 +201,19 @@ function HorizontalProductSlider({ products }: { products: ProductCardType[] }) 
 
     return (
         <div className="relative group">
-            {/* Left Arrow */}
-            <button
-                onClick={() => scroll('left')}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-[#d4af37]/30 hover:border-[#d4af37] text-[#0f172a] hover:text-[#d4af37] flex items-center justify-center shadow-md hover:shadow-lg transition-all opacity-0 group-hover:opacity-100 cursor-pointer">
-                <i className="fa-solid fa-chevron-left text-sm" />
-            </button>
+            {/* Navigation Arrows (Top Right) */}
+            <div className="absolute -top-16 right-0 hidden md:flex gap-2 z-10">
+                <button
+                    onClick={() => scroll('left')}
+                    className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20">
+                    <i className="fa-solid fa-arrow-left-long text-sm" />
+                </button>
+                <button
+                    onClick={() => scroll('right')}
+                    className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20">
+                    <i className="fa-solid fa-arrow-right-long text-sm" />
+                </button>
+            </div>
 
             {/* Scrollable container */}
             <div
@@ -219,13 +226,6 @@ function HorizontalProductSlider({ products }: { products: ProductCardType[] }) 
                     </div>
                 ))}
             </div>
-
-            {/* Right Arrow */}
-            <button
-                onClick={() => scroll('right')}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white border border-[#d4af37]/30 hover:border-[#d4af37] text-[#0f172a] hover:text-[#d4af37] flex items-center justify-center shadow-md hover:shadow-lg transition-all opacity-0 group-hover:opacity-100 cursor-pointer">
-                <i className="fa-solid fa-chevron-right text-sm" />
-            </button>
         </div>
     );
 }
@@ -254,10 +254,16 @@ function ReviewsCarousel() {
     const visibleReviews = [reviews[currentPage * 2], reviews[currentPage * 2 + 1]].filter(Boolean);
 
     return (
-        <div className="max-w-6xl mx-auto relative px-12 group">
-            <button onClick={handlePrev} className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-[#d4af37]/30 hover:border-[#d4af37] text-[#0f172a] hover:text-[#d4af37] flex items-center justify-center shadow-md hover:shadow-lg transition-all z-10 cursor-pointer" title="Previous">
-                <i className="fa-solid fa-chevron-left text-sm" />
-            </button>
+        <div className="max-w-6xl mx-auto relative group">
+            {/* Navigation Arrows (Top Right) */}
+            <div className="absolute -top-16 right-0 hidden md:flex gap-2 z-10">
+                <button onClick={handlePrev} className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20" title="Previous">
+                    <i className="fa-solid fa-arrow-left-long text-sm" />
+                </button>
+                <button onClick={handleNext} className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20" title="Next">
+                    <i className="fa-solid fa-arrow-right-long text-sm" />
+                </button>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-500 ease-in-out">
                 {visibleReviews.map((rev) => (
@@ -277,10 +283,6 @@ function ReviewsCarousel() {
                     </div>
                 ))}
             </div>
-
-            <button onClick={handleNext} className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border border-[#d4af37]/30 hover:border-[#d4af37] text-[#0f172a] hover:text-[#d4af37] flex items-center justify-center shadow-md hover:shadow-lg transition-all z-10 cursor-pointer" title="Next">
-                <i className="fa-solid fa-chevron-right text-sm" />
-            </button>
 
             <div className="flex justify-center gap-2 mt-8">
                 {[...Array(totalPages)].map((_, idx) => (
