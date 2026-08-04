@@ -51,7 +51,7 @@ export default function CategoriesIndex({ categories, filters }: CategoriesIndex
             cell: (cat) => (
                 cat.image ? (
                     <img
-                        src={cat.image.startsWith('http') ? cat.image : `/storage/${cat.image}`}
+                        src={cat.image.startsWith('http') ? cat.image : `/${cat.image}`}
                         alt={cat.name}
                         className="w-10 h-10 rounded-lg object-cover"
                     />

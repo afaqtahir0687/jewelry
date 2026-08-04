@@ -64,7 +64,7 @@ export default function SellerProductsIndex({ products }: ProductsIndexProps) {
                                     <TableCell>
                                         {p.images && p.images[0] ? (
                                             <img
-                                                src={p.images[0].startsWith('http') ? p.images[0] : `/storage/${p.images[0]}`}
+                                                src={p.images[0].startsWith('http') ? p.images[0] : `/${p.images[0]}`}
                                                 alt={p.title}
                                                 className="w-10 h-10 rounded-lg object-cover"
                                             />

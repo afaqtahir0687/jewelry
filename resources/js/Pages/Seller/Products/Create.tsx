@@ -19,6 +19,7 @@ export default function SellerProductCreate({ categories }: CreateProps) {
         description: '',
         price_on_request: true,
         price: '',
+        discount_price: '',
         gold_purity: '',
         approximate_weight: '',
         stone_info: '',
@@ -101,17 +102,29 @@ export default function SellerProductCreate({ categories }: CreateProps) {
                             </div>
 
                             {!data.price_on_request && (
-                                <div className="space-y-2">
-                                    <Label htmlFor="price">Price (PKR)</Label>
-                                    <Input
-                                        id="price"
-                                        type="number"
-                                        placeholder="350000"
-                                        value={data.price}
-                                        onChange={(e) => setData('price', e.target.value)}
-                                    />
-                                    {errors.price && <p className="text-red-400 text-xs">{errors.price}</p>}
-                                </div>
+                                <>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="price">Price (PKR)</Label>
+                                        <Input
+                                            id="price"
+                                            type="number"
+                                            placeholder="350000"
+                                            value={data.price}
+                                            onChange={(e) => setData('price', e.target.value)}
+                                        />
+                                        {errors.price && <p className="text-red-400 text-xs">{errors.price}</p>}
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="discount_price">Discount Price (PKR)</Label>
+                                        <Input
+                                            id="discount_price"
+                                            type="number"
+                                            placeholder="Leave empty for no discount"
+                                            value={data.discount_price}
+                                            onChange={(e) => setData('discount_price', e.target.value)}
+                                        />
+                                    </div>
+                                </>
                             )}
                         </div>
 

@@ -3,16 +3,17 @@
 namespace App\Services;
 
 use App\Repositories\Contracts\SubCategoryRepositoryInterface;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 
 class SubCategoryService
 {
     protected SubCategoryRepositoryInterface $subCategoryRepository;
+    protected UploadService $uploadService;
 
-    public function __construct(SubCategoryRepositoryInterface $subCategoryRepository)
+    public function __construct(SubCategoryRepositoryInterface $subCategoryRepository, UploadService $uploadService)
     {
         $this->subCategoryRepository = $subCategoryRepository;
+        $this->uploadService = $uploadService;
     }
 
     public function getPaginatedList(array $filters = [], int $perPage = 15)
@@ -23,7 +24,7 @@ class SubCategoryService
     public function createSubCategory(array $data)
     {
         if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
-            $data['image'] = $data['image']->store('subcategories', 'public');
+            $data['image'] = $this->uploadService->upload($data['image'], 'subcategories');
         }
         return $this->subCategoryRepository->create($data);
     }
@@ -33,10 +34,8 @@ class SubCategoryService
         $subcategory = $this->subCategoryRepository->findOrFail($id);
 
         if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
-            if ($subcategory->image && Storage::disk('public')->exists($subcategory->image)) {
-                Storage::disk('public')->delete($subcategory->image);
-            }
-            $data['image'] = $data['image']->store('subcategories', 'public');
+            $this->uploadService->delete($subcategory->image);
+            $data['image'] = $this->uploadService->upload($data['image'], 'subcategories');
         }
 
         return $this->subCategoryRepository->update($data, $id);
@@ -45,9 +44,9 @@ class SubCategoryService
     public function deleteSubCategory(int $id)
     {
         $subcategory = $this->subCategoryRepository->findOrFail($id);
-        if ($subcategory->image && Storage::disk('public')->exists($subcategory->image)) {
-            Storage::disk('public')->delete($subcategory->image);
-        }
+        
+        $this->uploadService->delete($subcategory->image);
+        
         return $this->subCategoryRepository->delete($id);
     }
 

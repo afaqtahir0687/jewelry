@@ -8,10 +8,12 @@ use App\Models\City;
 class LeadService
 {
     protected LeadRepositoryInterface $leadRepository;
+    protected UploadService $uploadService;
 
-    public function __construct(LeadRepositoryInterface $leadRepository)
+    public function __construct(LeadRepositoryInterface $leadRepository, UploadService $uploadService)
     {
         $this->leadRepository = $leadRepository;
+        $this->uploadService = $uploadService;
     }
 
     public function getPaginatedList(array $filters = [], int $perPage = 15)
@@ -37,7 +39,7 @@ class LeadService
     public function createLead(array $data, $imageFile = null)
     {
         if ($imageFile) {
-            $path = $imageFile->store('leads', 'public');
+            $path = $this->uploadService->upload($imageFile, 'leads');
             $data['reference_image'] = $path;
         }
 

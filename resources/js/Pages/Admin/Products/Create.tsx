@@ -35,6 +35,7 @@ export default function AdminProductsCreate({ categories }: AdminProductsCreateP
     const [description,         setDescription]         = useState('');
     const [priceOnRequest,      setPriceOnRequest]      = useState(true);
     const [price,               setPrice]               = useState('');
+    const [discountPrice,       setDiscountPrice]       = useState('');
     const [goldPurity,          setGoldPurity]          = useState('');
     const [approxWeight,        setApproxWeight]        = useState('');
     const [stoneInfo,           setStoneInfo]           = useState('');
@@ -98,6 +99,7 @@ export default function AdminProductsCreate({ categories }: AdminProductsCreateP
         formData.append('description',            description);
         formData.append('price_on_request',       priceOnRequest ? '1' : '0');
         if (!priceOnRequest && price) formData.append('price', price);
+        if (!priceOnRequest && discountPrice) formData.append('discount_price', discountPrice);
         if (goldPurity)       formData.append('gold_purity',           goldPurity);
         if (approxWeight)     formData.append('approximate_weight',    approxWeight);
         if (stoneInfo)        formData.append('stone_info',            stoneInfo);
@@ -272,11 +274,18 @@ export default function AdminProductsCreate({ categories }: AdminProductsCreateP
                         </label>
 
                         {!priceOnRequest && (
-                            <div className="space-y-2">
-                                <Label>Price (PKR)</Label>
-                                <Input type="number" min={0} value={price} onChange={(e) => setPrice(e.target.value)} placeholder="e.g. 350000" className="bg-white/5 border-white/10 text-white" />
-                                {errors.price && <p className="text-red-400 text-xs">{errors.price}</p>}
-                            </div>
+                            <>
+                                <div className="space-y-2">
+                                    <Label>Price (PKR)</Label>
+                                    <Input type="number" min={0} value={price} onChange={(e) => setPrice(e.target.value)} className="bg-white/5 border-white/10 text-white" />
+                                    {errors.price && <p className="text-red-400 text-xs">{errors.price}</p>}
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Discount Price (PKR)</Label>
+                                    <Input type="number" min={0} value={discountPrice} onChange={(e) => setDiscountPrice(e.target.value)} className="bg-white/5 border-white/10 text-white" placeholder="Leave empty for no discount" />
+                                    {errors.discount_price && <p className="text-red-400 text-xs">{errors.discount_price}</p>}
+                                </div>
+                            </>
                         )}
 
                         <div className="space-y-2">

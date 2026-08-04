@@ -54,15 +54,25 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                 </div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center animate-fade-in-up flex flex-col md:block items-center">
-                    
-                    {/* Luxury Spinning Circular Badge */}
-                    <div className="relative md:absolute md:top-0 lg:top-4 md:right-0 lg:-right-8 xl:-right-12 mb-6 md:mb-0 z-20 flex justify-center w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72">
-                        <DiscountBadge />
+                    {/* Mobile/Tablet Badge (Hidden on Large Desktop) */}
+                    <div className="lg:hidden flex justify-center w-full mb-6">
+                        <div className="w-24 h-24 sm:w-28 sm:h-28">
+                            <DiscountBadge />
+                        </div>
                     </div>
 
-                    <h1 className="font-luxury text-3xl sm:text-4xl lg:text-5xl text-white font-bold leading-tight max-w-4xl mx-auto mb-10 transition-transform duration-500 hover:scale-[1.01]">
-                        Find Trusted Gold &amp; Diamond Jewellers Across Pakistan
-                    </h1>
+                    <div className="relative w-full max-w-6xl mx-auto mb-10 flex items-center justify-center">
+                        <h1 className="font-luxury text-3xl sm:text-4xl lg:text-5xl text-white font-bold leading-tight max-w-4xl mx-auto transition-transform duration-500 hover:scale-[1.01] px-4 md:px-12 lg:px-24">
+                            Find Trusted Gold &amp; Diamond Jewellers Across Pakistan
+                        </h1>
+                        
+                        {/* Desktop Badge (Positioned exactly on the right) */}
+                        <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden lg:flex items-center justify-center">
+                            <div className="w-32 h-32 xl:w-36 xl:h-36">
+                                <DiscountBadge />
+                            </div>
+                        </div>
+                    </div>
 
                     {/* Main Search Form */}
                     <div className="max-w-4xl mx-auto bg-white p-6 rounded-md shadow-2xl border border-[#d4af37]/10">

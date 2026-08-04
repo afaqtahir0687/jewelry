@@ -3,16 +3,17 @@
 namespace App\Services;
 
 use App\Repositories\Contracts\CategoryRepositoryInterface;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 
 class CategoryService
 {
     protected CategoryRepositoryInterface $categoryRepository;
+    protected UploadService $uploadService;
 
-    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    public function __construct(CategoryRepositoryInterface $categoryRepository, UploadService $uploadService)
     {
         $this->categoryRepository = $categoryRepository;
+        $this->uploadService = $uploadService;
     }
 
     public function getPaginatedList(array $filters = [], int $perPage = 15)
@@ -33,10 +34,10 @@ class CategoryService
     public function createCategory(array $data)
     {
         if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
-            $data['image'] = $data['image']->store('categories', 'public');
+            $data['image'] = $this->uploadService->upload($data['image'], 'categories');
         }
         if (isset($data['banner_image']) && $data['banner_image'] instanceof UploadedFile) {
-            $data['banner_image'] = $data['banner_image']->store('categories', 'public');
+            $data['banner_image'] = $this->uploadService->upload($data['banner_image'], 'categories');
         }
 
         return $this->categoryRepository->create($data);
@@ -47,16 +48,12 @@ class CategoryService
         $category = $this->categoryRepository->findOrFail($id);
 
         if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
-            if ($category->image && Storage::disk('public')->exists($category->image)) {
-                Storage::disk('public')->delete($category->image);
-            }
-            $data['image'] = $data['image']->store('categories', 'public');
+            $this->uploadService->delete($category->image);
+            $data['image'] = $this->uploadService->upload($data['image'], 'categories');
         }
         if (isset($data['banner_image']) && $data['banner_image'] instanceof UploadedFile) {
-            if ($category->banner_image && Storage::disk('public')->exists($category->banner_image)) {
-                Storage::disk('public')->delete($category->banner_image);
-            }
-            $data['banner_image'] = $data['banner_image']->store('categories', 'public');
+            $this->uploadService->delete($category->banner_image);
+            $data['banner_image'] = $this->uploadService->upload($data['banner_image'], 'categories');
         }
 
         return $this->categoryRepository->update($data, $id);
@@ -65,12 +62,9 @@ class CategoryService
     public function deleteCategory(int $id)
     {
         $category = $this->categoryRepository->findOrFail($id);
-        if ($category->image && Storage::disk('public')->exists($category->image)) {
-            Storage::disk('public')->delete($category->image);
-        }
-        if ($category->banner_image && Storage::disk('public')->exists($category->banner_image)) {
-            Storage::disk('public')->delete($category->banner_image);
-        }
+        
+        $this->uploadService->delete($category->image);
+        $this->uploadService->delete($category->banner_image);
 
         return $this->categoryRepository->delete($id);
     }

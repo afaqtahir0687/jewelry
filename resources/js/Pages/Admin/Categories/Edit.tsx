@@ -80,7 +80,7 @@ export default function CategoriesEdit({ category }: CategoriesEditProps) {
                             <Label htmlFor="image">Category Image</Label>
                             {category.image && (
                                 <img 
-                                    src={category.image.startsWith('http') ? category.image : `/storage/${category.image}`} 
+                                    src={category.image.startsWith('http') ? category.image : `/${category.image}`} 
                                     alt="preview" 
                                     className="w-full h-32 object-cover rounded-lg mb-2 border border-white/10" 
                                 />
@@ -98,7 +98,7 @@ export default function CategoriesEdit({ category }: CategoriesEditProps) {
                             <Label htmlFor="banner_image">Banner Image</Label>
                             {category.banner_image && (
                                 <img 
-                                    src={category.banner_image.startsWith('http') ? category.banner_image : `/storage/${category.banner_image}`} 
+                                    src={category.banner_image.startsWith('http') ? category.banner_image : `/${category.banner_image}`} 
                                     alt="banner preview" 
                                     className="w-full h-32 object-cover rounded-lg mb-2 border border-white/10" 
                                 />

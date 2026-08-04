@@ -28,6 +28,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
     const hasDiscount = !product.price_on_request && product.discount_price && Number(product.discount_price) > 0;
 
+    let discountPercentage = 0;
+    if (hasDiscount && product.price) {
+        discountPercentage = Math.round(((Number(product.price) - Number(product.discount_price)) / Number(product.price)) * 100);
+    }
+
     const displayPrice = product.price_on_request
         ? 'Price on Request'
         : hasDiscount
@@ -87,18 +92,22 @@ export default function ProductCard({ product }: ProductCardProps) {
                     {statusLabel}
                 </span>
 
-                {/* Featured Badge */}
-                {product.is_featured && (
-                    <span className="absolute top-3 left-3 bg-[#d4af37] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
+                {/* Top Left Badge: Discount % OR Featured */}
+                {hasDiscount && discountPercentage > 0 ? (
+                    <span className="absolute top-3 left-3 bg-[#d4af37] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-sm z-10">
+                        -{discountPercentage}% OFF
+                    </span>
+                ) : product.is_featured ? (
+                    <span className="absolute top-3 left-3 bg-[#d4af37] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-sm z-10">
                         ✦ Featured
                     </span>
-                )}
+                ) : null}
 
                 {/* Dark overlay on hover + Quick view button */}
                 <div className={`absolute inset-0 bg-[#0f172a]/25 transition-opacity duration-300 flex flex-col justify-end p-4 ${
                     isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}>
-                    <span className="w-full text-center bg-[#7B0A26] hover:bg-[#600018] text-white text-xs font-semibold py-2 rounded-lg shadow-lg">
+                    <span className="w-full text-center bg-[#d4af37] hover:bg-[#b8952b] text-white text-xs font-semibold py-2 rounded-lg shadow-lg transition-colors">
                         Quick view
                     </span>
                 </div>

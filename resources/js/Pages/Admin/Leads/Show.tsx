@@ -125,9 +125,9 @@ export default function AdminLeadShow({ lead }: LeadShowProps) {
                                 <div className="mt-4 pt-4 border-t border-white/10">
                                     <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">Reference Design Image</p>
                                     <div className="max-w-md rounded-lg overflow-hidden border border-white/10 bg-white/5">
-                                        <a href={lead.reference_image.startsWith('http') ? lead.reference_image : `/storage/${lead.reference_image}`} target="_blank" rel="noreferrer">
+                                        <a href={lead.reference_image.startsWith('http') ? lead.reference_image : `/${lead.reference_image}`} target="_blank" rel="noreferrer">
                                             <img 
-                                                src={lead.reference_image.startsWith('http') ? lead.reference_image : `/storage/${lead.reference_image}`} 
+                                                src={lead.reference_image.startsWith('http') ? lead.reference_image : `/${lead.reference_image}`} 
                                                 alt="Reference Design" 
                                                 className="w-full max-h-96 object-contain hover:scale-105 transition-transform duration-300"
                                             />

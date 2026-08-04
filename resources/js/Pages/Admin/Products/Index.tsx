@@ -36,7 +36,7 @@ export default function AdminProductsIndex({ products, filters }: ProductsIndexP
             cell: (p) => {
                 // If backend uses product_images (objects) or images (strings)
                 const firstImage = p.product_images && p.product_images[0]
-                    ? (p.product_images[0].url || `/storage/${p.product_images[0].path}`)
+                    ? (p.product_images[0].url || `/${p.product_images[0].path}`)
                     : null;
                 return firstImage ? (
                     <img

@@ -115,7 +115,7 @@ export default function SubCategoriesEdit({ subcategory, categories }: SubCatego
                         <Label htmlFor="image">Subcategory Image</Label>
                         {subcategory.image && (
                             <img 
-                                src={subcategory.image.startsWith('http') ? subcategory.image : `/storage/${subcategory.image}`} 
+                                src={subcategory.image.startsWith('http') ? subcategory.image : `/${subcategory.image}`} 
                                 alt="preview" 
                                 className="w-full h-32 object-cover rounded-lg mb-2 border border-white/10" 
                             />

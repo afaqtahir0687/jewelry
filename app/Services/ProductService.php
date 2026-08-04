@@ -5,16 +5,17 @@ namespace App\Services;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Repositories\Contracts\ProductRepositoryInterface;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductService
 {
     protected ProductRepositoryInterface $productRepository;
+    protected UploadService $uploadService;
 
-    public function __construct(ProductRepositoryInterface $productRepository)
+    public function __construct(ProductRepositoryInterface $productRepository, UploadService $uploadService)
     {
         $this->productRepository = $productRepository;
+        $this->uploadService = $uploadService;
     }
 
     public function getPaginatedList(array $filters = [], int $perPage = 15)
@@ -142,7 +143,7 @@ class ProductService
         $offset = $product->productImages()->count();
 
         foreach ($files as $index => $file) {
-            $path = $file->store('products', 'public');
+            $path = $this->uploadService->upload($file, 'products');
             ProductImage::create([
                 'product_id' => $product->id,
                 'path'       => $path,
@@ -153,9 +154,6 @@ class ProductService
 
     private function deleteImageFile(string $path): void
     {
-        // Don't try to delete external URLs
-        if (!str_starts_with($path, 'http')) {
-            Storage::disk('public')->delete($path);
-        }
+        $this->uploadService->delete($path);
     }
 }

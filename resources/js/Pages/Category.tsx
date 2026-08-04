@@ -59,7 +59,7 @@ export default function CategoryPage({ category, subcategories, products, filter
                 <div className="absolute inset-0 opacity-15">
                     {heroImage && (
                         <img 
-                            src={heroImage.startsWith('http') ? heroImage : `/storage/${heroImage}`} 
+                            src={heroImage.startsWith('http') ? heroImage : `/${heroImage}`} 
                             alt={category.name} 
                             className="w-full h-full object-cover" 
                         />

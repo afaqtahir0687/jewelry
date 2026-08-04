@@ -22,6 +22,7 @@ class StoreProductRequest extends FormRequest
             'images.*'               => ['image', 'max:4096'],
             'price_on_request'       => ['boolean'],
             'price'                  => ['nullable', 'numeric', 'min:0'],
+            'discount_price'         => ['nullable', 'numeric', 'min:0'],
             'gold_purity'            => ['nullable', 'string', 'max:50'],
             'approximate_weight'     => ['nullable', 'string', 'max:50'],
             'stone_info'             => ['nullable', 'string', 'max:255'],

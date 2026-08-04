@@ -21,6 +21,7 @@ export default function SellerProductEdit({ product, categories }: EditProps) {
         description:            product.description ?? '',
         price_on_request:       product.price_on_request ?? true,
         price:                  product.price ?? '',
+        discount_price:         product.discount_price ?? '',
         gold_purity:            product.gold_purity ?? '',
         approximate_weight:     product.approximate_weight ?? '',
         stone_info:             product.stone_info ?? '',
@@ -100,15 +101,27 @@ export default function SellerProductEdit({ product, categories }: EditProps) {
                             </div>
 
                             {!data.price_on_request && (
-                                <div className="space-y-2">
-                                    <Label htmlFor="price">Price (PKR)</Label>
-                                    <Input
-                                        id="price"
-                                        type="number"
-                                        value={data.price}
-                                        onChange={(e) => setData('price', e.target.value)}
-                                    />
-                                </div>
+                                <>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="price">Price (PKR)</Label>
+                                        <Input
+                                            id="price"
+                                            type="number"
+                                            value={data.price}
+                                            onChange={(e) => setData('price', e.target.value)}
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="discount_price">Discount Price (PKR)</Label>
+                                        <Input
+                                            id="discount_price"
+                                            type="number"
+                                            value={data.discount_price}
+                                            onChange={(e) => setData('discount_price', e.target.value)}
+                                            placeholder="Leave empty for no discount"
+                                        />
+                                    </div>
+                                </>
                             )}
                         </div>
 
@@ -170,7 +183,7 @@ export default function SellerProductEdit({ product, categories }: EditProps) {
                                     {product.images.map((img, idx) => (
                                         <img
                                             key={idx}
-                                            src={img.startsWith('http') ? img : `/storage/${img}`}
+                                            src={img.startsWith('http') ? img : `/${img}`}
                                             className="w-16 h-16 object-cover rounded-md border border-white/10"
                                             alt=""
                                         />

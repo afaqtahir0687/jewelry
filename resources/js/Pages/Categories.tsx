@@ -46,7 +46,7 @@ export default function Categories({ categories }: CategoriesProps) {
                                     <div className="h-64 overflow-hidden relative">
                                         {cat.image ? (
                                             <img
-                                                src={cat.image.startsWith('http') ? cat.image : `/storage/${cat.image}`}
+                                                src={cat.image.startsWith('http') ? cat.image : `/${cat.image}`}
                                                 alt={cat.name}
                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                                             />
