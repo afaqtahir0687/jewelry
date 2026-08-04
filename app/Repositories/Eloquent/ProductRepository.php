@@ -75,6 +75,23 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             $query->where('category_id', $filters['category_id']);
         }
 
+        if (!empty($filters['subcategory_id'])) {
+            $query->where('subcategory_id', $filters['subcategory_id']);
+        }
+
+        if (!empty($filters['status'])) {
+            $query->where('status', $filters['status']);
+        }
+
+        if (!empty($filters['purity'])) {
+            $query->where('gold_purity', $filters['purity']);
+        }
+
+        if (!empty($filters['budget_max'])) {
+            $query->where('price', '<=', $filters['budget_max'])
+                  ->where('price_on_request', false);
+        }
+
         if (!empty($filters['sortField']) && !empty($filters['sortDirection'])) {
             $query->orderBy($filters['sortField'], $filters['sortDirection']);
         } else {

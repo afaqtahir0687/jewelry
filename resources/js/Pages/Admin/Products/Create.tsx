@@ -208,26 +208,6 @@ export default function AdminProductsCreate({ categories }: AdminProductsCreateP
                             <span className="ml-2 text-[10px] normal-case font-normal text-gray-500">(Max 2 Images)</span>
                         </h3>
 
-                        {existingImages.length > 0 && (
-                            <div>
-                                <p className="text-xs text-gray-400 mb-2">Current Images</p>
-                                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                                    {existingImages.map((img, idx) => (
-                                        <div key={img.id} className="relative group aspect-square rounded-lg overflow-hidden border border-white/10">
-                                            <img src={img.url} alt={`product-img-${img.id}`} className="w-full h-full object-cover" />
-                                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <button type="button" onClick={() => markExistingForDelete(img.id)} className="text-white hover:text-red-400 transition-colors" title="Remove image">
-                                                    <X size={20} />
-                                                </button>
-                                            </div>
-                                            {idx === 0 && <span className="absolute bottom-2 left-2 bg-gold text-black text-xs font-bold px-2 py-0.5 rounded">Primary Image</span>}
-                                            {idx === 1 && <span className="absolute bottom-2 left-2 bg-white/80 text-black text-xs font-bold px-2 py-0.5 rounded">Hover Image</span>}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
                         <div className="pt-2">
                             <p className="text-xs text-gray-400 mb-3">Upload New Images</p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -252,15 +232,15 @@ export default function AdminProductsCreate({ categories }: AdminProductsCreateP
                             </div>
                         </div>
 
-                        {newPreviews.length > 0 && (
+                        {previews.length > 0 && (
                             <div className="mt-4">
                                 <p className="text-xs text-gray-400 mb-2">New Previews</p>
                                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                                    {newPreviews.map((p, idx) => (
+                                    {previews.map((p, idx) => (
                                         <div key={idx} className="relative group aspect-square rounded-lg overflow-hidden border border-gold/30">
                                             <img src={p.previewUrl} alt={`new-${idx}`} className="w-full h-full object-cover" />
                                             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                <button type="button" onClick={() => removeNewPreview(idx)} className="text-white hover:text-red-400">
+                                                <button type="button" onClick={() => removePreview(idx)} className="text-white hover:text-red-400">
                                                     <X size={20} />
                                                 </button>
                                             </div>

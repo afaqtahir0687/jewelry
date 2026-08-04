@@ -41,34 +41,53 @@ class DatabaseSeeder extends Seeder
         }
 
         // 3. Categories & SubCategories
+        // 3. Categories & SubCategories
         $categoryData = [
             [
-                'name' => 'Earrings',
-                'description' => 'Beautiful lotus floral, zircon dangles, and heritage pearl tops.',
-                'image' => 'https://zeesy.pk/cdn/shop/files/SilverLotusFloralClusterEarrings-S-Whit-2.webp?v=1785396160&width=720',
+                'name' => 'Gold',
+                'description' => 'Browse fine gold jewelry crafted in 22K and 21K gold by Pakistan\'s best artisans.',
+                'image' => 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=600&auto=format&fit=crop',
                 'is_featured' => true,
-                'subcategories' => ['Studs', 'Dangles', 'Heritage']
+                'subcategories' => [
+                    ['name' => 'Rings', 'slug' => 'women-rings'],
+                    ['name' => 'Earrings', 'slug' => 'women-earrings'],
+                    ['name' => 'Necklaces', 'slug' => 'women-necklaces'],
+                    ['name' => 'Bangles', 'slug' => 'women-bangles'],
+                    ['name' => 'Bridal Sets', 'slug' => 'women-bridal-sets'],
+                    ['name' => 'Rings', 'slug' => 'men-rings'],
+                    ['name' => 'Chains', 'slug' => 'men-chains'],
+                    ['name' => 'Bracelets', 'slug' => 'men-bracelets'],
+                    ['name' => 'Earrings', 'slug' => 'kids-earrings'],
+                    ['name' => 'Bracelets', 'slug' => 'kids-bracelets'],
+                    ['name' => 'Pendants', 'slug' => 'kids-pendants'],
+                ]
             ],
             [
-                'name' => 'Bracelets & Bangles',
-                'description' => 'Modern zircon chain bracelets, minimalist delicate cuffs, and traditional bangles.',
-                'image' => 'https://zeesy.pk/cdn/shop/files/SweetheartCharmModernChainBracelet-G-3_d4c72910-02e4-4e51-b229-5d599fb8fb93.webp?v=1785395757&width=720',
+                'name' => 'Diamond',
+                'description' => 'Exquisite diamond necklaces, certified solitaire rings, and fine diamond bracelets.',
+                'image' => 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=600&auto=format&fit=crop',
                 'is_featured' => true,
-                'subcategories' => ['Charm Bracelets', 'Delicate Bracelets', 'Chain Bracelets']
+                'subcategories' => [
+                    ['name' => 'Engagement Rings', 'slug' => 'women-engagement-rings'],
+                    ['name' => 'Earrings', 'slug' => 'women-earrings'],
+                    ['name' => 'Pendants', 'slug' => 'women-pendants'],
+                    ['name' => 'Bracelets', 'slug' => 'women-bracelets'],
+                    ['name' => 'Rings', 'slug' => 'men-rings'],
+                    ['name' => 'Cufflinks', 'slug' => 'men-cufflinks'],
+                ]
             ],
             [
-                'name' => 'Necklace Sets',
-                'description' => 'Luxury Turkish pearl malla sets, choker sets, and traditional wedding harams.',
-                'image' => 'https://zeesy.pk/cdn/shop/files/MirabellaTurkishPearlMallaSet-G-Pearl-3.webp?v=1785393835&width=720',
+                'name' => 'Watches',
+                'description' => 'Luxury and everyday watches for men and women.',
+                'image' => 'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=600&auto=format&fit=crop',
                 'is_featured' => true,
-                'subcategories' => ['Malla Sets', 'Choker Sets', 'Pendant Sets']
-            ],
-            [
-                'name' => 'Finger Rings',
-                'description' => 'Bold stone statement rings, leaf rings, and sterling pave bands.',
-                'image' => 'https://zeesy.pk/cdn/shop/files/GoldenPrettyBoldStoneRing-G-Whit-3.webp?v=1784696326&width=720',
-                'is_featured' => true,
-                'subcategories' => ['Solitaire Rings', 'Statement Rings', 'Pave Rings']
+                'subcategories' => [
+                    ['name' => 'Luxury Watches', 'slug' => 'women-luxury'],
+                    ['name' => 'Everyday Wear', 'slug' => 'women-everyday'],
+                    ['name' => 'Automatic', 'slug' => 'men-automatic'],
+                    ['name' => 'Chronograph', 'slug' => 'men-chronograph'],
+                    ['name' => 'Luxury', 'slug' => 'men-luxury'],
+                ]
             ]
         ];
 
@@ -85,11 +104,11 @@ class DatabaseSeeder extends Seeder
                 ]
             );
 
-            foreach ($cat['subcategories'] as $subIdx => $subName) {
+            foreach ($cat['subcategories'] as $subIdx => $sub) {
                 SubCategory::updateOrCreate(
-                    ['slug' => Str::slug($subName), 'category_id' => $category->id],
+                    ['slug' => $sub['slug'], 'category_id' => $category->id],
                     [
-                        'name' => $subName,
+                        'name' => $sub['name'],
                         'sort_order' => $subIdx + 1,
                         'is_active' => true
                     ]
@@ -436,12 +455,52 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($scrapedProducts as $pData) {
-            $category = Category::where('name', $pData['category'])->first();
+            $titleLower = strtolower($pData['title']);
+            
+            if (str_contains($titleLower, 'watch')) {
+                $targetCategoryName = 'Watches';
+                if (str_contains($titleLower, 'men')) {
+                    $subCategorySlug = 'men-luxury';
+                } else {
+                    $subCategorySlug = 'women-luxury';
+                }
+            } elseif (str_contains($titleLower, 'diamond')) {
+                $targetCategoryName = 'Diamond';
+                if (str_contains($titleLower, 'earring')) {
+                    $subCategorySlug = 'women-earrings';
+                } elseif (str_contains($titleLower, 'ring')) {
+                    $subCategorySlug = str_contains($titleLower, 'engagement') ? 'women-engagement-rings' : 'men-rings';
+                } elseif (str_contains($titleLower, 'pendant')) {
+                    $subCategorySlug = 'women-pendants';
+                } elseif (str_contains($titleLower, 'bracelet') || str_contains($titleLower, 'bangle')) {
+                    $subCategorySlug = 'women-bracelets';
+                } else {
+                    $subCategorySlug = 'women-engagement-rings';
+                }
+            } else {
+                $targetCategoryName = 'Gold';
+                if (str_contains($titleLower, 'earring') || str_contains($titleLower, 'jhumka') || str_contains($titleLower, 'stud') || str_contains($titleLower, 'chandbali')) {
+                    $subCategorySlug = 'women-earrings';
+                } elseif (str_contains($titleLower, 'ring')) {
+                    $subCategorySlug = 'women-rings';
+                } elseif (str_contains($titleLower, 'necklace') || str_contains($titleLower, 'choker') || str_contains($titleLower, 'haram') || str_contains($titleLower, 'malla') || str_contains($titleLower, 'hasli')) {
+                    $subCategorySlug = str_contains($titleLower, 'bridal') ? 'women-bridal-sets' : 'women-necklaces';
+                } elseif (str_contains($titleLower, 'bracelet') || str_contains($titleLower, 'bangle')) {
+                    $subCategorySlug = 'women-bangles';
+                } else {
+                    $subCategorySlug = 'women-rings';
+                }
+            }
+
+            $category = Category::where('name', $targetCategoryName)->first();
             if (!$category) {
                 continue;
             }
 
-            $sub = $category->subCategories->random();
+            $sub = SubCategory::where('category_id', $category->id)->where('slug', $subCategorySlug)->first();
+            if (!$sub) {
+                $sub = SubCategory::where('category_id', $category->id)->first();
+            }
             $jeweller = $jewellerModels[array_rand($jewellerModels)];
             
             // Randomly flag some as featured / latest arrivals
