@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '../Layouts/AppLayout';
 import ProductCard from '@/components/ProductCard';
@@ -32,6 +32,21 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
     const [searchSpeciality, setSearchSpeciality] = useState('');
     const [searchCityId, setSearchCityId] = useState('');
     const [searchBudget, setSearchBudget] = useState('');
+    const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+
+    const banners = [
+        '/images/banner1.png',
+        // '/images/banner2.png',
+        '/images/banner3.png',
+        // '/images/banner4.jpeg'
+    ];
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentBannerIndex((prev) => (prev + 1) % banners.length);
+        }, 4000);
+        return () => clearInterval(timer);
+    }, []);
 
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -48,7 +63,21 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
 
             {/* ── Hero Section ──────────────────────────────────────────── */}
             <section className="relative bg-[#0f172a] py-16 md:py-24 overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
+                {/* Background Slider */}
+                <div className="absolute inset-0 z-0">
+                    {banners.map((src, index) => (
+                        <div
+                            key={src}
+                            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${currentBannerIndex === index ? 'opacity-60' : 'opacity-0'
+                                }`}
+                            style={{ backgroundImage: `url('${src}')` }}
+                        />
+                    ))}
+                    {/* Gradient Overlay for luxury feel and readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/65 to-[#0f172a]/35" />
+                </div>
+
+                <div className="absolute inset-0 opacity-5 pointer-events-none z-0">
                     <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#d4af37] rounded-full filter blur-3xl" />
                     <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500 rounded-full filter blur-3xl" />
                 </div>
@@ -65,7 +94,7 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                         <h1 className="font-luxury text-3xl sm:text-4xl lg:text-5xl text-white font-bold leading-tight max-w-4xl mx-auto transition-transform duration-500 hover:scale-[1.01] px-4 md:px-12 lg:px-24">
                             Find Trusted Gold &amp; Diamond Jewellers Across Pakistan
                         </h1>
-                        
+
                         {/* Desktop Badge (Positioned exactly on the right) */}
                         <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden lg:flex items-center justify-center">
                             <div className="w-32 h-32 xl:w-36 xl:h-36">
