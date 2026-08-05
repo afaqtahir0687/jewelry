@@ -56,12 +56,96 @@
         }
     }
 
+    @keyframes kenBurns {
+        from {
+            transform: scale(1);
+        }
+        to {
+            transform: scale(1.08);
+        }
+    }
+
+    @keyframes pageFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
     .animate-fade-in-up {
-        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes reviewEnterNext {
+        from {
+            opacity: 0;
+            transform: translateX(28px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+    }
+
+    @keyframes reviewEnterPrev {
+        from {
+            opacity: 0;
+            transform: translateX(-28px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+    }
+
+    .animate-review-next {
+        animation: reviewEnterNext 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .animate-review-prev {
+        animation: reviewEnterPrev 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     .animate-float {
         animation: float 4s ease-in-out infinite;
+    }
+
+    .animate-page-in {
+        animation: pageFadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Scroll-reveal primitive (paired with the <Reveal> component / useReveal hook) */
+    .reveal {
+        opacity: 0;
+        transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+    }
+
+    .reveal-up { transform: translateY(28px); }
+    .reveal-down { transform: translateY(-28px); }
+    .reveal-left { transform: translateX(28px); }
+    .reveal-right { transform: translateX(-28px); }
+    .reveal-zoom { transform: scale(0.94); }
+
+    .reveal-visible {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        .reveal {
+            opacity: 1 !important;
+            transform: none !important;
+        }
     }
 
     /* Premium Shimmer/Shine Hover Effect */

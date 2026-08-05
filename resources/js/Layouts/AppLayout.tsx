@@ -34,7 +34,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <Navbar />
 
             {/* Main Content */}
-            <main className="flex-grow">
+            <main className="flex-grow animate-page-in">
                 {children}
             </main>
 

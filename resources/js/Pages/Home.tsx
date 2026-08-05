@@ -3,6 +3,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import AppLayout from '../Layouts/AppLayout';
 import ProductCard from '@/components/ProductCard';
 import DiscountBadge from '@/components/DiscountBadge';
+import Reveal from '@/Components/Reveal';
 import type { Category, ProductCard as ProductCardType } from '@/types';
 
 interface City {
@@ -36,9 +37,8 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
 
     const banners = [
         '/images/banner1.png',
-        // '/images/banner2.png',
+        '/images/banner2.png',
         '/images/banner3.png',
-        // '/images/banner4.jpeg'
     ];
 
     useEffect(() => {
@@ -62,19 +62,24 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
             <Head title="Find Trusted Jewellers in Pakistan" />
 
             {/* ── Hero Section ──────────────────────────────────────────── */}
-            <section className="relative bg-[#0f172a] py-16 md:py-24 overflow-hidden">
+            <section className="relative bg-[#0f172a] py-16 md:py-24 min-h-[420px] md:min-h-[620px] overflow-hidden">
                 {/* Background Slider */}
                 <div className="absolute inset-0 z-0">
                     {banners.map((src, index) => (
                         <div
                             key={src}
-                            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${currentBannerIndex === index ? 'opacity-60' : 'opacity-0'
+                            className={`absolute inset-0 bg-cover bg-no-repeat transition-opacity duration-1000 ease-in-out ${currentBannerIndex === index ? 'opacity-90' : 'opacity-0'
                                 }`}
-                            style={{ backgroundImage: `url('${src}')` }}
+                            style={{
+                                backgroundImage: `url('${src}')`,
+                                backgroundPosition: '14% 18%',
+                                transformOrigin: '14% 18%',
+                                animation: currentBannerIndex === index ? 'kenBurns 4.6s ease-out forwards' : 'none',
+                            }}
                         />
                     ))}
                     {/* Gradient Overlay for luxury feel and readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/65 to-[#0f172a]/35" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/90 via-[#0f172a]/40 to-[#0f172a]/15" />
                 </div>
 
                 <div className="absolute inset-0 opacity-5 pointer-events-none z-0">
@@ -174,11 +179,11 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
             {latestArrivals.length > 0 && (
                 <section className="py-20 bg-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-12">
+                        <Reveal className="text-center mb-12">
                             <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Fresh Designs</span>
                             <h2 className="font-luxury text-4xl md:text-5xl text-[#0f172a] font-bold mt-2">Latest Arrivals</h2>
                             <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
-                        </div>
+                        </Reveal>
 
                         <HorizontalProductSlider products={latestArrivals} />
                     </div>
@@ -189,10 +194,10 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
             {featuredCategories.map((cat) => (
                 <section key={cat.id} className="py-20 bg-[#faf9f6] border-t border-gray-100">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="text-center mb-12">
+                        <Reveal className="text-center mb-12">
                             <h2 className="font-luxury text-5xl md:text-6xl text-[#0f172a] font-bold">{cat.name}</h2>
                             <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
-                        </div>
+                        </Reveal>
 
                         <HorizontalProductSlider products={cat.products} />
 
@@ -213,12 +218,14 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
             {/* ── Customer Reviews ──────────────────────────────────────── */}
             <section className="py-20 bg-white overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-12">
+                    <Reveal className="text-center mb-12">
                         <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Customer Stories</span>
                         <h2 className="font-luxury text-3xl md:text-4xl text-[#0f172a] font-bold mt-2">What Our Clients Say</h2>
                         <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
-                    </div>
-                    <ReviewsCarousel />
+                    </Reveal>
+                    <Reveal delay={150}>
+                        <ReviewsCarousel />
+                    </Reveal>
                 </div>
             </section>
         </AppLayout>
@@ -259,10 +266,14 @@ function HorizontalProductSlider({ products }: { products: ProductCardType[] }) 
                 ref={scrollRef}
                 className="flex gap-5 overflow-x-auto pb-4 scroll-smooth"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                {products.map((product) => (
-                    <div key={product.id} className="flex-shrink-0 w-[calc(100%-20px)] sm:w-[calc(50%-15px)] md:w-[calc(33.33%-15px)] lg:w-[calc(25%-15px)]">
+                {products.map((product, idx) => (
+                    <Reveal
+                        key={product.id}
+                        delay={Math.min(idx, 4) * 90}
+                        className="flex-shrink-0 w-[calc(100%-20px)] sm:w-[calc(50%-15px)] md:w-[calc(33.33%-15px)] lg:w-[calc(25%-15px)]"
+                    >
                         <ProductCard product={product} />
-                    </div>
+                    </Reveal>
                 ))}
             </div>
         </div>
@@ -280,10 +291,17 @@ function ReviewsCarousel() {
     ];
 
     const [currentPage, setCurrentPage] = React.useState(0);
+    const [direction, setDirection] = React.useState<'next' | 'prev'>('next');
     const totalPages = Math.ceil(reviews.length / 2);
 
-    const handleNext = () => setCurrentPage((prev) => (prev + 1) % totalPages);
-    const handlePrev = () => setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
+    const handleNext = () => {
+        setDirection('next');
+        setCurrentPage((prev) => (prev + 1) % totalPages);
+    };
+    const handlePrev = () => {
+        setDirection('prev');
+        setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
+    };
 
     React.useEffect(() => {
         const interval = setInterval(handleNext, 6000);
@@ -296,20 +314,31 @@ function ReviewsCarousel() {
         <div className="max-w-6xl mx-auto relative group">
             {/* Navigation Arrows (Top Right) */}
             <div className="absolute -top-16 right-0 hidden md:flex gap-2 z-10">
-                <button onClick={handlePrev} className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20" title="Previous">
+                <button onClick={handlePrev} className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:-translate-x-0.5 cursor-pointer border-2 border-transparent hover:border-white/20" title="Previous">
                     <i className="fa-solid fa-arrow-left-long text-sm" />
                 </button>
-                <button onClick={handleNext} className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20" title="Next">
+                <button onClick={handleNext} className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:translate-x-0.5 cursor-pointer border-2 border-transparent hover:border-white/20" title="Next">
                     <i className="fa-solid fa-arrow-right-long text-sm" />
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 transition-all duration-500 ease-in-out">
-                {visibleReviews.map((rev) => (
-                    <div key={rev.id} className="bg-[#faf9f6] border border-[#d4af37]/25 rounded-2xl p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 relative hover:-translate-y-1">
+            <div key={currentPage} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {visibleReviews.map((rev, idx) => (
+                    <div
+                        key={rev.id}
+                        className={`bg-[#faf9f6] border border-[#d4af37]/25 rounded-2xl p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 relative hover:-translate-y-1 ${direction === 'next' ? 'animate-review-next' : 'animate-review-prev'
+                            }`}
+                        style={{ animationDelay: `${idx * 100}ms` }}
+                    >
                         <span className="absolute top-4 right-6 text-6xl text-[#d4af37]/10 font-serif">"</span>
                         <div className="flex gap-1 mb-3 text-[#d4af37]">
-                            {[...Array(rev.rating)].map((_, i) => <i key={i} className="fa-solid fa-star text-xs" />)}
+                            {[...Array(rev.rating)].map((_, i) => (
+                                <i
+                                    key={i}
+                                    className="fa-solid fa-star text-xs animate-fade-in-up"
+                                    style={{ animationDelay: `${idx * 100 + 200 + i * 60}ms` }}
+                                />
+                            ))}
                         </div>
                         <p className="text-gray-600 italic text-sm md:text-base leading-relaxed mb-6">"{rev.review}"</p>
                         <div className="flex items-center justify-between border-t border-gray-200/50 pt-4">
@@ -325,7 +354,14 @@ function ReviewsCarousel() {
 
             <div className="flex justify-center gap-2 mt-8">
                 {[...Array(totalPages)].map((_, idx) => (
-                    <button key={idx} onClick={() => setCurrentPage(idx)} className={`h-2.5 rounded-full transition-all duration-300 ${idx === currentPage ? 'w-8 bg-[#d4af37]' : 'w-2.5 bg-gray-300 hover:bg-gray-400'}`} />
+                    <button
+                        key={idx}
+                        onClick={() => {
+                            setDirection(idx >= currentPage ? 'next' : 'prev');
+                            setCurrentPage(idx);
+                        }}
+                        className={`h-2.5 rounded-full transition-all duration-300 ${idx === currentPage ? 'w-8 bg-[#d4af37]' : 'w-2.5 bg-gray-300 hover:bg-gray-400'}`}
+                    />
                 ))}
             </div>
         </div>
