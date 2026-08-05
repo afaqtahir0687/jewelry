@@ -17,7 +17,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     }, [flash]);
 
     return (
-        <div className="bg-[#faf9f6] font-sans text-[#0f172a] min-h-screen flex flex-col antialiased">
+        <div className="bg-[#faf9f6] font-sans text-[#0f172a] min-h-screen flex flex-col antialiased overflow-x-hidden">
             {seo_meta && (
                 <Head title={seo_meta.title}>
                     {seo_meta.description && <meta name="description" content={seo_meta.description} />}
