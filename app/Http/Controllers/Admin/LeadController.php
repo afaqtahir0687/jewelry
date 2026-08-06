@@ -99,12 +99,13 @@ class LeadController extends Controller
         $data = $request->validated();
 
         if (isset($data['sale_amount']) && $data['sale_amount'] > 0) {
-            $commission = $this->leadService->calculateCommission($lead, (float) $data['sale_amount']);
+            $commission                = $this->leadService->calculateCommission($lead, (float) $data['sale_amount']);
             $data['commission_type']   = $commission['type'];
             $data['commission_amount'] = $commission['amount'];
         }
 
-        $lead->update($data);
+        // Route through service so email triggers on status change
+        $this->leadService->updateLead($lead->id, $data);
 
         return back()->with('success', 'Lead updated successfully.');
     }

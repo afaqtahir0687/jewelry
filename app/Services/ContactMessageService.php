@@ -8,11 +8,17 @@ use App\Models\ContactMessage;
 class ContactMessageService
 {
     public function __construct(
-        protected ContactMessageRepository $contactMessageRepository
+        protected ContactMessageRepository $contactMessageRepository,
+        protected EmailService $emailService
     ) {}
 
     public function createMessage(array $data): ContactMessage
     {
-        return $this->contactMessageRepository->create($data);
+        $contactMessage = $this->contactMessageRepository->create($data);
+
+        // Email: notify admin of new contact message
+        $this->emailService->sendContactMessageNotification($contactMessage);
+
+        return $contactMessage;
     }
 }
