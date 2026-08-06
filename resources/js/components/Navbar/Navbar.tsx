@@ -93,26 +93,42 @@ export default function Navbar() {
                     </nav>
 
                     {/* Desktop CTA & Actions */}
-                    <div className="hidden md:flex items-center space-x-5">
-                        <Link href="/search" className="text-[#0f172a] hover:text-[#d4af37] transition-colors" title="Search">
-                            <i className="fa-solid fa-magnifying-glass text-lg" />
+                    <div className="hidden md:flex items-center gap-5">
+                        <div className="flex items-center gap-4 pr-5 border-r border-gray-200">
+                            <a href="tel:+923017730687" className="text-[#0f172a] hover:text-[#d4af37] transition-all duration-200" title="Call us">
+                                <i className="fa-solid fa-phone text-lg" />
+                            </a>
+                            <a
+                                href="https://wa.me/923017730687"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[#25D366] hover:text-[#1ebe5d] transition-all duration-200"
+                                title="Chat on WhatsApp"
+                            >
+                                <i className="fa-brands fa-whatsapp text-xl" />
+                            </a>
+                        </div>
+                        <Link href="/become-a-partner" className="border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-white px-4 py-2.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all duration-300 whitespace-nowrap">
+                            Become a Partner
                         </Link>
-                        <a href="tel:+923017730687" className="flex items-center gap-1.5 text-[#0f172a] hover:text-[#d4af37] transition-all duration-200 group" title="Call us">
-                            <i className="fa-solid fa-phone text-lg group-hover:scale-110 transition-transform" />
-                            <span className="text-xs font-semibold tracking-wide">03017730687</span>
-                        </a>
-                        <Link href="/custom-jewellery" className="bg-[#0f172a] hover:bg-[#1e293b] text-white px-5 py-2.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all duration-300 shadow-md">
+                        <Link href="/custom-jewellery" className="bg-[#0f172a] hover:bg-[#1e293b] text-white px-5 py-2.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all duration-300 shadow-md whitespace-nowrap">
                             Get Quote
                         </Link>
                     </div>
 
                     {/* Mobile menu toggle */}
                     <div className="md:hidden flex items-center gap-4">
-                        <Link href="/search" className="text-[#0f172a] hover:text-[#d4af37] transition-colors" title="Search">
-                            <i className="fa-solid fa-magnifying-glass text-xl" />
-                        </Link>
-                        <button 
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+                        <a
+                            href="https://wa.me/923017730687"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[#25D366] hover:text-[#1ebe5d] transition-colors"
+                            title="Chat on WhatsApp"
+                        >
+                            <i className="fa-brands fa-whatsapp text-2xl" />
+                        </a>
+                        <button
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             className="text-[#0f172a] hover:text-[#d4af37] focus:outline-none transition-colors"
                             aria-expanded={mobileMenuOpen}
                             aria-label="Toggle menu"
@@ -195,6 +211,9 @@ export default function Navbar() {
                     <div className="p-5 border-t border-gray-100 space-y-3 bg-[#faf9f6]">
                         <Link href="/find-a-jeweller" className="block w-full text-center border border-[#0f172a]/30 px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-sm hover:border-[#d4af37] hover:text-[#d4af37] transition-colors" onClick={closeAllMenus}>
                             Find a Jeweller
+                        </Link>
+                        <Link href="/become-a-partner" className="block w-full text-center border border-[#d4af37] text-[#d4af37] px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-sm hover:bg-[#d4af37] hover:text-white transition-colors" onClick={closeAllMenus}>
+                            Become a Partner
                         </Link>
                         <Link href="/custom-jewellery" className="block w-full text-center bg-[#d4af37] text-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded-sm shadow-md" onClick={closeAllMenus}>
                             Get a Quote

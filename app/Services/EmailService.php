@@ -8,8 +8,12 @@ use App\Mail\LeadStatusUpdatedMail;
 use App\Mail\NewAppointmentMail;
 use App\Mail\NewContactMessageMail;
 use App\Mail\NewLeadReceivedMail;
+use App\Mail\NewPartnerRequestMail;
+use App\Mail\PartnerRequestApprovedMail;
+use App\Mail\PartnerRequestRejectedMail;
 use App\Models\Appointment;
 use App\Models\ContactMessage;
+use App\Models\JewellerRequest;
 use App\Models\Lead;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -118,6 +122,42 @@ class EmailService
             Mail::to($this->adminEmail)->send(new NewContactMessageMail($contactMessage));
         } catch (\Throwable $e) {
             Log::error('EmailService::sendContactMessageNotification failed', ['error' => $e->getMessage(), 'contact_id' => $contactMessage->id]);
+        }
+    }
+
+    /**
+     * Scenario 7: New partner (jeweller) application submitted — notify admin
+     */
+    public function sendNewPartnerRequestNotification(JewellerRequest $jewellerRequest): void
+    {
+        try {
+            Mail::to($this->adminEmail)->send(new NewPartnerRequestMail($jewellerRequest));
+        } catch (\Throwable $e) {
+            Log::error('EmailService::sendNewPartnerRequestNotification failed', ['error' => $e->getMessage(), 'request_id' => $jewellerRequest->id]);
+        }
+    }
+
+    /**
+     * Scenario 8: Partner application approved — notify applicant (with login credentials if a new account was created)
+     */
+    public function sendPartnerRequestApprovedNotification(JewellerRequest $jewellerRequest, ?string $temporaryPassword = null): void
+    {
+        try {
+            Mail::to($jewellerRequest->email)->send(new PartnerRequestApprovedMail($jewellerRequest, $temporaryPassword));
+        } catch (\Throwable $e) {
+            Log::error('EmailService::sendPartnerRequestApprovedNotification failed', ['error' => $e->getMessage(), 'request_id' => $jewellerRequest->id]);
+        }
+    }
+
+    /**
+     * Scenario 9: Partner application rejected — notify applicant
+     */
+    public function sendPartnerRequestRejectedNotification(JewellerRequest $jewellerRequest): void
+    {
+        try {
+            Mail::to($jewellerRequest->email)->send(new PartnerRequestRejectedMail($jewellerRequest));
+        } catch (\Throwable $e) {
+            Log::error('EmailService::sendPartnerRequestRejectedNotification failed', ['error' => $e->getMessage(), 'request_id' => $jewellerRequest->id]);
         }
     }
 

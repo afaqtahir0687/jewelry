@@ -3,7 +3,7 @@ import { Link, router, usePage } from '@inertiajs/react';
 import {
     LayoutDashboard, Users, Store, Package, ClipboardList,
     Calendar, Tag, MapPin, Star, LogOut, Menu, X, ChevronRight, Gem,
-    FileText, MessageSquare, Globe
+    FileText, MessageSquare, Globe, Handshake
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
@@ -20,6 +20,7 @@ interface NavItem {
 const navItems: NavItem[] = [
     { label: 'Dashboard',    href: '/admin',              icon: <LayoutDashboard size={18} />, routeKey: 'admin.dashboard' },
     { label: 'Leads',        href: '/admin/leads',        icon: <ClipboardList size={18} />,  routeKey: 'admin.leads' },
+    { label: 'Partner Requests', href: '/admin/partner-requests', icon: <Handshake size={18} />, routeKey: 'admin.partner-requests' },
     { label: 'Jewellers',    href: '/admin/jewellers',    icon: <Store size={18} />,          routeKey: 'admin.jewellers' },
     { label: 'Products',     href: '/admin/products',     icon: <Package size={18} />,        routeKey: 'admin.products' },
     { label: 'Appointments', href: '/admin/appointments', icon: <Calendar size={18} />,       routeKey: 'admin.appointments' },

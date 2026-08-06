@@ -8,6 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\SellerAuthController;
 use App\Http\Controllers\Admin;
@@ -26,6 +27,8 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 Route::get('/custom-jewellery', [LeadController::class, 'custom'])->name('lead.custom');
 Route::post('/custom-jewellery', [LeadController::class, 'store'])->name('lead.store');
 Route::get('/custom-jewellery/success', [LeadController::class, 'success'])->name('lead.success');
+Route::get('/become-a-partner', [PartnerController::class, 'create'])->name('partner.create');
+Route::post('/become-a-partner', [PartnerController::class, 'store'])->name('partner.store');
 Route::get('/jewellers/{city:slug}', [CityController::class, 'show'])->name('city.show');
 Route::get('/jeweller/{jeweller:slug}', [JewellerController::class, 'show'])->name('jeweller.show');
 
@@ -52,6 +55,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/leads/{lead}', [Admin\LeadController::class, 'show'])->name('leads.show');
         Route::patch('/leads/{lead}', [Admin\LeadController::class, 'update'])->name('leads.update');
         Route::delete('/leads/{lead}', [Admin\LeadController::class, 'destroy'])->name('leads.destroy');
+
+        // Partner Requests
+        Route::get('/partner-requests', [Admin\PartnerRequestController::class, 'index'])->name('partner-requests.index');
+        Route::get('/partner-requests/{partnerRequest}', [Admin\PartnerRequestController::class, 'show'])->name('partner-requests.show');
+        Route::patch('/partner-requests/{partnerRequest}/approve', [Admin\PartnerRequestController::class, 'approve'])->name('partner-requests.approve');
+        Route::patch('/partner-requests/{partnerRequest}/reject', [Admin\PartnerRequestController::class, 'reject'])->name('partner-requests.reject');
+        Route::delete('/partner-requests/{partnerRequest}', [Admin\PartnerRequestController::class, 'destroy'])->name('partner-requests.destroy');
 
         // Jewellers
         Route::get('/jewellers', [Admin\JewellerController::class, 'index'])->name('jewellers.index');

@@ -143,6 +143,17 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
             <Toaster richColors theme="light" position="top-right" closeButton />
 
+            {/* Floating Call Button */}
+            <a
+                href="tel:+923017730687"
+                className="fixed bottom-20 md:bottom-6 left-5 z-50 group flex items-center gap-2 bg-[#0f172a] hover:bg-[#1e293b] text-white rounded-full shadow-2xl transition-all duration-300 hover:shadow-[#d4af37]/30 hover:scale-105"
+                title="Call us">
+                <span className="relative flex items-center gap-2 px-4 py-3">
+                    <i className="fa-solid fa-phone text-lg" />
+                    <span className="text-sm font-semibold tracking-wide hidden sm:inline">03017730687</span>
+                </span>
+            </a>
+
             {/* Floating WhatsApp Button */}
             <a
                 href="https://wa.me/923017730687"

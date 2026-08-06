@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\Contracts\UserRepositoryInterface::class, \App\Repositories\Eloquent\UserRepository::class);
         $this->app->bind(\App\Repositories\Contracts\AppointmentRepositoryInterface::class, \App\Repositories\Eloquent\AppointmentRepository::class);
         $this->app->bind(\App\Repositories\Contracts\SubCategoryRepositoryInterface::class, \App\Repositories\Eloquent\SubCategoryRepository::class);
+        $this->app->bind(\App\Repositories\Contracts\JewellerRequestRepositoryInterface::class, \App\Repositories\Eloquent\JewellerRequestRepository::class);
     }
 
     /**
