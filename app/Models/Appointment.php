@@ -14,6 +14,7 @@ class Appointment extends Model
         'lead_id',
         'jeweller_id',
         'customer_name',
+        'customer_email',
         'customer_phone',
         'appointment_date',
         'appointment_time',

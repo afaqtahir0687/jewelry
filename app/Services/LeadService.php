@@ -9,11 +9,16 @@ class LeadService
 {
     protected LeadRepositoryInterface $leadRepository;
     protected UploadService $uploadService;
+    protected EmailService $emailService;
 
-    public function __construct(LeadRepositoryInterface $leadRepository, UploadService $uploadService)
-    {
+    public function __construct(
+        LeadRepositoryInterface $leadRepository,
+        UploadService $uploadService,
+        EmailService $emailService
+    ) {
         $this->leadRepository = $leadRepository;
-        $this->uploadService = $uploadService;
+        $this->uploadService  = $uploadService;
+        $this->emailService   = $emailService;
     }
 
     public function getPaginatedList(array $filters = [], int $perPage = 15)
@@ -23,7 +28,18 @@ class LeadService
 
     public function updateLead(int $id, array $data)
     {
-        return $this->leadRepository->update($data, $id);
+        $lead      = $this->leadRepository->findOrFail($id);
+        $oldStatus = $lead->status;
+
+        $updated = $this->leadRepository->update($data, $id);
+
+        // Send email if status changed
+        if (isset($data['status']) && $data['status'] !== $oldStatus) {
+            $lead->refresh();
+            $this->emailService->sendLeadStatusUpdatedNotification($lead);
+        }
+
+        return $updated;
     }
 
     public function deleteLead(int $id)
@@ -39,7 +55,7 @@ class LeadService
     public function createLead(array $data, $imageFile = null)
     {
         if ($imageFile) {
-            $path = $this->uploadService->upload($imageFile, 'leads');
+            $path                    = $this->uploadService->upload($imageFile, 'leads');
             $data['reference_image'] = $path;
         }
 
@@ -53,14 +69,25 @@ class LeadService
             $data['status'] = 'new';
         }
 
-        return $this->leadRepository->create($data);
+        $lead = $this->leadRepository->create($data);
+
+        // Email: notify admin of new lead
+        $this->emailService->sendNewLeadNotification($lead);
+
+        // Email: notify jeweller if lead is assigned
+        if (!empty($data['jeweller_id'])) {
+            $lead->load('jeweller.user');
+            $this->emailService->sendLeadAssignedNotification($lead);
+        }
+
+        return $lead;
     }
 
     protected function generateUniqueLeadId($cityId): string
     {
         $cityCode = 'GEN';
-        $city = City::find($cityId);
-        
+        $city     = City::find($cityId);
+
         if ($city) {
             $cityName = strtolower($city->name);
             if (str_contains($cityName, 'lahore')) {
@@ -81,7 +108,7 @@ class LeadService
                 $cityCode = 'UET';
             }
         }
-        
+
         $randomNum = str_pad(rand(1, 999999), 6, '0', STR_PAD_LEFT);
         return strtoupper($cityCode) . '-CUSTOM-' . $randomNum;
     }
@@ -110,4 +137,3 @@ class LeadService
         ];
     }
 }
-
