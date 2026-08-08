@@ -23,25 +23,25 @@ export default function NewsletterSignup({ variant = 'section' }: NewsletterSign
 
     if (variant === 'compact') {
         return (
-            <div>
+            <div className="w-full md:w-auto">
                 {subscribed ? (
                     <div className="flex items-center gap-2 text-sm text-[#d4af37] bg-white/5 border border-[#d4af37]/30 rounded-sm px-4 py-2.5">
                         <i className="fa-solid fa-circle-check" /> Thank you for subscribing!
                     </div>
                 ) : (
-                    <form onSubmit={handleSubmit} className="flex w-full md:w-auto gap-2">
+                    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full md:w-auto gap-2">
                         <input
                             type="email"
                             required
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
                             placeholder="Enter your email"
-                            className="flex-1 md:w-64 bg-white/10 border border-white/15 rounded-sm px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-[#d4af37] transition-colors duration-300"
+                            className="w-full sm:flex-1 md:w-64 bg-white/10 border border-white/15 rounded-sm px-4 py-2.5 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-[#d4af37] transition-colors duration-300"
                         />
                         <button
                             type="submit"
                             disabled={processing}
-                            className="bg-[#d4af37] hover:bg-[#bda030] text-[#3d1112] font-bold px-5 py-2.5 text-xs uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap disabled:opacity-60">
+                            className="w-full sm:w-auto bg-[#d4af37] hover:bg-[#bda030] text-[#3d1112] font-bold px-5 py-2.5 text-xs uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap disabled:opacity-60">
                             {processing ? 'Subscribing…' : 'Subscribe'}
                         </button>
                     </form>

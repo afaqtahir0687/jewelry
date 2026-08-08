@@ -13,11 +13,26 @@ interface AppLayoutProps {
 export default function AppLayout({ children }: AppLayoutProps) {
     const { flash, seo_meta, nav_categories = [] } = usePage<PageProps>().props;
     const pageUrl = usePage().url;
+    const footerRef = React.useRef<HTMLElement>(null);
+    const [footerVisible, setFooterVisible] = React.useState(false);
 
     React.useEffect(() => {
         if (flash?.success) toast.success(flash.success);
         if (flash?.error) toast.error(flash.error);
     }, [flash]);
+
+    // Hide the floating call/WhatsApp buttons once the footer scrolls into view
+    // so they don't sit on top of footer text/links.
+    React.useEffect(() => {
+        const node = footerRef.current;
+        if (!node) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => setFooterVisible(entry.isIntersecting),
+            { rootMargin: '0px 0px -40% 0px' }
+        );
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, [pageUrl]);
 
     React.useEffect(() => {
         AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
@@ -50,7 +65,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             </main>
 
             {/* Premium Footer */}
-            <footer className="bg-gradient-to-b from-[#3d1112] to-black text-gray-400 pt-16 pb-24 md:pb-12 border-t border-[#d4af37]/20">
+            <footer ref={footerRef} className="bg-gradient-to-b from-[#3d1112] to-black text-gray-400 pt-16 pb-24 md:pb-12 border-t border-[#d4af37]/20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                     {/* Newsletter Strip */}
@@ -170,7 +185,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             {/* Floating Call Button */}
             <a
                 href="tel:+923017730687"
-                className="fixed bottom-20 md:bottom-6 left-5 z-50 group flex items-center gap-2 bg-[#5c1a1b] hover:bg-[#7a2426] text-white rounded-full shadow-2xl transition-all duration-300 hover:shadow-[#d4af37]/30 hover:scale-105"
+                className={`fixed bottom-20 md:bottom-6 left-5 z-50 group flex items-center gap-2 bg-[#5c1a1b] hover:bg-[#7a2426] text-white rounded-full shadow-2xl transition-all duration-300 hover:shadow-[#d4af37]/30 hover:scale-105 ${footerVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                 title="Call us">
                 <span className="relative flex items-center gap-2 px-4 py-3">
                     <i className="fa-solid fa-phone text-lg" />
@@ -183,7 +198,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 href="https://wa.me/923017730687"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="fixed bottom-20 md:bottom-6 right-5 z-50 group flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-full shadow-2xl transition-all duration-300 hover:shadow-green-400/40 hover:scale-105"
+                className={`fixed bottom-20 md:bottom-6 right-5 z-50 group flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-full shadow-2xl transition-all duration-300 hover:shadow-green-400/40 hover:scale-105 ${footerVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                 title="Chat on WhatsApp">
                 <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30" />
                 <span className="relative flex items-center gap-2 px-4 py-3">
