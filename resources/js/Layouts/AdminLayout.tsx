@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, router, usePage } from '@inertiajs/react';
 import {
     LayoutDashboard, Users, Store, Package, ClipboardList,
-    Calendar, Tag, MapPin, Star, LogOut, Menu, X, ChevronRight, Gem,
+    Calendar, Tag, MapPin, Star, LogOut, Menu, X, ChevronRight,
     FileText, MessageSquare, Globe, Handshake
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -70,11 +70,8 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
         )}>
             {/* Logo */}
             <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
-                <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center">
-                    <Gem size={16} className="text-gold" />
-                </div>
+                <img src="/images/gehna-logo.svg" alt="Gehna" className="h-9 w-auto" />
                 <div>
-                    <p className="font-bold text-white text-sm tracking-wider uppercase">Online Jewelry</p>
                     <p className="text-[10px] text-gold tracking-widest uppercase">Admin CRM</p>
                 </div>
             </div>

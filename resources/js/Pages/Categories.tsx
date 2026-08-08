@@ -13,7 +13,7 @@ export default function Categories({ categories }: CategoriesProps) {
             <Head title="All Jewellery Categories | Online Jewelry Shop" />
 
             {/* Page Hero */}
-            <section className="bg-[#0f172a] text-white py-16 relative overflow-hidden border-b border-[#d4af37]/10">
+            <section className="bg-[#5c1a1b] text-white py-16 relative overflow-hidden border-b border-[#d4af37]/10">
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-1/4 left-1/3 w-80 h-80 bg-[#d4af37] rounded-full filter blur-3xl" />
                     <div className="absolute bottom-1/4 right-1/3 w-60 h-60 bg-yellow-500 rounded-full filter blur-3xl" />
@@ -28,12 +28,12 @@ export default function Categories({ categories }: CategoriesProps) {
             </section>
 
             {/* Categories Grid */}
-            <section className="py-20 bg-[#faf9f6]">
+            <section className="py-20 bg-[#fff8f0]">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in-up">
                     {categories.length === 0 ? (
                         <div className="text-center py-20">
                             <i className="fa-solid fa-gem text-6xl text-gray-300 mb-4 block" />
-                            <h3 className="font-luxury font-bold text-2xl text-[#0f172a] mb-2">No Categories Available</h3>
+                            <h3 className="font-luxury font-bold text-2xl text-[#5c1a1b] mb-2">No Categories Available</h3>
                             <p className="text-gray-500 text-sm">Check back soon for our collections.</p>
                         </div>
                     ) : (
@@ -55,7 +55,7 @@ export default function Categories({ categories }: CategoriesProps) {
                                                 <i className="fa-solid fa-gem text-5xl text-gray-300" />
                                             </div>
                                         )}
-                                        <div className="absolute inset-0 bg-[#0f172a]/20 group-hover:bg-[#0f172a]/30 transition-colors duration-300" />
+                                        <div className="absolute inset-0 bg-[#5c1a1b]/20 group-hover:bg-[#5c1a1b]/30 transition-colors duration-300" />
 
                                         {cat.is_featured && (
                                             <span className="absolute top-3 left-3 bg-[#d4af37] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
@@ -65,7 +65,7 @@ export default function Categories({ categories }: CategoriesProps) {
                                     </div>
                                     <div className="p-6 flex-grow flex flex-col justify-between">
                                         <div>
-                                            <h2 className="font-luxury text-xl font-bold text-[#0f172a] group-hover:text-[#d4af37] transition-colors duration-300">
+                                            <h2 className="font-luxury text-xl font-bold text-[#5c1a1b] group-hover:text-[#d4af37] transition-colors duration-300">
                                                 {cat.name}
                                             </h2>
                                             {cat.description && (

@@ -1,0 +1,59 @@
+<svg viewBox="0 0 640 210" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 3D maroon gradients -->
+    <linearGradient id="g1-top" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#B5595B"/>
+      <stop offset="45%" stop-color="#7A2426"/>
+      <stop offset="100%" stop-color="#5C1A1B"/>
+    </linearGradient>
+    <linearGradient id="g1-left" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5C1A1B"/>
+      <stop offset="100%" stop-color="#3D1112"/>
+    </linearGradient>
+    <linearGradient id="g1-right" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7A2426"/>
+      <stop offset="100%" stop-color="#4A1517"/>
+    </linearGradient>
+    <linearGradient id="g1-text" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7A2426"/>
+      <stop offset="50%" stop-color="#5C1A1B"/>
+      <stop offset="100%" stop-color="#3D1112"/>
+    </linearGradient>
+    <radialGradient id="g1-glow" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFF6DC" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FFF6DC" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="g1-shadow" x="-40%" y="-40%" width="180%" height="200%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#3D1112" flood-opacity="0.35"/>
+    </filter>
+    <filter id="g1-textshadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#3D1112" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- 3D Gem -->
+  <g transform="translate(320,72)" filter="url(#g1-shadow)">
+    <!-- crown (top) -->
+    <polygon points="-44,-4 -24,-34 24,-34 44,-4" fill="url(#g1-top)"/>
+    <polygon points="-24,-34 0,-4 24,-34" fill="#C97B7D" opacity="0.85"/>
+    <polygon points="-44,-4 -24,-34 0,-4" fill="#8A3234"/>
+    <polygon points="44,-4 24,-34 0,-4" fill="#6E2224"/>
+    <!-- pavilion (bottom) -->
+    <polygon points="-44,-4 0,52 0,-4" fill="url(#g1-left)"/>
+    <polygon points="44,-4 0,52 0,-4" fill="url(#g1-right)"/>
+    <!-- girdle highlight -->
+    <line x1="-44" y1="-4" x2="44" y2="-4" stroke="#E3AEAF" stroke-width="1.6" opacity="0.9"/>
+    <!-- sparkle -->
+    <g fill="#FFFFFF">
+      <path d="M -14 -22 l 2.5 6 l 6 2.5 l -6 2.5 l -2.5 6 l -2.5 -6 l -6 -2.5 l 6 -2.5 z" opacity="0.95"/>
+      <circle cx="18" cy="10" r="2.2" opacity="0.8"/>
+    </g>
+    <!-- soft glow -->
+    <ellipse cx="0" cy="-14" rx="46" ry="26" fill="url(#g1-glow)" opacity="0.4"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="320" y="188" text-anchor="middle" filter="url(#g1-textshadow)"
+        font-family="'Montserrat','Segoe UI',Arial,sans-serif" font-weight="800"
+        font-size="64" letter-spacing="14" fill="url(#g1-text)">GEHNA</text>
+</svg>

@@ -23,9 +23,9 @@ export default function ContactUs() {
                 <meta name="description" content="Get in touch with Online Jewelry Shop for any inquiries, support or feedback." />
             </Head>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-                <div className="text-center mb-16 animate-fade-in-up">
-                    <h1 className="text-4xl md:text-5xl font-luxury text-[#0f172a] mb-4">Contact Us</h1>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-24">
+                <div className="text-center mb-10 md:mb-16 animate-fade-in-up">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-luxury text-[#5c1a1b] mb-4">Contact Us</h1>
                     <p className="text-gray-600 max-w-2xl mx-auto">
                         Have a question about our verified jewelers or need help with a custom order? 
                         We are here to help. Reach out to us anytime.
@@ -37,11 +37,11 @@ export default function ContactUs() {
                     <div className="bg-white p-8 rounded-lg shadow-sm border border-gray-100 animate-fade-in-left flex flex-col justify-center">
                         <div className="space-y-8">
                             <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 bg-[#faf9f6] rounded-full flex items-center justify-center text-[#d4af37] shrink-0">
+                                <div className="w-12 h-12 bg-[#fff8f0] rounded-full flex items-center justify-center text-[#d4af37] shrink-0">
                                     <i className="fa-solid fa-location-dot text-xl"></i>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-luxury font-semibold text-[#0f172a] mb-1">Our Office</h3>
+                                    <h3 className="text-lg font-luxury font-semibold text-[#5c1a1b] mb-1">Our Office</h3>
                                     <p className="text-gray-600 text-sm leading-relaxed">
                                         Jewelry Market, Lahore<br />
                                         Punjab, Pakistan
@@ -50,22 +50,22 @@ export default function ContactUs() {
                             </div>
                             
                             <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 bg-[#faf9f6] rounded-full flex items-center justify-center text-[#d4af37] shrink-0">
+                                <div className="w-12 h-12 bg-[#fff8f0] rounded-full flex items-center justify-center text-[#d4af37] shrink-0">
                                     <i className="fa-solid fa-phone text-xl"></i>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-luxury font-semibold text-[#0f172a] mb-1">Phone Number</h3>
+                                    <h3 className="text-lg font-luxury font-semibold text-[#5c1a1b] mb-1">Phone Number</h3>
                                     <p className="text-gray-600 text-sm mb-1">03017730687</p>
                                     <p className="text-xs text-gray-500">Mon-Sat 9am to 6pm</p>
                                 </div>
                             </div>
                             
                             <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 bg-[#faf9f6] rounded-full flex items-center justify-center text-[#d4af37] shrink-0">
+                                <div className="w-12 h-12 bg-[#fff8f0] rounded-full flex items-center justify-center text-[#d4af37] shrink-0">
                                     <i className="fa-solid fa-envelope text-xl"></i>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-luxury font-semibold text-[#0f172a] mb-1">Email Address</h3>
+                                    <h3 className="text-lg font-luxury font-semibold text-[#5c1a1b] mb-1">Email Address</h3>
                                     <p className="text-gray-600 text-sm">support@onlinejewelry.pk</p>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@ export default function ContactUs() {
                     <div className="bg-white p-8 rounded-lg shadow-sm border border-[#d4af37]/20 animate-fade-in-right relative">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#d4af37] to-[#f3e5ab] rounded-t-lg"></div>
                         
-                        <h2 className="text-2xl font-luxury text-[#0f172a] mb-6">Send a Message</h2>
+                        <h2 className="text-2xl font-luxury text-[#5c1a1b] mb-6">Send a Message</h2>
                         
                         <form onSubmit={submit} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -88,7 +88,7 @@ export default function ContactUs() {
                                         value={data.name}
                                         onChange={(e) => setData('name', e.target.value)}
                                         placeholder="John Doe"
-                                        className="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
+                                        className="bg-[#fff8f0] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
                                     />
                                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                                 </div>
@@ -100,7 +100,7 @@ export default function ContactUs() {
                                         value={data.email}
                                         onChange={(e) => setData('email', e.target.value)}
                                         placeholder="john@example.com"
-                                        className="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
+                                        className="bg-[#fff8f0] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
                                     />
                                     {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                                 </div>
@@ -113,7 +113,7 @@ export default function ContactUs() {
                                     value={data.subject}
                                     onChange={(e) => setData('subject', e.target.value)}
                                     placeholder="How can we help?"
-                                    className="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
+                                    className="bg-[#fff8f0] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37]"
                                 />
                                 {errors.subject && <p className="text-red-500 text-xs mt-1">{errors.subject}</p>}
                             </div>
@@ -126,7 +126,7 @@ export default function ContactUs() {
                                     value={data.message}
                                     onChange={(e) => setData('message', e.target.value)}
                                     placeholder="Write your message here..."
-                                    className="bg-[#faf9f6] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37] resize-y"
+                                    className="bg-[#fff8f0] border border-gray-200 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#d4af37] resize-y"
                                 ></textarea>
                                 {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
                             </div>

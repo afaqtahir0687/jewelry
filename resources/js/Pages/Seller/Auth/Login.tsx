@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, Head } from '@inertiajs/react';
-import { Store, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -39,9 +39,7 @@ export default function SellerLogin() {
                     <div className="bg-[#0f172a] border border-white/10 rounded-2xl p-8 shadow-2xl">
 
                         <div className="text-center mb-8">
-                            <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4">
-                                <Store size={24} className="text-emerald-400" />
-                            </div>
+                            <img src="/images/gehna-logo.svg" alt="Gehna" className="h-16 w-auto mx-auto mb-4" />
                             <h1 className="text-2xl font-bold text-white">Seller Portal</h1>
                             <p className="text-gray-400 text-sm mt-1">Manage your jewellery store</p>
                         </div>

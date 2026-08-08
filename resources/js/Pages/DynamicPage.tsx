@@ -59,13 +59,13 @@ export default function DynamicPage({ page }: DynamicPageProps) {
                         {/* Top Decorative Line */}
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent rounded-t-lg opacity-50"></div>
                         
-                        <h1 className="text-3xl md:text-4xl font-luxury text-[#0f172a] mb-8 pb-4 border-b border-gray-100 text-center">
+                        <h1 className="text-3xl md:text-4xl font-luxury text-[#5c1a1b] mb-8 pb-4 border-b border-gray-100 text-center">
                             {page.title}
                         </h1>
                         
                         {/* Render HTML content safely */}
                         <div 
-                            className="prose prose-sm sm:prose lg:prose-lg max-w-none prose-headings:font-luxury prose-h2:text-2xl prose-h3:text-xl prose-a:text-[#d4af37] hover:prose-a:text-[#0f172a] transition-colors prose-strong:text-[#0f172a]"
+                            className="prose prose-sm sm:prose lg:prose-lg max-w-none prose-headings:font-luxury prose-h2:text-2xl prose-h3:text-xl prose-a:text-[#d4af37] hover:prose-a:text-[#5c1a1b] transition-colors prose-strong:text-[#5c1a1b]"
                             dangerouslySetInnerHTML={{ __html: page.content || '' }} 
                         />
                     </div>

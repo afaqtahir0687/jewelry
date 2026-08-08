@@ -10,7 +10,7 @@ interface MegaMenuColumnProps {
 export default function MegaMenuColumn({ group, closeMenu }: MegaMenuColumnProps) {
     return (
         <div className="flex flex-col">
-            <h3 className="text-[#0f172a] font-luxury font-bold text-sm tracking-wider uppercase mb-4 border-b border-[#d4af37]/20 pb-2">
+            <h3 className="text-[#5c1a1b] font-luxury font-bold text-sm tracking-wider uppercase mb-4 border-b border-[#d4af37]/20 pb-2">
                 {group.heading}
             </h3>
             <ul className="space-y-3">

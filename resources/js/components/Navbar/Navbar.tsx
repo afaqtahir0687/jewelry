@@ -8,8 +8,16 @@ export default function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
     const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
+    const [scrolled, setScrolled] = useState(false);
     const headerRef = useRef<HTMLElement>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 24);
+        handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const handleMouseEnter = (label: string) => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -54,21 +62,30 @@ export default function Navbar() {
     };
 
     return (
-        <header ref={headerRef} className="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-[#d4af37]/20 shadow-sm transition-all duration-300">
+        <header
+            ref={headerRef}
+            className={`bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b transition-all duration-300 ${scrolled ? 'border-[#d4af37]/30 shadow-lg' : 'border-[#d4af37]/15 shadow-sm'
+                }`}
+        >
+            {/* Gold hairline accent */}
+            <div className="h-[3px] w-full bg-gradient-to-r from-[#5c1a1b] via-[#d4af37] to-[#5c1a1b]" />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-20 items-center">
+                <div className={`flex justify-between items-center transition-all duration-300 ${scrolled ? 'h-12' : 'h-14'}`}>
 
                     {/* Brand Logo */}
                     <div className="flex-shrink-0 flex items-center">
-                        <Link href="/" className="flex flex-col" onClick={closeAllMenus}>
-                            <span className="font-luxury font-bold text-2xl tracking-wide text-[#0f172a]">ONLINE JEWELRY</span>
-                            <span className="text-xs font-semibold tracking-widest text-[#d4af37] text-right uppercase -mt-1">SHOP</span>
+                        <Link href="/" className="flex items-center" onClick={closeAllMenus}>
+                            <img
+                                src="/images/gehna-logo.svg"
+                                alt="Gehna"
+                                className={`w-auto transition-all duration-300 ${scrolled ? 'h-10' : 'h-12'}`}
+                            />
                         </Link>
                     </div>
 
                     {/* Desktop Navigation Menu */}
                     <nav className="hidden md:flex items-center space-x-6 lg:space-x-10 h-full">
-                        <Link href="/" className="relative h-full flex items-center px-1 text-sm font-semibold text-[#0f172a] hover:text-[#d4af37] uppercase tracking-wider group transition-colors duration-200">
+                        <Link href="/" className="relative h-full flex items-center px-1 text-sm font-semibold text-[#5c1a1b] hover:text-[#d4af37] uppercase tracking-wider group transition-colors duration-200">
                             Home
                             <span className="absolute left-0 bottom-0 h-[2px] bg-[#d4af37] w-0 group-hover:w-full transition-all duration-300"></span>
                         </Link>
@@ -85,17 +102,12 @@ export default function Navbar() {
                                 closeMenu={closeAllMenus}
                             />
                         ))}
-
-                        <Link href="/custom-jewellery" className="relative h-full flex items-center px-1 text-sm font-semibold text-[#0f172a] hover:text-[#d4af37] uppercase tracking-wider group transition-colors duration-200">
-                            Custom Order
-                            <span className="absolute left-0 bottom-0 h-[2px] bg-[#d4af37] w-0 group-hover:w-full transition-all duration-300"></span>
-                        </Link>
                     </nav>
 
                     {/* Desktop CTA & Actions */}
                     <div className="hidden md:flex items-center gap-5">
                         <div className="flex items-center gap-4 pr-5 border-r border-gray-200">
-                            <a href="tel:+923017730687" className="text-[#0f172a] hover:text-[#d4af37] transition-all duration-200" title="Call us">
+                            <a href="tel:+923017730687" className="text-[#5c1a1b] hover:text-[#d4af37] transition-all duration-200" title="Call us">
                                 <i className="fa-solid fa-phone text-lg" />
                             </a>
                             <a
@@ -108,11 +120,11 @@ export default function Navbar() {
                                 <i className="fa-brands fa-whatsapp text-xl" />
                             </a>
                         </div>
-                        <Link href="/become-a-partner" className="border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-white px-4 py-2.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all duration-300 whitespace-nowrap">
+                        <Link href="/become-a-partner" className="border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-white px-4 py-1.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all duration-300 whitespace-nowrap">
                             Become a Partner
                         </Link>
-                        <Link href="/custom-jewellery" className="bg-[#0f172a] hover:bg-[#1e293b] text-white px-5 py-2.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all duration-300 shadow-md whitespace-nowrap">
-                            Get Quote
+                        <Link href="/custom-jewellery" className="bg-[#5c1a1b] hover:bg-[#7a2426] text-white px-5 py-1.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all duration-300 shadow-md whitespace-nowrap">
+                            Custom Order
                         </Link>
                     </div>
 
@@ -129,7 +141,7 @@ export default function Navbar() {
                         </a>
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="text-[#0f172a] hover:text-[#d4af37] focus:outline-none transition-colors"
+                            className="text-[#5c1a1b] hover:text-[#d4af37] focus:outline-none transition-colors"
                             aria-expanded={mobileMenuOpen}
                             aria-label="Toggle menu"
                         >
@@ -151,7 +163,7 @@ export default function Navbar() {
                 {/* Drawer */}
                 <div className={`absolute top-0 right-0 w-4/5 max-w-sm h-full bg-white shadow-2xl transition-transform duration-300 ease-in-out transform flex flex-col ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                     <div className="flex justify-between items-center p-5 border-b border-gray-100">
-                        <span className="font-luxury font-bold text-xl tracking-wide text-[#0f172a]">MENU</span>
+                        <span className="font-luxury font-bold text-xl tracking-wide text-[#5c1a1b]">MENU</span>
                         <button onClick={closeAllMenus} className="text-gray-400 hover:text-red-500 transition-colors">
                             <i className="fa-solid fa-xmark text-2xl" />
                         </button>
@@ -159,7 +171,7 @@ export default function Navbar() {
 
                     <div className="flex-1 overflow-y-auto py-2">
                         <div className="px-5 py-3 border-b border-gray-50">
-                            <Link href="/" className="block text-sm font-bold uppercase tracking-wider text-[#0f172a] hover:text-[#d4af37]" onClick={closeAllMenus}>Home</Link>
+                            <Link href="/" className="block text-sm font-bold uppercase tracking-wider text-[#5c1a1b] hover:text-[#d4af37]" onClick={closeAllMenus}>Home</Link>
                         </div>
                         
                         {/* Mobile Accordion Menu */}
@@ -168,14 +180,14 @@ export default function Navbar() {
                                 {item.groups ? (
                                     <>
                                         <button 
-                                            className="w-full flex justify-between items-center px-5 py-3 text-sm font-bold uppercase tracking-wider text-[#0f172a] hover:text-[#d4af37]"
+                                            className="w-full flex justify-between items-center px-5 py-3 text-sm font-bold uppercase tracking-wider text-[#5c1a1b] hover:text-[#d4af37]"
                                             onClick={() => setExpandedMobileItem(expandedMobileItem === item.label ? null : item.label)}
                                         >
                                             {item.label}
                                             <i className={`fa-solid fa-chevron-down text-[10px] transition-transform duration-300 ${expandedMobileItem === item.label ? 'rotate-180 text-[#d4af37]' : ''}`} />
                                         </button>
                                         <div 
-                                            className={`overflow-hidden transition-all duration-300 ease-in-out bg-[#faf9f6] ${expandedMobileItem === item.label ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
+                                            className={`overflow-hidden transition-all duration-300 ease-in-out bg-[#fff8f0] ${expandedMobileItem === item.label ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
                                         >
                                             <div className="px-5 py-3 space-y-4">
                                                 {item.groups.map((group, gIdx) => (
@@ -184,7 +196,7 @@ export default function Navbar() {
                                                         <ul className="space-y-2 pl-2">
                                                             {group.links.map((link, lIdx) => (
                                                                 <li key={lIdx}>
-                                                                    <Link href={link.href} className="block text-sm text-[#0f172a] hover:text-[#d4af37]" onClick={closeAllMenus}>
+                                                                    <Link href={link.href} className="block text-sm text-[#5c1a1b] hover:text-[#d4af37]" onClick={closeAllMenus}>
                                                                         {link.label}
                                                                     </Link>
                                                                 </li>
@@ -196,27 +208,24 @@ export default function Navbar() {
                                         </div>
                                     </>
                                 ) : (
-                                    <Link href={item.href || '#'} className="block px-5 py-3 text-sm font-bold uppercase tracking-wider text-[#0f172a] hover:text-[#d4af37]" onClick={closeAllMenus}>
+                                    <Link href={item.href || '#'} className="block px-5 py-3 text-sm font-bold uppercase tracking-wider text-[#5c1a1b] hover:text-[#d4af37]" onClick={closeAllMenus}>
                                         {item.label}
                                     </Link>
                                 )}
                             </div>
                         ))}
 
-                        <div className="px-5 py-3 border-b border-gray-50">
-                            <Link href="/custom-jewellery" className="block text-sm font-bold uppercase tracking-wider text-[#0f172a] hover:text-[#d4af37]" onClick={closeAllMenus}>Custom Order</Link>
-                        </div>
                     </div>
 
-                    <div className="p-5 border-t border-gray-100 space-y-3 bg-[#faf9f6]">
-                        <Link href="/find-a-jeweller" className="block w-full text-center border border-[#0f172a]/30 px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-sm hover:border-[#d4af37] hover:text-[#d4af37] transition-colors" onClick={closeAllMenus}>
-                            Find a Jeweller
+                    <div className="p-5 border-t border-gray-100 space-y-3 bg-[#fff8f0]">
+                        <Link href="/products" className="block w-full text-center border border-[#5c1a1b]/30 px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-sm hover:border-[#d4af37] hover:text-[#d4af37] transition-colors" onClick={closeAllMenus}>
+                            Shop Products
                         </Link>
                         <Link href="/become-a-partner" className="block w-full text-center border border-[#d4af37] text-[#d4af37] px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-sm hover:bg-[#d4af37] hover:text-white transition-colors" onClick={closeAllMenus}>
                             Become a Partner
                         </Link>
                         <Link href="/custom-jewellery" className="block w-full text-center bg-[#d4af37] text-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded-sm shadow-md" onClick={closeAllMenus}>
-                            Get a Quote
+                            Custom Order
                         </Link>
                     </div>
                 </div>

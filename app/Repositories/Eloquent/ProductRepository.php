@@ -92,6 +92,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                   ->where('price_on_request', false);
         }
 
+        if (!empty($filters['city_id'])) {
+            $query->whereHas('jeweller', function ($q) use ($filters) {
+                $q->where('city_id', $filters['city_id']);
+            });
+        }
+
+        if (!empty($filters['budget'])) {
+            [$min, $max] = $this->parseBudgetRange($filters['budget']);
+            if ($min !== null) {
+                $query->where('price', '>=', $min);
+            }
+            if ($max !== null) {
+                $query->where('price', '<=', $max);
+            }
+        }
+
         if (!empty($filters['sortField']) && !empty($filters['sortDirection'])) {
             $query->orderBy($filters['sortField'], $filters['sortDirection']);
         } else {
@@ -99,6 +115,17 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         }
 
         return $query->paginate($perPage);
+    }
+
+    protected function parseBudgetRange(string $budget): array
+    {
+        return match ($budget) {
+            'Under Rs. 100,000' => [null, 100000],
+            'Rs. 100,000 - 250,000' => [100000, 250000],
+            'Rs. 250,000 - 500,000' => [250000, 500000],
+            'Above Rs. 500,000' => [500000, null],
+            default => [null, null],
+        };
     }
 
     public function findBySlug(string $slug)

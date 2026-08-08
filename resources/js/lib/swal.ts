@@ -7,10 +7,10 @@ export const confirmDelete = (title: string, text: string, callback: () => void)
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#d4af37',
-        cancelButtonColor: '#1e293b',
+        cancelButtonColor: '#7a2426',
         confirmButtonText: 'Yes, delete it!',
         cancelButtonText: 'Cancel',
-        background: '#0f172a',
+        background: '#5c1a1b',
         color: '#ffffff',
         iconColor: '#e11d48', // red accent for warning/delete
         customClass: {
@@ -40,10 +40,10 @@ export const confirmAction = (
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#d4af37',
-        cancelButtonColor: '#1e293b',
+        cancelButtonColor: '#7a2426',
         confirmButtonText: confirmText,
         cancelButtonText: 'Cancel',
-        background: '#0f172a',
+        background: '#5c1a1b',
         color: '#ffffff',
         iconColor: '#d4af37',
         customClass: {
@@ -73,10 +73,10 @@ export const promptText = (
         inputPlaceholder,
         showCancelButton: true,
         confirmButtonColor: '#d4af37',
-        cancelButtonColor: '#1e293b',
+        cancelButtonColor: '#7a2426',
         confirmButtonText: confirmText,
         cancelButtonText: 'Cancel',
-        background: '#0f172a',
+        background: '#5c1a1b',
         color: '#ffffff',
         customClass: {
             popup: 'border border-white/10 rounded-xl',

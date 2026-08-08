@@ -34,7 +34,7 @@ export default function NavItem({
         </span>
     );
 
-    const classes = `relative h-full flex items-center px-1 text-sm font-semibold transition-colors duration-200 group cursor-pointer ${isActive ? 'text-[#d4af37]' : 'text-[#0f172a] hover:text-[#d4af37]'}`;
+    const classes = `relative h-full flex items-center px-1 text-sm font-semibold transition-colors duration-200 group cursor-pointer ${isActive ? 'text-[#d4af37]' : 'text-[#5c1a1b] hover:text-[#d4af37]'}`;
 
     return (
         <div 
@@ -60,7 +60,7 @@ export default function NavItem({
                             {item.groups!.map((group, gIdx) => (
                                 <li key={gIdx} className="relative group/sub">
                                     <button
-                                        className="w-full flex items-center justify-between px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0f172a] hover:bg-[#faf9f6] hover:text-[#d4af37] transition-all duration-300"
+                                        className="w-full flex items-center justify-between px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#5c1a1b] hover:bg-[#fff8f0] hover:text-[#d4af37] transition-all duration-300"
                                         aria-haspopup="true"
                                         aria-expanded="false"
                                     >
@@ -75,7 +75,7 @@ export default function NavItem({
                                                 <li key={lIdx}>
                                                     <Link
                                                         href={link.href}
-                                                        className="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#0f172a] hover:bg-[#faf9f6] hover:text-[#d4af37] hover:pl-5 transition-all duration-300"
+                                                        className="block px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[#5c1a1b] hover:bg-[#fff8f0] hover:text-[#d4af37] hover:pl-5 transition-all duration-300"
                                                         onClick={closeMenu}
                                                     >
                                                         {link.label}

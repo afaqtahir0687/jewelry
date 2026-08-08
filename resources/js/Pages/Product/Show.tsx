@@ -25,6 +25,7 @@ interface ProductShowProps {
         slug: string;
         description?: string;
         price?: number | null;
+        discount_price?: number | null;
         price_on_request: boolean;
         gold_purity?: string | null;
         approximate_weight?: string | null;
@@ -48,11 +49,24 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
         ? 'Made to Order'
         : 'Design Inspiration';
 
+    const hasDiscount = !product.price_on_request && !!product.discount_price && Number(product.discount_price) > 0;
+
+    let discountPercentage = 0;
+    if (hasDiscount && product.price) {
+        discountPercentage = Math.round(((Number(product.price) - Number(product.discount_price)) / Number(product.price)) * 100);
+    }
+
     const displayPrice = product.price_on_request
         ? 'Price on Request'
+        : hasDiscount
+        ? `Rs. ${Number(product.discount_price).toLocaleString()}`
         : product.price
         ? `Rs. ${Number(product.price).toLocaleString()}`
         : 'Price on Request';
+
+    const originalPrice = product.price && !product.price_on_request
+        ? `Rs. ${Number(product.price).toLocaleString()}`
+        : null;
 
     const inquiryUrl = `/custom-jewellery?product_id=${product.id}&product_title=${encodeURIComponent(product.title)}`;
 
@@ -71,19 +85,24 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                             <i className="fa-solid fa-chevron-right text-[8px]" />
                         </>
                     )}
-                    <span className="text-[#0f172a] font-semibold truncate max-w-xs">{product.title}</span>
+                    <span className="text-[#5c1a1b] font-semibold truncate max-w-xs">{product.title}</span>
                 </div>
             </div>
 
             {/* Product Detail */}
-            <section className="py-12 bg-[#faf9f6] animate-fade-in-up">
+            <section className="py-12 bg-[#fff8f0] animate-fade-in-up">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
                         {/* Image Gallery */}
                         <div>
                             {/* Main Image */}
-                            <div className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-md mb-4 aspect-square">
+                            <div className="relative bg-white rounded-xl overflow-hidden border border-gray-100 shadow-md mb-4 aspect-square">
+                                {hasDiscount && (
+                                    <span className="absolute top-3 left-3 z-10 bg-[#d4af37] text-white text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow-sm">
+                                        -{discountPercentage}% OFF
+                                    </span>
+                                )}
                                 {product.images.length > 0 ? (
                                     <img
                                         src={product.images[activeImage]?.url}
@@ -134,20 +153,30 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                                     {statusLabel}
                                 </span>
                                 {product.is_featured && (
-                                    <span className="text-xs bg-[#0f172a] text-[#d4af37] px-3 py-1 rounded-full font-semibold">✦ Featured</span>
+                                    <span className="text-xs bg-[#5c1a1b] text-[#d4af37] px-3 py-1 rounded-full font-semibold">✦ Featured</span>
                                 )}
                             </div>
 
-                            <h1 className="font-luxury text-3xl md:text-4xl font-bold text-[#0f172a] leading-tight">
+                            <h1 className="font-luxury text-3xl md:text-4xl font-bold text-[#5c1a1b] leading-tight">
                                 {product.title}
                             </h1>
 
                             {/* Price */}
                             <div className="border-y border-gray-100 py-4">
                                 <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Price</p>
-                                <p className={`text-2xl font-bold ${product.price_on_request ? 'text-gray-500 italic' : 'text-[#d4af37]'}`}>
-                                    {displayPrice}
-                                </p>
+                                <div className="flex items-center gap-3 flex-wrap">
+                                    <p className={`text-2xl font-bold ${product.price_on_request ? 'text-gray-500 italic' : hasDiscount ? 'text-[#7B0A26]' : 'text-[#d4af37]'}`}>
+                                        {displayPrice}
+                                    </p>
+                                    {hasDiscount && (
+                                        <>
+                                            <span className="text-lg text-gray-400 line-through">{originalPrice}</span>
+                                            <span className="bg-[#d4af37] text-white text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow-sm">
+                                                -{discountPercentage}% OFF
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Description */}
@@ -159,23 +188,23 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                             )}
 
                             {/* Specs */}
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {product.gold_purity && (
                                     <div className="bg-white rounded-lg p-4 border border-gray-100">
                                         <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Gold Purity</p>
-                                        <p className="font-semibold text-[#0f172a] text-sm">{product.gold_purity}</p>
+                                        <p className="font-semibold text-[#5c1a1b] text-sm">{product.gold_purity}</p>
                                     </div>
                                 )}
                                 {product.approximate_weight && (
                                     <div className="bg-white rounded-lg p-4 border border-gray-100">
                                         <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Approx. Weight</p>
-                                        <p className="font-semibold text-[#0f172a] text-sm">{product.approximate_weight}</p>
+                                        <p className="font-semibold text-[#5c1a1b] text-sm">{product.approximate_weight}</p>
                                     </div>
                                 )}
                                 {product.stone_info && (
                                     <div className="bg-white rounded-lg p-4 border border-gray-100 col-span-2">
                                         <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Stone Info</p>
-                                        <p className="font-semibold text-[#0f172a] text-sm">{product.stone_info}</p>
+                                        <p className="font-semibold text-[#5c1a1b] text-sm">{product.stone_info}</p>
                                     </div>
                                 )}
                             </div>
@@ -215,7 +244,7 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-10">
                             <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">You May Also Like</span>
-                            <h2 className="font-luxury text-2xl md:text-3xl text-[#0f172a] font-bold mt-2">Related Designs</h2>
+                            <h2 className="font-luxury text-2xl md:text-3xl text-[#5c1a1b] font-bold mt-2">Related Designs</h2>
                             <div className="w-16 h-0.5 bg-[#d4af37] mx-auto mt-3" />
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

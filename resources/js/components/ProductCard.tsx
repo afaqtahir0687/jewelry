@@ -56,7 +56,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             {/* Image Container (Only this gets border/hover effect) */}
             <Link 
                 href={productUrl} 
-                className="block h-96 w-full bg-[#faf9f6] relative overflow-hidden rounded-2xl border border-gray-200 group-hover:border-gray-900 group-hover:shadow-lg transition-all duration-300"
+                className="block h-56 sm:h-72 md:h-96 w-full bg-[#fff8f0] relative overflow-hidden rounded-2xl border border-gray-200 group-hover:border-gray-900 group-hover:shadow-lg transition-all duration-300"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
@@ -64,7 +64,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     <>
                         {/* Primary Image */}
                         <img
-                            src={primaryImage.startsWith('http') ? primaryImage : primaryImage}
+                            src={primaryImage}
                             alt={product.title}
                             className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${
                                 isHovered && hoverImage !== primaryImage ? 'opacity-0 scale-105' : 'opacity-100 scale-100 group-hover:scale-105'
@@ -73,7 +73,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                         {/* Hover Image (only shown if different from primary) */}
                         {hoverImage && hoverImage !== primaryImage && (
                             <img
-                                src={hoverImage.startsWith('http') ? hoverImage : hoverImage}
+                                src={hoverImage}
                                 alt={`${product.title} — alternate view`}
                                 className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${
                                     isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
@@ -88,7 +88,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 )}
 
                 {/* Status Badge */}
-                <span className="absolute top-3 right-3 bg-[#0f172a]/80 text-[#d4af37] text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded">
+                <span className="absolute top-3 right-3 bg-[#5c1a1b]/80 text-[#d4af37] text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded">
                     {statusLabel}
                 </span>
 
@@ -104,7 +104,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 ) : null}
 
                 {/* Dark overlay on hover + Quick view button */}
-                <div className={`absolute inset-0 bg-[#0f172a]/25 transition-opacity duration-300 flex flex-col justify-end p-4 ${
+                <div className={`absolute inset-0 bg-[#5c1a1b]/25 transition-opacity duration-300 flex flex-col justify-end p-4 ${
                     isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'
                 }`}>
                     <span className="w-full text-center bg-[#d4af37] hover:bg-[#b8952b] text-white text-xs font-semibold py-2 rounded-lg shadow-lg transition-colors">

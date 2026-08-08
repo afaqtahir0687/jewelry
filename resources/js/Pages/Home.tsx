@@ -4,6 +4,8 @@ import AppLayout from '../Layouts/AppLayout';
 import ProductCard from '@/components/ProductCard';
 import DiscountBadge from '@/components/DiscountBadge';
 import Reveal from '@/Components/Reveal';
+import WhyChooseUs from '@/Components/WhyChooseUs';
+import NewsletterSignup from '@/Components/NewsletterSignup';
 import type { Category, ProductCard as ProductCardType } from '@/types';
 
 interface City {
@@ -29,147 +31,208 @@ interface HomeProps {
     featuredCategories: FeaturedCategory[];
 }
 
+const BUDGET_OPTIONS = [
+    { value: 'Under Rs. 100,000', label: 'Under Rs. 100,000' },
+    { value: 'Rs. 100,000 - 250,000', label: 'Rs. 100,000 – 250,000' },
+    { value: 'Rs. 250,000 - 500,000', label: 'Rs. 250,000 – 500,000' },
+    { value: 'Above Rs. 500,000', label: 'Above Rs. 500,000' },
+];
+
+const SLIDES = [
+    {
+        image: '/images/banner1.webp',
+        imageFallback: '/images/banner1.jpg',
+        position: 'left top',
+        eyebrow: 'Timeless Craftsmanship',
+        heading: 'Find Trusted Gold & Diamond Jewellers',
+        tagline: 'Discover certified artisans, transparent pricing and bespoke designs in one elegant marketplace.',
+    },
+    {
+        image: '/images/banner2.webp',
+        imageFallback: '/images/banner2.jpg',
+        position: 'left top',
+        eyebrow: 'Bridal & Heritage Sets',
+        heading: 'Heirloom Pieces Crafted For a Lifetime',
+        tagline: 'From heritage bridal sets to modern solitaires, connect with Pakistan\'s top jewellers.',
+    },
+    {
+        image: '/images/banner3.webp',
+        imageFallback: '/images/banner3.jpg',
+        position: 'left top',
+        eyebrow: 'Bespoke & Custom Orders',
+        heading: 'Design Your Own Dream Ornament Today',
+        tagline: 'Share your vision and get personalised quotes from top-rated artisans near you.',
+    },
+];
+
 export default function Home({ cities, categories, latestArrivals, featuredCategories }: HomeProps) {
-    const [searchSpeciality, setSearchSpeciality] = useState('');
+    const [searchCategory, setSearchCategory] = useState('');
     const [searchCityId, setSearchCityId] = useState('');
     const [searchBudget, setSearchBudget] = useState('');
     const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-
-    const banners = [
-        '/images/banner1.png',
-        '/images/banner2.png',
-        '/images/banner3.png',
-    ];
+    const [otherSlidesLoaded, setOtherSlidesLoaded] = useState(false);
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setCurrentBannerIndex((prev) => (prev + 1) % banners.length);
-        }, 4000);
+            setCurrentBannerIndex((prev) => (prev + 1) % SLIDES.length);
+        }, 5500);
         return () => clearInterval(timer);
+    }, []);
+
+    // Defer loading the remaining slide images until after the first (LCP) image has painted,
+    // so they don't compete for bandwidth/priority on initial load.
+    useEffect(() => {
+        const idle = ('requestIdleCallback' in window)
+            ? (window as any).requestIdleCallback(() => setOtherSlidesLoaded(true))
+            : setTimeout(() => setOtherSlidesLoaded(true), 1000);
+        return () => {
+            if ('cancelIdleCallback' in window) (window as any).cancelIdleCallback(idle);
+            else clearTimeout(idle);
+        };
     }, []);
 
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        router.get('/find-a-jeweller', {
-            speciality: searchSpeciality,
+        router.get('/products', {
+            category: searchCategory,
             city_id: searchCityId,
             budget: searchBudget,
         });
     };
 
+    const activeSlide = SLIDES[currentBannerIndex];
+
     return (
         <AppLayout>
             <Head title="Find Trusted Jewellers in Pakistan" />
 
-            {/* ── Hero Section ──────────────────────────────────────────── */}
-            <section className="relative bg-[#0f172a] py-16 md:py-24 min-h-[420px] md:min-h-[620px] overflow-hidden">
-                {/* Background Slider */}
+            {/* ── Hero Banner Slider ────────────────────────────────────── */}
+            <section className="relative bg-[#5c1a1b] min-h-[max(440px,calc(100dvh-6rem))] overflow-hidden flex items-center">
+                {/* Background Slides */}
                 <div className="absolute inset-0 z-0">
-                    {banners.map((src, index) => (
-                        <div
-                            key={src}
-                            className={`absolute inset-0 bg-cover bg-no-repeat transition-opacity duration-1000 ease-in-out ${currentBannerIndex === index ? 'opacity-90' : 'opacity-0'
-                                }`}
-                            style={{
-                                backgroundImage: `url('${src}')`,
-                                backgroundPosition: '14% 18%',
-                                transformOrigin: '14% 18%',
-                                animation: currentBannerIndex === index ? 'kenBurns 4.6s ease-out forwards' : 'none',
-                            }}
-                        />
-                    ))}
-                    {/* Gradient Overlay for luxury feel and readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/90 via-[#0f172a]/40 to-[#0f172a]/15" />
+                    {SLIDES.map((slide, index) => {
+                        if (index !== 0 && !otherSlidesLoaded) return null;
+                        return (
+                            <picture key={slide.image}>
+                                <source srcSet={slide.image} type="image/webp" />
+                                <img
+                                    src={slide.imageFallback}
+                                    alt=""
+                                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out ${currentBannerIndex === index ? 'opacity-100' : 'opacity-0'
+                                        }`}
+                                    style={{ objectPosition: slide.position }}
+                                    fetchPriority={index === 0 ? 'high' : 'low'}
+                                    loading={index === 0 ? 'eager' : 'lazy'}
+                                    decoding={index === 0 ? 'sync' : 'async'}
+                                />
+                            </picture>
+                        );
+                    })}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#3d1112]/95 via-[#5c1a1b]/60 to-[#3d1112]/40" />
                 </div>
 
-                <div className="absolute inset-0 opacity-5 pointer-events-none z-0">
+                <div className="absolute inset-0 opacity-10 pointer-events-none z-0">
                     <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#d4af37] rounded-full filter blur-3xl" />
-                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500 rounded-full filter blur-3xl" />
+                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#d4af37] rounded-full filter blur-3xl" />
                 </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center animate-fade-in-up flex flex-col md:block items-center">
-                    {/* Mobile/Tablet Badge (Hidden on Large Desktop) */}
-                    <div className="lg:hidden flex justify-center w-full mb-6">
-                        <div className="w-24 h-24 sm:w-28 sm:h-28">
+                {/* Discount badge — pinned to a corner, never overlaps the centered heading */}
+                <div className="hidden lg:block absolute top-8 right-6 xl:right-10 z-20">
+                    <div className="w-28 h-28 xl:w-32 xl:h-32">
+                        <DiscountBadge />
+                    </div>
+                </div>
+
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-6 sm:py-8">
+                    <div className="text-center flex flex-col items-center">
+                        <div className="lg:hidden w-24 h-24 sm:w-28 sm:h-28 mb-4">
                             <DiscountBadge />
                         </div>
-                    </div>
 
-                    <div className="relative w-full max-w-6xl mx-auto mb-10 flex items-center justify-center">
-                        <h1 className="font-luxury text-3xl sm:text-4xl lg:text-5xl text-white font-bold leading-tight max-w-4xl mx-auto transition-transform duration-500 hover:scale-[1.01] px-4 md:px-12 lg:px-24">
-                            Find Trusted Gold &amp; Diamond Jewellers Across Pakistan
-                        </h1>
+                        {/* Slide-specific text (re-animates on slide change only) */}
+                        <div key={currentBannerIndex} className="flex flex-col items-center animate-fade-in-up">
+                            <span className="inline-block text-[#d4af37] tracking-[0.25em] uppercase font-semibold text-xs mb-3 border border-[#d4af37]/40 rounded-full px-4 py-1.5">
+                                {activeSlide.eyebrow}
+                            </span>
 
-                        {/* Desktop Badge (Positioned exactly on the right) */}
-                        <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden lg:flex items-center justify-center">
-                            <div className="w-32 h-32 xl:w-36 xl:h-36">
-                                <DiscountBadge />
-                            </div>
+                            <h1 className="font-luxury text-2xl sm:text-3xl lg:text-5xl text-white font-bold leading-tight max-w-4xl mx-auto mb-3 px-4 flex items-center justify-center min-h-[64px] sm:min-h-[90px] lg:min-h-[130px]">
+                                {activeSlide.heading}
+                            </h1>
+
+                            <p className="text-cream/80 text-sm sm:text-base max-w-2xl mx-auto mb-5 leading-relaxed min-h-[40px] sm:min-h-[28px] flex items-center justify-center">
+                                {activeSlide.tagline}
+                            </p>
                         </div>
-                    </div>
 
-                    {/* Main Search Form */}
-                    <div className="max-w-4xl mx-auto bg-white p-6 rounded-md shadow-2xl border border-[#d4af37]/10">
-                        <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                        {/* Slide indicators */}
+                        <div className="flex justify-center gap-2 mb-5">
+                            {SLIDES.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setCurrentBannerIndex(idx)}
+                                    aria-label={`Go to slide ${idx + 1}`}
+                                    className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentBannerIndex ? 'w-8 bg-[#d4af37]' : 'w-1.5 bg-white/30 hover:bg-white/50'}`}
+                                />
+                            ))}
+                        </div>
 
-                            <div className="flex flex-col text-left">
-                                <label className="text-xs font-bold text-gray-500 uppercase mb-1 tracking-wider">Looking For</label>
-                                <select
-                                    value={searchSpeciality}
-                                    onChange={(e) => setSearchSpeciality(e.target.value)}
-                                    className="w-full bg-[#faf9f6] border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-[#d4af37]">
-                                    <option value="">Select Specialty</option>
-                                    <option value="22K Gold">22K Gold</option>
-                                    <option value="Solitaire Diamond Rings">Diamond Solitaires</option>
-                                    <option value="Heritage Bridal Sets">Heritage Bridal Sets</option>
-                                    <option value="Gold Bangles">Gold Bangles</option>
-                                </select>
-                            </div>
+                        {/* Embedded Search Bar */}
+                        <div className="w-full max-w-4xl mx-auto bg-white/95 backdrop-blur-sm p-5 sm:p-6 rounded-lg shadow-2xl border border-[#d4af37]/20">
+                            <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
 
-                            <div className="flex flex-col text-left">
-                                <label className="text-xs font-bold text-gray-500 uppercase mb-1 tracking-wider">Select City</label>
-                                <select
-                                    value={searchCityId}
-                                    onChange={(e) => setSearchCityId(e.target.value)}
-                                    className="w-full bg-[#faf9f6] border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-[#d4af37]">
-                                    <option value="">Select City</option>
-                                    {cities.map((city) => (
-                                        <option key={city.id} value={city.id}>{city.name}</option>
-                                    ))}
-                                </select>
-                            </div>
+                                <div className="flex flex-col text-left">
+                                    <label className="text-xs font-bold text-gray-500 uppercase mb-1 tracking-wider">Category</label>
+                                    <select
+                                        value={searchCategory}
+                                        onChange={(e) => setSearchCategory(e.target.value)}
+                                        className="w-full bg-[#fff8f0] border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-[#d4af37] transition-colors duration-300">
+                                        <option value="">All Categories</option>
+                                        {categories.map((cat) => (
+                                            <option key={cat.id} value={cat.slug}>{cat.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                            <div className="flex flex-col text-left">
-                                <label className="text-xs font-bold text-gray-500 uppercase mb-1 tracking-wider">Approximate Budget</label>
-                                <select
-                                    value={searchBudget}
-                                    onChange={(e) => setSearchBudget(e.target.value)}
-                                    className="w-full bg-[#faf9f6] border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-[#d4af37]">
-                                    <option value="">Select Budget</option>
-                                    <option value="Under Rs. 100,000">Under Rs. 100,000</option>
-                                    <option value="Rs. 100,000 - 250,000">Rs. 100,000 – 250,000</option>
-                                    <option value="Rs. 250,000 - 500,000">Rs. 250,000 – 500,000</option>
-                                    <option value="Above Rs. 500,000">Above Rs. 500,000</option>
-                                </select>
-                            </div>
+                                <div className="flex flex-col text-left">
+                                    <label className="text-xs font-bold text-gray-500 uppercase mb-1 tracking-wider">Select City</label>
+                                    <select
+                                        value={searchCityId}
+                                        onChange={(e) => setSearchCityId(e.target.value)}
+                                        className="w-full bg-[#fff8f0] border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-[#d4af37] transition-colors duration-300">
+                                        <option value="">All Cities</option>
+                                        {cities.map((city) => (
+                                            <option key={city.id} value={city.id}>{city.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                            <div className="pt-4 md:pt-0">
-                                <label className="hidden md:block text-xs font-bold text-transparent mb-1">Search</label>
+                                <div className="flex flex-col text-left">
+                                    <label className="text-xs font-bold text-gray-500 uppercase mb-1 tracking-wider">Approximate Budget</label>
+                                    <select
+                                        value={searchBudget}
+                                        onChange={(e) => setSearchBudget(e.target.value)}
+                                        className="w-full bg-[#fff8f0] border border-gray-200 rounded px-3 py-3 text-sm focus:outline-none focus:border-[#d4af37] transition-colors duration-300">
+                                        <option value="">Any Budget</option>
+                                        {BUDGET_OPTIONS.map((b) => (
+                                            <option key={b.value} value={b.value}>{b.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
                                 <button
                                     type="submit"
-                                    className="w-full bg-[#d4af37] hover:bg-[#bda030] text-white font-bold py-3.5 px-4 rounded text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-md hover:shadow-lg hover-shine">
-                                    <i className="fa-solid fa-magnifying-glass mr-2" /> Find Jeweller
+                                    className="w-full bg-[#5c1a1b] hover:bg-[#7a2426] text-white font-bold py-3.5 px-4 rounded text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-md hover:shadow-lg hover-shine">
+                                    <i className="fa-solid fa-magnifying-glass mr-2" /> Search
                                 </button>
+                            </form>
+
+                            <div className="text-center mt-4">
+                                <span className="text-xs text-gray-500">Or design your own dream ornament:
+                                    <Link href="/custom-jewellery" className="text-[#d4af37] font-bold hover:underline ml-1">
+                                        Request Custom Jewellery Quote <i className="fa-solid fa-chevron-right text-[10px]" />
+                                    </Link>
+                                </span>
                             </div>
-
-                        </form>
-
-                        <div className="text-center mt-4">
-                            <span className="text-xs text-gray-500">Or design your own dream ornament:
-                                <Link href="/custom-jewellery" className="text-[#d4af37] font-bold hover:underline ml-1">
-                                    Request Custom Jewellery Quote <i className="fa-solid fa-chevron-right text-[10px]" />
-                                </Link>
-                            </span>
                         </div>
                     </div>
                 </div>
@@ -177,11 +240,11 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
 
             {/* ── Latest Arrivals ───────────────────────────────────────── */}
             {latestArrivals.length > 0 && (
-                <section className="py-20 bg-white">
+                <section className="py-12 md:py-20 bg-white">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <Reveal className="text-center mb-12">
+                        <Reveal className="text-center mb-10 md:mb-20">
                             <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Fresh Designs</span>
-                            <h2 className="font-luxury text-4xl md:text-5xl text-[#0f172a] font-bold mt-2">Latest Arrivals</h2>
+                            <h2 className="font-luxury text-2xl sm:text-3xl md:text-5xl text-[#5c1a1b] font-bold mt-2">Latest Arrivals</h2>
                             <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
                         </Reveal>
 
@@ -192,10 +255,10 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
 
             {/* ── Featured Categories with Product Sliders ─────────────── */}
             {featuredCategories.map((cat) => (
-                <section key={cat.id} className="py-20 bg-[#faf9f6] border-t border-gray-100">
+                <section key={cat.id} className="py-12 md:py-20 bg-[#fff8f0] border-t border-gray-100">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <Reveal className="text-center mb-12">
-                            <h2 className="font-luxury text-5xl md:text-6xl text-[#0f172a] font-bold">{cat.name}</h2>
+                        <Reveal className="text-center mb-10 md:mb-20">
+                            <h2 className="font-luxury text-3xl sm:text-4xl md:text-6xl text-[#5c1a1b] font-bold">{cat.name}</h2>
                             <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
                         </Reveal>
 
@@ -205,7 +268,7 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                             <div className="text-center mt-8">
                                 <Link
                                     href={`/${cat.slug}`}
-                                    className="inline-flex items-center gap-2 bg-[#0f172a] hover:bg-[#1e293b] text-white px-6 py-3 rounded-sm font-bold text-xs uppercase tracking-widest transition-all duration-300">
+                                    className="inline-flex items-center gap-2 bg-[#5c1a1b] hover:bg-[#7a2426] text-white px-6 py-3 rounded-sm font-bold text-xs uppercase tracking-widest transition-all duration-300">
                                     See More Designs ({cat.total_products - cat.products.length}+ more)
                                     <i className="fa-solid fa-arrow-right" />
                                 </Link>
@@ -215,12 +278,15 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                 </section>
             ))}
 
+            {/* ── Why Choose Us ─────────────────────────────────────────── */}
+            <WhyChooseUs />
+
             {/* ── Customer Reviews ──────────────────────────────────────── */}
-            <section className="py-20 bg-white overflow-hidden">
+            <section className="py-12 md:py-20 bg-[#fff8f0] overflow-hidden">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <Reveal className="text-center mb-12">
+                    <Reveal className="text-center mb-10 md:mb-12">
                         <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Customer Stories</span>
-                        <h2 className="font-luxury text-3xl md:text-4xl text-[#0f172a] font-bold mt-2">What Our Clients Say</h2>
+                        <h2 className="font-luxury text-2xl sm:text-3xl md:text-4xl text-[#5c1a1b] font-bold mt-2">What Our Clients Say</h2>
                         <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
                     </Reveal>
                     <Reveal delay={150}>
@@ -246,17 +312,17 @@ function HorizontalProductSlider({ products }: { products: ProductCardType[] }) 
     if (!products || products.length === 0) return null;
 
     return (
-        <div className="relative group">
+        <div className="relative group mt-2">
             {/* Navigation Arrows (Top Right) */}
             <div className="absolute -top-16 right-0 hidden md:flex gap-2 z-10">
                 <button
                     onClick={() => scroll('left')}
-                    className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20">
+                    className="w-10 h-10 rounded-full bg-[#5c1a1b] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20">
                     <i className="fa-solid fa-arrow-left-long text-sm" />
                 </button>
                 <button
                     onClick={() => scroll('right')}
-                    className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20">
+                    className="w-10 h-10 rounded-full bg-[#5c1a1b] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20">
                     <i className="fa-solid fa-arrow-right-long text-sm" />
                 </button>
             </div>
@@ -264,16 +330,15 @@ function HorizontalProductSlider({ products }: { products: ProductCardType[] }) 
             {/* Scrollable container */}
             <div
                 ref={scrollRef}
-                className="flex gap-5 overflow-x-auto pb-4 scroll-smooth"
+                className="flex gap-5 overflow-x-auto pt-1 pb-4 scroll-smooth"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                {products.map((product, idx) => (
-                    <Reveal
+                {products.map((product) => (
+                    <div
                         key={product.id}
-                        delay={Math.min(idx, 4) * 90}
                         className="flex-shrink-0 w-[calc(100%-20px)] sm:w-[calc(50%-15px)] md:w-[calc(33.33%-15px)] lg:w-[calc(25%-15px)]"
                     >
                         <ProductCard product={product} />
-                    </Reveal>
+                    </div>
                 ))}
             </div>
         </div>
@@ -314,10 +379,10 @@ function ReviewsCarousel() {
         <div className="max-w-6xl mx-auto relative group">
             {/* Navigation Arrows (Top Right) */}
             <div className="absolute -top-16 right-0 hidden md:flex gap-2 z-10">
-                <button onClick={handlePrev} className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:-translate-x-0.5 cursor-pointer border-2 border-transparent hover:border-white/20" title="Previous">
+                <button onClick={handlePrev} className="w-10 h-10 rounded-full bg-[#5c1a1b] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:-translate-x-0.5 cursor-pointer border-2 border-transparent hover:border-white/20" title="Previous">
                     <i className="fa-solid fa-arrow-left-long text-sm" />
                 </button>
-                <button onClick={handleNext} className="w-10 h-10 rounded-full bg-[#0f172a] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:translate-x-0.5 cursor-pointer border-2 border-transparent hover:border-white/20" title="Next">
+                <button onClick={handleNext} className="w-10 h-10 rounded-full bg-[#5c1a1b] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:translate-x-0.5 cursor-pointer border-2 border-transparent hover:border-white/20" title="Next">
                     <i className="fa-solid fa-arrow-right-long text-sm" />
                 </button>
             </div>
@@ -326,7 +391,7 @@ function ReviewsCarousel() {
                 {visibleReviews.map((rev, idx) => (
                     <div
                         key={rev.id}
-                        className={`bg-[#faf9f6] border border-[#d4af37]/25 rounded-2xl p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 relative hover:-translate-y-1 ${direction === 'next' ? 'animate-review-next' : 'animate-review-prev'
+                        className={`bg-[#fff8f0] border border-[#d4af37]/25 rounded-2xl p-6 md:p-8 shadow-md hover:shadow-xl transition-all duration-300 relative hover:-translate-y-1 ${direction === 'next' ? 'animate-review-next' : 'animate-review-prev'
                             }`}
                         style={{ animationDelay: `${idx * 100}ms` }}
                     >
@@ -343,7 +408,7 @@ function ReviewsCarousel() {
                         <p className="text-gray-600 italic text-sm md:text-base leading-relaxed mb-6">"{rev.review}"</p>
                         <div className="flex items-center justify-between border-t border-gray-200/50 pt-4">
                             <div>
-                                <h4 className="font-luxury font-bold text-[#0f172a] text-sm tracking-wide">{rev.name}</h4>
+                                <h4 className="font-luxury font-bold text-[#5c1a1b] text-sm tracking-wide">{rev.name}</h4>
                                 <p className="text-xs text-gray-400">{rev.city}, Pakistan</p>
                             </div>
                             <span className="text-xs text-[#d4af37] font-semibold">{rev.date}</span>

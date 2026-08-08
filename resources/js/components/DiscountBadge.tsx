@@ -20,8 +20,6 @@ export default function DiscountBadge({
         >
             <style dangerouslySetInnerHTML={{
                 __html: `
-                @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&display=swap');
-                .font-luxury-cinzel { font-family: 'Cinzel', serif; }
                 .gold-gradient-text {
                     background: linear-gradient(135deg, #FFD700 0%, #C9A227 50%, #B8860B 100%);
                     -webkit-background-clip: text;
@@ -64,7 +62,7 @@ export default function DiscountBadge({
                     <circle cx="50" cy="50" r="49" stroke="url(#goldGrad)" strokeWidth="0.2" opacity="0.5" />
 
                     {/* Circular Text */}
-                    <text className="font-luxury-cinzel uppercase" fill="#C9A227" fontSize="7.5" letterSpacing="1.5" fontWeight="400">
+                    <text className="font-luxury uppercase" fill="#C9A227" fontSize="7.5" letterSpacing="1.5" fontWeight="400">
                         <textPath href="#circlePath" startOffset="0%" textLength="276" lengthAdjust="spacing">
                             {circularText}
                         </textPath>
@@ -77,10 +75,10 @@ export default function DiscountBadge({
 
                 {/* Text Content */}
                 <div className="relative z-20 flex flex-col items-center justify-center text-center p-3">
-                    <span className="font-luxury-cinzel text-[10px] sm:text-xs md:text-sm font-semibold tracking-[0.2em] text-[#C9A227] mb-0.5 opacity-90">
+                    <span className="font-luxury text-[10px] sm:text-xs md:text-sm font-semibold tracking-[0.2em] text-[#C9A227] mb-0.5 opacity-90">
                         {subtitle}
                     </span>
-                    <span className="font-luxury-cinzel text-xl sm:text-2xl md:text-3xl font-bold leading-none gold-gradient-text drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] my-0.5">
+                    <span className="font-luxury text-xl sm:text-2xl md:text-3xl font-bold leading-none gold-gradient-text drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] my-0.5">
                         {text.split(' ').map((word, i, arr) => (
                             <React.Fragment key={i}>
                                 {word}

@@ -2,17 +2,53 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Repositories\Contracts\CityRepositoryInterface;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
     protected ProductService $productService;
+    protected CategoryRepositoryInterface $categoryRepo;
+    protected CityRepositoryInterface $cityRepo;
 
-    public function __construct(ProductService $productService)
-    {
+    public function __construct(
+        ProductService $productService,
+        CategoryRepositoryInterface $categoryRepo,
+        CityRepositoryInterface $cityRepo
+    ) {
         $this->productService = $productService;
+        $this->categoryRepo = $categoryRepo;
+        $this->cityRepo = $cityRepo;
+    }
+
+    public function index(Request $request)
+    {
+        $filters = $request->only(['category', 'city_id', 'budget']);
+
+        $queryFilters = [
+            'city_id' => $filters['city_id'] ?? null,
+            'budget'  => $filters['budget'] ?? null,
+        ];
+
+        if (!empty($filters['category'])) {
+            $category = Category::where('slug', $filters['category'])->first();
+            $queryFilters['category_id'] = $category?->id;
+        }
+
+        $paginatedProducts = $this->productService->getPaginatedList($queryFilters, 12);
+        $paginatedProducts->through(fn ($p) => $this->formatProductForCard($p));
+
+        return Inertia::render('Products', [
+            'products'   => $paginatedProducts,
+            'cities'     => $this->cityRepo->getActiveCities(),
+            'categories' => $this->categoryRepo->getActiveCategories(),
+            'filters'    => $filters,
+        ]);
     }
 
     public function show(Product $product, string $slug)
@@ -40,6 +76,7 @@ class ProductController extends Controller
                 'slug'                  => $product->slug,
                 'description'           => $product->description,
                 'price'                 => $product->price,
+                'discount_price'        => $product->discount_price,
                 'price_on_request'      => $product->price_on_request,
                 'gold_purity'           => $product->gold_purity,
                 'approximate_weight'    => $product->approximate_weight,
@@ -78,6 +115,7 @@ class ProductController extends Controller
             'title'            => $product->title,
             'slug'             => $product->slug,
             'price'            => $product->price,
+            'discount_price'   => $product->discount_price,
             'price_on_request' => $product->price_on_request,
             'status'           => $product->status,
             'primary_image'    => $primaryImage,

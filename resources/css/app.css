@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap');
-
 @import 'tailwindcss';
+@import 'aos/dist/aos.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -10,21 +9,29 @@
 @theme {
     --color-gold: #d4af37;
     --color-gold-hover: #bda030;
-    --color-charcoal: #0f172a;
-    --color-cream: #faf9f6;
-    --font-heading: 'Playfair Display', serif;
-    --font-luxury: 'Playfair Display', serif;
-    --font-sans: 'Poppins', sans-serif;
-    --font-body: 'Poppins', sans-serif;
+    --color-gold-light: #e8c766;
+    --color-maroon: #5c1a1b;
+    --color-maroon-dark: #3d1112;
+    --color-maroon-light: #7a2426;
+    --color-charcoal: #5c1a1b;
+    --color-cream: #fff8f0;
+    --font-heading: 'Cormorant Garamond', serif;
+    --font-luxury: 'Cormorant Garamond', serif;
+    --font-sans: 'Poppins', 'Lato', sans-serif;
+    --font-body: 'Poppins', 'Lato', sans-serif;
 }
 
 @layer base {
     h1, h2, h3, h4, h5, h6, .logo, .hero-title, .product-title, .section-title {
         font-family: var(--font-heading);
     }
-    
+
     body, p, a, button, input, textarea, select, .nav-links, .price, .footer-text, .product-description {
         font-family: var(--font-body);
+    }
+
+    a, button {
+        transition: all 0.3s ease;
     }
 }
 

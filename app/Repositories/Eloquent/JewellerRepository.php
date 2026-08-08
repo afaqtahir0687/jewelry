@@ -37,6 +37,26 @@ class JewellerRepository extends BaseRepository implements JewellerRepositoryInt
             $query->whereJsonContains('specialities', $filters['speciality']);
         }
 
+        if (!empty($filters['category'])) {
+            $query->whereHas('products', function ($q) use ($filters) {
+                $q->whereHas('category', function ($cq) use ($filters) {
+                    $cq->where('slug', $filters['category']);
+                });
+            });
+        }
+
+        if (!empty($filters['budget'])) {
+            [$min, $max] = $this->parseBudgetRange($filters['budget']);
+            $query->whereHas('products', function ($q) use ($min, $max) {
+                if ($min !== null) {
+                    $q->where('price', '>=', $min);
+                }
+                if ($max !== null) {
+                    $q->where('price', '<=', $max);
+                }
+            });
+        }
+
         if (!empty($filters['custom_order'])) {
             $query->where('custom_order_available', true);
         }
@@ -50,6 +70,17 @@ class JewellerRepository extends BaseRepository implements JewellerRepositoryInt
         }
 
         return $query->paginate(9);
+    }
+
+    protected function parseBudgetRange(string $budget): array
+    {
+        return match ($budget) {
+            'Under Rs. 100,000' => [null, 100000],
+            'Rs. 100,000 - 250,000' => [100000, 250000],
+            'Rs. 250,000 - 500,000' => [250000, 500000],
+            'Above Rs. 500,000' => [500000, null],
+            default => [null, null],
+        };
     }
 
     public function getCityJewellers($cityId)

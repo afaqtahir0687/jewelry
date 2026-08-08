@@ -1,13 +1,12 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CityController;
-use App\Http\Controllers\JewellerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\SellerAuthController;
@@ -22,17 +21,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/login', fn () => redirect()->route('admin.login'))->name('login');
-Route::get('/find-a-jeweller', [JewellerController::class, 'index'])->name('search.index');
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/custom-jewellery', [LeadController::class, 'custom'])->name('lead.custom');
 Route::post('/custom-jewellery', [LeadController::class, 'store'])->name('lead.store');
 Route::get('/custom-jewellery/success', [LeadController::class, 'success'])->name('lead.success');
 Route::get('/become-a-partner', [PartnerController::class, 'create'])->name('partner.create');
 Route::post('/become-a-partner', [PartnerController::class, 'store'])->name('partner.store');
-Route::get('/jewellers/{city:slug}', [CityController::class, 'show'])->name('city.show');
-Route::get('/jeweller/{jeweller:slug}', [JewellerController::class, 'show'])->name('jeweller.show');
 
-// Product detail page (SEO-friendly slug)
+// Product listing/search + detail pages (SEO-friendly slug)
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}/{slug}', [ProductController::class, 'show'])->name('product.show');
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -171,6 +168,7 @@ Route::prefix('seller')->name('seller.')->group(function () {
 
 Route::get('/contact-us', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->name('newsletter.subscribe');
 Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 
 // ─────────────────────────────────────────────────────────────────────────────
