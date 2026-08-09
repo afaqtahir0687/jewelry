@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Faq;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\CityRepositoryInterface;
 use App\Services\CategoryService;
@@ -42,6 +43,10 @@ class HomeController extends Controller
                 'products'    => $cat->products->map(fn ($p) => $this->formatProductForCard($p)),
                 'total_products' => $cat->products()->count(),
             ]),
+            'faqs' => Faq::where('is_active', true)
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->get(['id', 'question', 'answer']),
         ]);
     }
 

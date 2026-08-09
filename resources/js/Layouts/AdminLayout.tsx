@@ -3,7 +3,7 @@ import { Link, router, usePage } from '@inertiajs/react';
 import {
     LayoutDashboard, Users, Store, Package, ClipboardList,
     Calendar, Tag, MapPin, Star, LogOut, Menu, X, ChevronRight,
-    FileText, MessageSquare, Globe, Handshake
+    FileText, MessageSquare, Globe, Handshake, HelpCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
@@ -30,6 +30,7 @@ const navItems: NavItem[] = [
     { label: 'Reviews',      href: '/admin/reviews',      icon: <Star size={18} />,           routeKey: 'admin.reviews' },
     { label: 'Users',        href: '/admin/users',        icon: <Users size={18} />,          routeKey: 'admin.users' },
     { label: 'Pages',        href: '/admin/pages',        icon: <FileText size={18} />,       routeKey: 'admin.pages' },
+    { label: 'FAQs',         href: '/admin/faqs',         icon: <HelpCircle size={18} />,     routeKey: 'admin.faqs' },
     { label: 'Inquiries',    href: '/admin/contact-messages', icon: <MessageSquare size={18} />, routeKey: 'admin.contact-messages' },
 ];
 

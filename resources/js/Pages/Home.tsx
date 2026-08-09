@@ -6,6 +6,7 @@ import DiscountBadge from '@/components/DiscountBadge';
 import Reveal from '@/Components/Reveal';
 import WhyChooseUs from '@/Components/WhyChooseUs';
 import NewsletterSignup from '@/Components/NewsletterSignup';
+import FaqSection from '@/Components/FaqSection';
 import type { Category, ProductCard as ProductCardType } from '@/types';
 
 interface City {
@@ -24,11 +25,18 @@ interface FeaturedCategory {
     total_products: number;
 }
 
+interface Faq {
+    id: number;
+    question: string;
+    answer: string;
+}
+
 interface HomeProps {
     cities: City[];
     categories: Category[];
     latestArrivals: ProductCardType[];
     featuredCategories: FeaturedCategory[];
+    faqs: Faq[];
 }
 
 const BUDGET_OPTIONS = [
@@ -65,7 +73,7 @@ const SLIDES = [
     },
 ];
 
-export default function Home({ cities, categories, latestArrivals, featuredCategories }: HomeProps) {
+export default function Home({ cities, categories, latestArrivals, featuredCategories, faqs }: HomeProps) {
     const [searchCategory, setSearchCategory] = useState('');
     const [searchCityId, setSearchCityId] = useState('');
     const [searchBudget, setSearchBudget] = useState('');
@@ -294,6 +302,9 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                     </Reveal>
                 </div>
             </section>
+
+            {/* ── FAQs ──────────────────────────────────────────────────── */}
+            <FaqSection faqs={faqs} />
         </AppLayout>
     );
 }

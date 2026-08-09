@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\LeadController;
@@ -27,6 +28,7 @@ Route::post('/custom-jewellery', [LeadController::class, 'store'])->name('lead.s
 Route::get('/custom-jewellery/success', [LeadController::class, 'success'])->name('lead.success');
 Route::get('/become-a-partner', [PartnerController::class, 'create'])->name('partner.create');
 Route::post('/become-a-partner', [PartnerController::class, 'store'])->name('partner.store');
+Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
 
 // Product listing/search + detail pages (SEO-friendly slug)
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
@@ -110,6 +112,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Pages
         Route::resource('pages', Admin\PageController::class)->except(['show']);
+
+        // FAQs
+        Route::resource('faqs', Admin\FaqController::class)->except(['show']);
 
         // SEO Meta Tags
         Route::resource('seo-metas', Admin\SeoMetaController::class)->except(['show']);
