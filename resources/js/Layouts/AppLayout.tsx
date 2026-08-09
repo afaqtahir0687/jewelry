@@ -99,7 +99,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                 <li><Link href="/page/about-us" className="hover:text-[#d4af37] transition-colors duration-300">About Us</Link></li>
                                 <li><Link href="/products" className="hover:text-[#d4af37] transition-colors duration-300">Shop Products</Link></li>
                                 <li><Link href="/contact-us" className="hover:text-[#d4af37] transition-colors duration-300">Contact Us</Link></li>
-                                <li><Link href="/page/faqs" className="hover:text-[#d4af37] transition-colors duration-300">FAQs</Link></li>
+                                <li><Link href="/faqs" className="hover:text-[#d4af37] transition-colors duration-300">FAQs</Link></li>
                                 <li><Link href="/page/terms-and-conditions" className="hover:text-[#d4af37] transition-colors duration-300">Terms &amp; Conditions</Link></li>
                                 <li><Link href="/page/privacy-policy" className="hover:text-[#d4af37] transition-colors duration-300">Privacy Policy</Link></li>
                             </ul>
