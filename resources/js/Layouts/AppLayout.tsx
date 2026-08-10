@@ -5,6 +5,8 @@ import { Toaster, toast } from 'sonner';
 import Navbar from '@/Components/Navbar/Navbar';
 import NewsletterSignup from '@/Components/NewsletterSignup';
 import AOS from 'aos';
+import InstallAppBanner from '@/components/PWA/InstallAppBanner';
+
 
 interface AppLayoutProps {
     children: React.ReactNode;
@@ -181,6 +183,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
             </div>
 
             <Toaster richColors theme="light" position="top-right" closeButton />
+            <InstallAppBanner />
+
 
             {/* Floating Call Button */}
             <a

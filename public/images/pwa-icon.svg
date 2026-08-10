@@ -1,0 +1,68 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bg-grad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#7A2426"/>
+      <stop offset="100%" stop-color="#3D1112"/>
+    </radialGradient>
+    
+    <!-- 3D maroon gradients -->
+    <linearGradient id="g1-top" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#B5595B"/>
+      <stop offset="45%" stop-color="#7A2426"/>
+      <stop offset="100%" stop-color="#5C1A1B"/>
+    </linearGradient>
+    <linearGradient id="g1-left" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5C1A1B"/>
+      <stop offset="100%" stop-color="#3D1112"/>
+    </linearGradient>
+    <linearGradient id="g1-right" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7A2426"/>
+      <stop offset="100%" stop-color="#4A1517"/>
+    </linearGradient>
+    
+    <!-- Gem Glow -->
+    <radialGradient id="g1-glow" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#FFF6DC" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FFF6DC" stop-opacity="0"/>
+    </radialGradient>
+    
+    <!-- Gold Border Gradient -->
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe8a3"/>
+      <stop offset="50%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#8a6f27"/>
+    </linearGradient>
+    
+    <filter id="g1-shadow" x="-40%" y="-40%" width="180%" height="200%">
+      <feDropShadow dx="0" dy="15" stdDeviation="15" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg-grad)"/>
+  
+  <!-- Outer Gold Border -->
+  <rect x="24" y="24" width="464" height="464" rx="88" fill="none" stroke="url(#gold-grad)" stroke-width="6" opacity="0.85"/>
+
+  <!-- Centered 3D Gem (Scaled up) -->
+  <g transform="translate(256, 240) scale(3.5)" filter="url(#g1-shadow)">
+    <!-- crown (top) -->
+    <polygon points="-44,-4 -24,-34 24,-34 44,-4" fill="url(#g1-top)"/>
+    <polygon points="-24,-34 0,-4 24,-34" fill="#C97B7D" opacity="0.85"/>
+    <polygon points="-44,-4 -24,-34 0,-4" fill="#8A3234"/>
+    <polygon points="44,-4 24,-34 0,-4" fill="#6E2224"/>
+    <!-- pavilion (bottom) -->
+    <polygon points="-44,-4 0,52 0,-4" fill="url(#g1-left)"/>
+    <polygon points="44,-4 0,52 0,-4" fill="url(#g1-right)"/>
+    <!-- girdle highlight -->
+    <line x1="-44" y1="-4" x2="44" y2="-4" stroke="#E3AEAF" stroke-width="1.6" opacity="0.9"/>
+    <!-- sparkle -->
+    <g fill="#FFFFFF">
+      <path d="M -14 -22 l 2.5 6 l 6 2.5 l -6 2.5 l -2.5 6 l -2.5 -6 l -6 -2.5 l 6 -2.5 z" opacity="0.95"/>
+      <circle cx="18" cy="10" r="2.2" opacity="0.8"/>
+    </g>
+    <!-- soft glow -->
+    <ellipse cx="0" cy="-14" rx="46" ry="26" fill="url(#g1-glow)" opacity="0.4"/>
+  </g>
+</svg>

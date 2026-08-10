@@ -4,6 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/svg+xml" href="/images/gehna-logo.svg">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#5c1a1b">
+    
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Gehna">
+    <link rel="apple-touch-icon" href="/images/pwa-icon-192.png">
+
 
     @if(($page['component'] ?? null) === 'Home')
         <link rel="preload" as="image" href="/images/banner1.webp" fetchpriority="high">
@@ -42,5 +51,17 @@
 </head>
 <body class="bg-cream font-sans antialiased text-charcoal">
     @inertia
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
 </body>
 </html>
