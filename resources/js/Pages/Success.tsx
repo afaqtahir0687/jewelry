@@ -45,7 +45,7 @@ export default function Success({ lead }: SuccessProps) {
                         <i className="fa-solid fa-check text-4xl"></i>
                     </div>
 
-                    <h1 className="font-luxury text-3xl font-bold text-[#5c1a1b] mb-3">Inquiry Submitted Successfully!</h1>
+                    <h1 className="font-luxury text-3xl font-bold text-[#4a0e0e] mb-3">Inquiry Submitted Successfully!</h1>
                     <p className="text-gray-500 text-sm mb-8">
                         Thank you, <strong>{lead.customer_name}</strong>. Your inquiry has been logged in our CRM database. Our team will verify and route this to a local partner.
                     </p>
@@ -54,7 +54,7 @@ export default function Success({ lead }: SuccessProps) {
                         <span className="text-xxs text-gray-400 font-bold uppercase tracking-widest block mb-1">Your Unique Lead ID</span>
                         
                         <div className="flex items-center justify-between bg-[#fff8f0] p-3 rounded border border-gray-100 mb-4">
-                            <span className="font-mono text-base font-bold text-[#5c1a1b] tracking-wide">{lead.lead_id}</span>
+                            <span className="font-mono text-base font-bold text-[#4a0e0e] tracking-wide">{lead.lead_id}</span>
                             <button onClick={copyLeadId} className="text-xs text-[#d4af37] font-bold hover:text-[#bda030] focus:outline-none">
                                 <i className="fa-solid fa-copy mr-1"></i> Copy
                             </button>
@@ -72,7 +72,7 @@ export default function Success({ lead }: SuccessProps) {
                     </div>
 
                     <div className="max-w-md mx-auto text-left space-y-4 mb-8">
-                        <h3 className="font-luxury text-base font-bold text-[#5c1a1b] border-b border-gray-100 pb-2">What Happens Next?</h3>
+                        <h3 className="font-luxury text-base font-bold text-[#4a0e0e] border-b border-gray-100 pb-2">What Happens Next?</h3>
                         
                         <div className="flex gap-3">
                             <span className="w-6 h-6 rounded-full bg-[#d4af37] text-white text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
@@ -96,7 +96,7 @@ export default function Success({ lead }: SuccessProps) {
                         </div>
                     </div>
 
-                    <Link href="/" className="inline-block bg-[#5c1a1b] hover:bg-[#5c1a1b]/90 text-white font-bold uppercase tracking-wider text-xs px-8 py-3.5 rounded shadow">
+                    <Link href="/" className="inline-block bg-[#4a0e0e] hover:bg-[#4a0e0e]/90 text-white font-bold uppercase tracking-wider text-xs px-8 py-3.5 rounded shadow">
                         Back to Home
                     </Link>
 

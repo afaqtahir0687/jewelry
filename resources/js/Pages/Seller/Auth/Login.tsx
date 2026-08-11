@@ -39,7 +39,7 @@ export default function SellerLogin() {
                     <div className="bg-[#0f172a] border border-white/10 rounded-2xl p-8 shadow-2xl">
 
                         <div className="text-center mb-8">
-                            <img src="/images/gehna-logo.svg" alt="Gehna" className="h-16 w-auto mx-auto mb-4" />
+                            <img src="/images/gehna-diamond.svg" alt="Gehna" className="h-16 w-auto mx-auto mb-4" />
                             <h1 className="text-2xl font-bold text-white">Seller Portal</h1>
                             <p className="text-gray-400 text-sm mt-1">Manage your jewellery store</p>
                         </div>

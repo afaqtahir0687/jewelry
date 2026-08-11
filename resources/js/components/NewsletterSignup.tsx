@@ -41,7 +41,7 @@ export default function NewsletterSignup({ variant = 'section' }: NewsletterSign
                         <button
                             type="submit"
                             disabled={processing}
-                            className="w-full sm:w-auto bg-[#d4af37] hover:bg-[#bda030] text-[#3d1112] font-bold px-5 py-2.5 text-xs uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap disabled:opacity-60">
+                            className="w-full sm:w-auto bg-[#d4af37] hover:bg-[#bda030] text-[#0a0a0a] font-bold px-5 py-2.5 text-xs uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] whitespace-nowrap disabled:opacity-60">
                             {processing ? 'Subscribing…' : 'Subscribe'}
                         </button>
                     </form>
@@ -52,7 +52,7 @@ export default function NewsletterSignup({ variant = 'section' }: NewsletterSign
     }
 
     return (
-        <section className="relative bg-gradient-to-br from-[#5c1a1b] via-[#3d1112] to-[#5c1a1b] py-16 md:py-20 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-[#4a0e0e] via-[#0a0a0a] to-[#4a0e0e] py-16 md:py-20 overflow-hidden">
             <div className="absolute inset-0 opacity-10 pointer-events-none">
                 <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-[#d4af37] rounded-full filter blur-3xl" />
                 <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#d4af37] rounded-full filter blur-3xl" />
@@ -83,12 +83,12 @@ export default function NewsletterSignup({ variant = 'section' }: NewsletterSign
                                 value={data.email}
                                 onChange={(e) => setData('email', e.target.value)}
                                 placeholder="Enter your email address"
-                                className="flex-1 bg-white/95 border border-white/20 rounded-sm px-4 py-3.5 text-sm text-[#5c1a1b] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition-all duration-300"
+                                className="flex-1 bg-white/95 border border-white/20 rounded-sm px-4 py-3.5 text-sm text-[#4a0e0e] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d4af37] transition-all duration-300"
                             />
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="bg-[#d4af37] hover:bg-[#bda030] text-[#3d1112] font-bold px-7 py-3.5 text-xs uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] shadow-lg hover-shine disabled:opacity-60 whitespace-nowrap">
+                                className="bg-[#d4af37] hover:bg-[#bda030] text-[#0a0a0a] font-bold px-7 py-3.5 text-xs uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] shadow-lg hover-shine disabled:opacity-60 whitespace-nowrap">
                                 {processing ? 'Subscribing…' : 'Subscribe Now'}
                             </button>
                         </form>

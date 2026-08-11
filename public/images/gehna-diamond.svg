@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150" fill="none">
+  <g transform="translate(10, 15)">
+    <!-- Diamond Shape with bolder strokes -->
+    <path d="M32 16 L88 16 L114 46 L60 106 L6 46 Z" stroke="#D4AF37" stroke-width="4"></path>
+    <path d="M6 46 L114 46" stroke="#D4AF37" stroke-width="3"></path>
+    <path d="M32 16 L46 46 M88 16 L74 46 M60 16 L46 46 M60 16 L74 46" stroke="#D4AF37" stroke-width="2"></path>
+    <path d="M46 46 L60 106 M74 46 L60 106" stroke="#D4AF37" stroke-width="2"></path>
+    <!-- Little sparkle -->
+    <path d="M106 2 L107.6 7.4 L113 9 L107.6 10.6 L106 16 L104.4 10.6 L99 9 L104.4 7.4 Z" fill="#D4AF37" opacity="0.9"></path>
+  </g>
+  <!-- Text placed beside the diamond -->
+  <text x="160" y="100" font-family="'Playfair Display', serif" font-size="80" font-weight="800" fill="#D4AF37" letter-spacing="8">GEHNA</text>
+</svg>

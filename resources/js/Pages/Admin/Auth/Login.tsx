@@ -42,7 +42,7 @@ export default function AdminLogin() {
 
                         {/* Header */}
                         <div className="text-center mb-8">
-                            <img src="/images/gehna-logo.svg" alt="Gehna" className="h-16 w-auto mx-auto mb-4" />
+                            <img src="/images/gehna-diamond.svg" alt="Gehna" className="h-16 w-auto mx-auto mb-4" />
                             <h1 className="text-2xl font-bold text-white">Admin Portal</h1>
                             <p className="text-gray-400 text-sm mt-1">Admin CRM</p>
                         </div>

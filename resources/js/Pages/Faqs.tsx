@@ -21,7 +21,7 @@ export default function Faqs({ faqs }: FaqsPageProps) {
             </Head>
 
             {/* ── Page Hero ─────────────────────────────────────────────── */}
-            <section className="bg-[#5c1a1b] py-14 md:py-20">
+            <section className="bg-[#4a0e0e] py-14 md:py-20">
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Help Center</span>
                     <h1 className="font-luxury text-3xl sm:text-4xl md:text-5xl text-white font-bold mt-2">Frequently Asked Questions</h1>

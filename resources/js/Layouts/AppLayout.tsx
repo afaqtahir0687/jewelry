@@ -6,6 +6,8 @@ import Navbar from '@/Components/Navbar/Navbar';
 import NewsletterSignup from '@/Components/NewsletterSignup';
 import AOS from 'aos';
 import InstallAppBanner from '@/components/PWA/InstallAppBanner';
+import { ReactLenis } from '@studio-freight/react-lenis';
+import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 
 
 interface AppLayoutProps {
@@ -17,6 +19,20 @@ export default function AppLayout({ children }: AppLayoutProps) {
     const pageUrl = usePage().url;
     const footerRef = React.useRef<HTMLElement>(null);
     const [footerVisible, setFooterVisible] = React.useState(false);
+    const [isFirstLoad, setIsFirstLoad] = React.useState(true);
+    
+    const { scrollYProgress } = useScroll();
+    const scaleX = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    React.useEffect(() => {
+        // Set first load to false after animation
+        const timer = setTimeout(() => setIsFirstLoad(false), 2000);
+        return () => clearTimeout(timer);
+    }, []);
 
     React.useEffect(() => {
         if (flash?.success) toast.success(flash.success);
@@ -44,8 +60,45 @@ export default function AppLayout({ children }: AppLayoutProps) {
         AOS.refresh();
     }, [pageUrl]);
 
+    const [cursorPos, setCursorPos] = React.useState({ x: -100, y: -100 });
+    React.useEffect(() => {
+        const moveCursor = (e: MouseEvent) => setCursorPos({ x: e.clientX, y: e.clientY });
+        window.addEventListener('mousemove', moveCursor);
+        return () => window.removeEventListener('mousemove', moveCursor);
+    }, []);
+
     return (
-        <div className="bg-[#fff8f0] font-sans text-[#5c1a1b] min-h-screen flex flex-col antialiased overflow-x-hidden">
+        <ReactLenis root>
+        <div className="bg-[#fff8f0] font-sans text-[#4a0e0e] min-h-screen flex flex-col antialiased overflow-x-hidden">
+            {/* Custom Diamond Sparkle Cursor */}
+            <div className="cursor-glint" style={{ top: cursorPos.y, left: cursorPos.x }} />
+
+            {/* Scroll Progress Bar */}
+            <motion.div 
+                className="fixed top-0 left-0 right-0 h-1 bg-[#d4af37] origin-left z-[100]" 
+                style={{ scaleX }} 
+            />
+
+            {/* Page Load Intro Curtain */}
+            <AnimatePresence>
+                {isFirstLoad && (
+                    <motion.div
+                        initial={{ y: 0 }}
+                        animate={{ y: '-100%' }}
+                        exit={{ y: '-100%' }}
+                        transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 1 }}
+                        className="fixed inset-0 z-[999] bg-[#0a0a0a] flex items-center justify-center pointer-events-none"
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                        >
+                            <img src="/images/gehna-diamond.svg" alt="Gehna" className="h-20 w-auto filter drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]" />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             {seo_meta && (
                 <Head title={seo_meta.title}>
                     {seo_meta.description && <meta name="description" content={seo_meta.description} />}
@@ -54,7 +107,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             )}
 
             {/* Top Premium Notification Bar */}
-            <div className="bg-[#5c1a1b] text-[#d4af37] text-xs py-2 text-center tracking-widest uppercase font-semibold border-b border-[#d4af37]/20">
+            <div className="bg-[#4a0e0e] text-[#d4af37] text-xs py-2 text-center tracking-widest uppercase font-semibold border-b border-[#d4af37]/20">
                 <i className="fa-solid fa-gem mr-2" /> Connecting You to Pakistan's Most Trusted Verified Artisans <i className="fa-solid fa-gem ml-2" />
             </div>
 
@@ -67,7 +120,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             </main>
 
             {/* Premium Footer */}
-            <footer ref={footerRef} className="bg-gradient-to-b from-[#3d1112] to-black text-gray-400 pt-16 pb-24 md:pb-12 border-t border-[#d4af37]/20">
+            <footer ref={footerRef} className="bg-gradient-to-b from-[#0a0a0a] to-black text-gray-400 pt-16 pb-24 md:pb-12 border-t border-[#d4af37]/20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                     {/* Newsletter Strip */}
@@ -83,15 +136,15 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
                         <div data-aos="fade-up" data-aos-delay="0">
                             <Link href="/" className="flex items-center mb-4">
-                                <img src="/images/gehna-logo.svg" alt="Gehna" className="h-14 w-auto" />
+                                <img src="/images/gehna-diamond.svg" alt="Gehna" className="h-14 w-auto" />
                             </Link>
                             <p className="text-sm text-gray-400 mb-6 leading-relaxed">
                                 Connecting customers with certified and verified top-tier jewellers in Pakistan. Request quotes, browse inspirations and find physical shops with confidence.
                             </p>
                             <div className="flex space-x-4">
-                                <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#d4af37] hover:text-[#3d1112] flex items-center justify-center transition-all duration-300"><i className="fa-brands fa-facebook-f" /></a>
-                                <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#d4af37] hover:text-[#3d1112] flex items-center justify-center transition-all duration-300"><i className="fa-brands fa-instagram" /></a>
-                                <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#d4af37] hover:text-[#3d1112] flex items-center justify-center transition-all duration-300"><i className="fa-brands fa-tiktok" /></a>
+                                <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#d4af37] hover:text-[#0a0a0a] flex items-center justify-center transition-all duration-300"><i className="fa-brands fa-facebook-f" /></a>
+                                <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#d4af37] hover:text-[#0a0a0a] flex items-center justify-center transition-all duration-300"><i className="fa-brands fa-instagram" /></a>
+                                <a href="#" className="w-9 h-9 rounded-full bg-white/10 hover:bg-[#d4af37] hover:text-[#0a0a0a] flex items-center justify-center transition-all duration-300"><i className="fa-brands fa-tiktok" /></a>
                             </div>
                         </div>
 
@@ -160,15 +213,15 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
             {/* Sticky Mobile Bottom Menu */}
             <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-2xl py-3 px-6 z-50 flex justify-between items-center text-center">
-                <Link href="/" className="flex flex-col items-center gap-1 text-[#5c1a1b]/80 hover:text-[#d4af37]">
+                <Link href="/" className="flex flex-col items-center gap-1 text-[#4a0e0e]/80 hover:text-[#d4af37]">
                     <i className="fa-solid fa-house text-lg" />
                     <span className="text-[10px] font-bold">Home</span>
                 </Link>
-                <Link href="/categories" className="flex flex-col items-center gap-1 text-[#5c1a1b]/80 hover:text-[#d4af37]">
+                <Link href="/categories" className="flex flex-col items-center gap-1 text-[#4a0e0e]/80 hover:text-[#d4af37]">
                     <i className="fa-solid fa-list text-lg" />
                     <span className="text-[10px] font-bold">Categories</span>
                 </Link>
-                <Link href="/products" className="flex flex-col items-center gap-1 text-[#5c1a1b]/80 hover:text-[#d4af37]">
+                <Link href="/products" className="flex flex-col items-center gap-1 text-[#4a0e0e]/80 hover:text-[#d4af37]">
                     <i className="fa-solid fa-bag-shopping text-lg" />
                     <span className="text-[10px] font-bold">Shop</span>
                 </Link>
@@ -176,7 +229,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                     <i className="fa-brands fa-whatsapp text-xl" />
                     <span className="text-[10px] font-bold">WhatsApp</span>
                 </a>
-                <Link href="/custom-jewellery" className="flex flex-col items-center gap-1 text-[#5c1a1b]/80 hover:text-[#d4af37]">
+                <Link href="/custom-jewellery" className="flex flex-col items-center gap-1 text-[#4a0e0e]/80 hover:text-[#d4af37]">
                     <i className="fa-solid fa-gem text-lg" />
                     <span className="text-[10px] font-bold">Get Quote</span>
                 </Link>
@@ -189,7 +242,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             {/* Floating Call Button */}
             <a
                 href="tel:+923017730687"
-                className={`fixed bottom-20 md:bottom-6 left-5 z-50 group flex items-center gap-2 bg-[#5c1a1b] hover:bg-[#7a2426] text-white rounded-full shadow-2xl transition-all duration-300 hover:shadow-[#d4af37]/30 hover:scale-105 ${footerVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                className={`fixed bottom-20 md:bottom-6 left-5 z-50 group flex items-center gap-2 bg-[#4a0e0e] hover:bg-[#b76e79] text-white rounded-full shadow-2xl transition-all duration-300 hover:shadow-[#d4af37]/30 hover:scale-105 ${footerVisible ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                 title="Call us">
                 <span className="relative flex items-center gap-2 px-4 py-3">
                     <i className="fa-solid fa-phone text-lg" />
@@ -211,5 +264,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 </span>
             </a>
         </div>
+        </ReactLenis>
     );
 }

@@ -47,7 +47,7 @@ export default function MegaMenu({ groups, isOpen, closeMenu }: MegaMenuProps) {
                     {/* Optional Featured Section / Image block could go here if we had less than 4 groups */}
                     {groups.length < 4 && (
                         <div className="hidden lg:block lg:col-span-1 rounded-lg overflow-hidden relative group">
-                            <div className="absolute inset-0 bg-[#5c1a1b] mix-blend-multiply opacity-20 group-hover:opacity-10 transition-opacity"></div>
+                            <div className="absolute inset-0 bg-[#4a0e0e] mix-blend-multiply opacity-20 group-hover:opacity-10 transition-opacity"></div>
                             <img src="https://images.unsplash.com/photo-1599643478524-fb66f70a00ac?q=80&w=600&auto=format&fit=crop" alt="Featured Jewellery" className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
                             <div className="absolute bottom-6 left-6 right-6">
                                 <h4 className="text-white font-luxury text-xl mb-2 drop-shadow-md">New Arrivals</h4>

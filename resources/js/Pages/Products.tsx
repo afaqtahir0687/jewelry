@@ -87,7 +87,7 @@ export default function Products({ products, cities, categories, filters }: Prod
 
             <div className="pt-4 flex gap-2">
                 <button type="submit" className="w-full bg-[#d4af37] hover:bg-[#bda030] text-white text-xs font-bold uppercase tracking-wider py-2.5 rounded shadow shadow-[#d4af37]/10 transition-all duration-300 hover-shine active:scale-[0.98]">Apply</button>
-                <Link href="/products" className="w-full text-center border border-[#5c1a1b]/20 hover:bg-[#fff8f0] text-[#5c1a1b] text-xs font-bold uppercase tracking-wider py-2.5 rounded transition-all duration-300 active:scale-[0.98]">Clear</Link>
+                <Link href="/products" className="w-full text-center border border-[#4a0e0e]/20 hover:bg-[#fff8f0] text-[#4a0e0e] text-xs font-bold uppercase tracking-wider py-2.5 rounded transition-all duration-300 active:scale-[0.98]">Clear</Link>
             </div>
         </>
     );
@@ -96,7 +96,7 @@ export default function Products({ products, cities, categories, filters }: Prod
         <AppLayout>
             <Head title="Shop Jewellery | Online Jewelry Shop" />
 
-            <section className="bg-gradient-to-b from-[#5c1a1b] to-[#3d1112] text-white py-14 relative overflow-hidden border-b border-[#d4af37]/20">
+            <section className="bg-gradient-to-b from-[#4a0e0e] to-[#0a0a0a] text-white py-14 relative overflow-hidden border-b border-[#d4af37]/20">
                 <div className="absolute inset-0 opacity-10 pointer-events-none">
                     <div className="absolute top-0 left-1/4 w-72 h-72 bg-[#d4af37] rounded-full filter blur-3xl" />
                 </div>
@@ -114,13 +114,13 @@ export default function Products({ products, cities, categories, filters }: Prod
                         onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
                         className="w-full flex items-center justify-between bg-white border border-gray-200 rounded-lg px-5 py-3.5 shadow-sm"
                     >
-                        <span className="font-luxury font-bold text-sm text-[#5c1a1b] flex items-center gap-2">
+                        <span className="font-luxury font-bold text-sm text-[#4a0e0e] flex items-center gap-2">
                             <i className="fa-solid fa-sliders text-[#d4af37]" /> Filter Products
                             {activeFilterCount > 0 && (
                                 <span className="bg-[#d4af37] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">{activeFilterCount}</span>
                             )}
                         </span>
-                        <i className={`fa-solid fa-chevron-down text-xs text-[#5c1a1b] transition-transform duration-300 ${mobileFiltersOpen ? 'rotate-180 text-[#d4af37]' : ''}`} />
+                        <i className={`fa-solid fa-chevron-down text-xs text-[#4a0e0e] transition-transform duration-300 ${mobileFiltersOpen ? 'rotate-180 text-[#d4af37]' : ''}`} />
                     </button>
                     <div className={`overflow-hidden transition-all duration-300 ease-in-out ${mobileFiltersOpen ? 'max-h-[1000px] opacity-100 mt-3' : 'max-h-0 opacity-0'}`}>
                         <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm space-y-4">
@@ -136,7 +136,7 @@ export default function Products({ products, cities, categories, filters }: Prod
                     {/* Filter Sidebar (Desktop) */}
                     <div className="hidden lg:block lg:col-span-1">
                         <div data-aos="fade-right" className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm space-y-6 sticky top-24">
-                            <h3 className="font-luxury text-base font-bold text-[#5c1a1b] border-b border-gray-100 pb-2">Filter Products</h3>
+                            <h3 className="font-luxury text-base font-bold text-[#4a0e0e] border-b border-gray-100 pb-2">Filter Products</h3>
                             <form onSubmit={handleFilterSubmit} className="space-y-4">
                                 {filterFormFields}
                             </form>
@@ -146,7 +146,7 @@ export default function Products({ products, cities, categories, filters }: Prod
                     {/* Results */}
                     <div className="lg:col-span-3">
                         <div data-aos="fade-up" className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
-                            <p className="text-sm text-[#5c1a1b]">
+                            <p className="text-sm text-[#4a0e0e]">
                                 <span className="font-bold text-lg font-luxury">{products.total}</span>
                                 <span className="text-gray-500"> results found</span>
                             </p>
@@ -155,7 +155,7 @@ export default function Products({ products, cities, categories, filters }: Prod
                         {products.data.length === 0 ? (
                             <div className="bg-white p-12 rounded-lg border border-gray-200 text-center shadow-sm">
                                 <i className="fa-solid fa-gem text-5xl text-gray-300 mb-4 block"></i>
-                                <h3 className="font-luxury font-bold text-xl mb-2 text-[#5c1a1b]">No Products Found</h3>
+                                <h3 className="font-luxury font-bold text-xl mb-2 text-[#4a0e0e]">No Products Found</h3>
                                 <p className="text-gray-500 text-sm max-w-md mx-auto mb-6">No products match your filter criteria. Try adjusting your filters.</p>
                                 <Link href="/products" className="text-[#d4af37] font-bold text-sm hover:underline">
                                     Clear all filters
@@ -182,7 +182,7 @@ export default function Products({ products, cities, categories, filters }: Prod
                                                     link.active
                                                         ? 'bg-[#d4af37] text-white border-[#d4af37] font-bold'
                                                         : link.url
-                                                        ? 'bg-white text-[#5c1a1b] border-gray-200 hover:border-[#d4af37] hover:text-[#d4af37]'
+                                                        ? 'bg-white text-[#4a0e0e] border-gray-200 hover:border-[#d4af37] hover:text-[#d4af37]'
                                                         : 'bg-white text-gray-300 border-gray-100 cursor-not-allowed'
                                                 }`}
                                                 dangerouslySetInnerHTML={{ __html: link.label }}

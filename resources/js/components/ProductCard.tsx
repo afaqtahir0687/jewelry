@@ -1,23 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import type { ProductCard as ProductCardType } from '@/types';
+import QuickViewModal from './QuickViewModal';
 
 interface ProductCardProps {
     product: ProductCardType;
 }
 
-/**
- * Reusable Product Card used across:
- * - Latest Arrivals (homepage)
- * - Featured Categories (homepage)
- * - Category pages
- * - Product detail page (related products)
- * - Search results
- *
- * Image 1 = primary; Image 2 = hover image (falls back to primary if only 1 image).
- */
 export default function ProductCard({ product }: ProductCardProps) {
     const [isHovered, setIsHovered] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const primaryImage = product.primary_image;
     const hoverImage   = product.hover_image ?? primaryImage;
@@ -52,106 +44,123 @@ export default function ProductCard({ product }: ProductCardProps) {
         : 'Design Inspiration';
 
     return (
-        <div className="group flex flex-col relative transition-all duration-300">
-            {/* Image Container (Only this gets border/hover effect) */}
-            <Link 
-                href={productUrl} 
-                className="block h-56 sm:h-72 md:h-96 w-full bg-[#fff8f0] relative overflow-hidden rounded-2xl border border-gray-200 group-hover:border-gray-900 group-hover:shadow-lg transition-all duration-300"
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
-                {primaryImage ? (
-                    <>
-                        {/* Primary Image */}
-                        <img
-                            src={primaryImage}
-                            alt={product.title}
-                            className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${
-                                isHovered && hoverImage !== primaryImage ? 'opacity-0 scale-105' : 'opacity-100 scale-100 group-hover:scale-105'
-                            }`}
-                        />
-                        {/* Hover Image (only shown if different from primary) */}
-                        {hoverImage && hoverImage !== primaryImage && (
-                            <img
-                                src={hoverImage}
-                                alt={`${product.title} — alternate view`}
-                                className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${
-                                    isHovered ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-                                }`}
-                            />
+        <>
+            <div className="group flex flex-col relative transition-all duration-300 transform hover:-translate-y-1">
+                {/* Image Container (Only this gets border/hover effect) */}
+                <div 
+                    className="block h-56 sm:h-72 md:h-96 w-full bg-[#fff8f0] relative overflow-hidden rounded-2xl border border-gray-200 group-hover:border-[#d4af37]/50 group-hover:shadow-[0_20px_40px_-15px_rgba(212,175,55,0.2)] transition-all duration-500 cursor-pointer"
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                >
+                    <Link href={productUrl} className="block w-full h-full">
+                        {primaryImage ? (
+                            <>
+                                {/* Primary Image */}
+                                <img
+                                    src={primaryImage}
+                                    alt={product.title}
+                                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
+                                        isHovered && hoverImage !== primaryImage ? 'opacity-0 scale-110' : 'opacity-100 scale-100 group-hover:scale-105'
+                                    }`}
+                                />
+                                {/* Hover Image */}
+                                {hoverImage && hoverImage !== primaryImage && (
+                                    <img
+                                        src={hoverImage}
+                                        alt={`${product.title} — alternate view`}
+                                        className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] ${
+                                            isHovered ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
+                                        }`}
+                                    />
+                                )}
+                            </>
+                        ) : (
+                            <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                                <i className="fa-solid fa-gem text-4xl text-gray-300" />
+                            </div>
                         )}
-                    </>
-                ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                        <i className="fa-solid fa-gem text-4xl text-gray-300" />
-                    </div>
-                )}
-
-                {/* Status Badge */}
-                <span className="absolute top-3 right-3 bg-[#5c1a1b]/80 text-[#d4af37] text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded">
-                    {statusLabel}
-                </span>
-
-                {/* Top Left Badge: Discount % OR Featured */}
-                {hasDiscount && discountPercentage > 0 ? (
-                    <span className="absolute top-3 left-3 bg-[#d4af37] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-sm z-10">
-                        -{discountPercentage}% OFF
-                    </span>
-                ) : product.is_featured ? (
-                    <span className="absolute top-3 left-3 bg-[#d4af37] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-sm z-10">
-                        ✦ Featured
-                    </span>
-                ) : null}
-
-                {/* Dark overlay on hover + Quick view button */}
-                <div className={`absolute inset-0 bg-[#5c1a1b]/25 transition-opacity duration-300 flex flex-col justify-end p-4 ${
-                    isHovered ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                }`}>
-                    <span className="w-full text-center bg-[#d4af37] hover:bg-[#b8952b] text-white text-xs font-semibold py-2 rounded-lg shadow-lg transition-colors">
-                        Quick view
-                    </span>
-                </div>
-            </Link>
-
-            {/* Card Body (Outside the bordered box, transparent background) */}
-            <div className="pt-3 pb-1 flex flex-col justify-between">
-                <div>
-                    <Link href={productUrl}>
-                        <h3 className="font-sans font-medium text-sm text-[#333] line-clamp-1 hover:text-[#d4af37] transition-colors duration-300 leading-snug">
-                            {product.title}
-                        </h3>
                     </Link>
- 
-                    {/* Mock/Real Reviews Stars */}
-                    <div className="flex items-center gap-1.5 mt-1 text-xs text-gray-400">
-                        <div className="flex text-[#d4af37] gap-0.5 text-xs">
-                            <i className="fa-solid fa-star" />
-                            <i className="fa-solid fa-star" />
-                            <i className="fa-solid fa-star" />
-                            <i className="fa-solid fa-star" />
-                            <i className="fa-solid fa-star" />
-                        </div>
-                        <span>{(product.id % 20) + 12} reviews</span>
+
+                    {/* Status Badge */}
+                    <span className="absolute top-3 right-3 bg-[#4a0e0e]/90 text-[#d4af37] text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded backdrop-blur-sm shadow-sm">
+                        {statusLabel}
+                    </span>
+
+                    {/* Top Left Badge */}
+                    {hasDiscount && discountPercentage > 0 ? (
+                        <span className="absolute top-3 left-3 bg-[#d4af37] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-sm z-10 animate-pulse">
+                            -{discountPercentage}% OFF
+                        </span>
+                    ) : product.is_featured ? (
+                        <span className="absolute top-3 left-3 bg-gradient-to-r from-[#d4af37] to-[#e8c766] text-[#4a0e0e] text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-md z-10">
+                            ✦ Featured
+                        </span>
+                    ) : null}
+
+                    {/* Quick view button overlay */}
+                    <div className={`absolute bottom-0 left-0 right-0 p-4 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                        isHovered ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0 pointer-events-none'
+                    }`}>
+                        <button 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setModalOpen(true);
+                            }}
+                            className="w-full text-center bg-white/90 backdrop-blur hover:bg-[#d4af37] hover:text-white text-[#4a0e0e] text-xs font-bold py-3 rounded-xl shadow-xl transition-colors tracking-widest uppercase"
+                        >
+                            Quick View
+                        </button>
                     </div>
                 </div>
- 
-                <div className="mt-1.5 flex items-center gap-2">
-                    {hasDiscount ? (
-                        <>
-                            <span className="font-bold text-sm text-[#7B0A26]">
+
+                {/* Card Body */}
+                <div className="pt-4 pb-2 flex flex-col justify-between px-1">
+                    <div>
+                        <Link href={productUrl}>
+                            <h3 className="font-luxury font-bold text-lg text-[#0a0a0a] line-clamp-1 group-hover:text-[#d4af37] transition-colors duration-300 leading-snug">
+                                {product.title}
+                            </h3>
+                        </Link>
+    
+                        {/* Reviews */}
+                        <div className="flex items-center gap-1.5 mt-1.5 text-xs text-gray-400">
+                            <div className="flex text-[#d4af37] gap-0.5 text-[10px]">
+                                <i className="fa-solid fa-star" />
+                                <i className="fa-solid fa-star" />
+                                <i className="fa-solid fa-star" />
+                                <i className="fa-solid fa-star" />
+                                <i className="fa-solid fa-star" />
+                            </div>
+                            <span>({(product.id % 20) + 12})</span>
+                        </div>
+                    </div>
+    
+                    <div className="mt-2.5 flex items-end gap-2.5">
+                        {hasDiscount ? (
+                            <>
+                                <span className="font-bold text-base text-[#4a0e0e]">
+                                    {displayPrice}
+                                </span>
+                                <span className="text-gray-400 line-through text-xs mb-0.5">
+                                    {originalPrice}
+                                </span>
+                            </>
+                        ) : (
+                            <span className={`font-semibold text-base ${product.price_on_request ? 'text-gray-400 italic' : 'text-[#4a0e0e]'}`}>
                                 {displayPrice}
                             </span>
-                            <span className="text-gray-400 line-through text-xs">
-                                {originalPrice}
-                            </span>
-                        </>
-                    ) : (
-                        <span className={`font-semibold text-sm ${product.price_on_request ? 'text-gray-400 italic' : 'text-gray-700'}`}>
-                            {displayPrice}
-                        </span>
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+
+            {/* Quick View Modal */}
+            <QuickViewModal 
+                isOpen={modalOpen} 
+                onClose={() => setModalOpen(false)} 
+                product={product} 
+            />
+        </>
     );
 }

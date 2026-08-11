@@ -7,6 +7,8 @@ import Reveal from '@/Components/Reveal';
 import WhyChooseUs from '@/Components/WhyChooseUs';
 import NewsletterSignup from '@/Components/NewsletterSignup';
 import FaqSection from '@/Components/FaqSection';
+import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
 import type { Category, ProductCard as ProductCardType } from '@/types';
 
 interface City {
@@ -115,62 +117,107 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
             <Head title="Find Trusted Jewellers in Pakistan" />
 
             {/* ── Hero Banner Slider ────────────────────────────────────── */}
-            <section className="relative bg-[#5c1a1b] min-h-[max(440px,calc(100dvh-6rem))] overflow-hidden flex items-center">
+            <section className="relative bg-[#4a0e0e] min-h-[max(440px,calc(100dvh-6rem))] overflow-hidden flex items-center">
                 {/* Background Slides */}
                 <div className="absolute inset-0 z-0">
-                    {SLIDES.map((slide, index) => {
-                        if (index !== 0 && !otherSlidesLoaded) return null;
-                        return (
-                            <picture key={slide.image}>
-                                <source srcSet={slide.image} type="image/webp" />
-                                <img
-                                    src={slide.imageFallback}
-                                    alt=""
-                                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out ${currentBannerIndex === index ? 'opacity-100' : 'opacity-0'
-                                        }`}
-                                    style={{ objectPosition: slide.position }}
-                                    fetchPriority={index === 0 ? 'high' : 'low'}
-                                    loading={index === 0 ? 'eager' : 'lazy'}
-                                    decoding={index === 0 ? 'sync' : 'async'}
-                                />
-                            </picture>
-                        );
-                    })}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#3d1112]/95 via-[#5c1a1b]/60 to-[#3d1112]/40" />
+                    <AnimatePresence initial={false}>
+                        <motion.div
+                            key={currentBannerIndex}
+                            initial={{ opacity: 0, scale: 1.05 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 1.2, ease: "easeInOut" }}
+                            className="absolute inset-0"
+                        >
+                            <img
+                                src={activeSlide.imageFallback}
+                                alt=""
+                                className="absolute inset-0 w-full h-full object-cover animate-[kenBurns_20s_ease-out_forwards]"
+                                style={{ objectPosition: activeSlide.position }}
+                                fetchPriority={currentBannerIndex === 0 ? 'high' : 'low'}
+                                loading={currentBannerIndex === 0 ? 'eager' : 'lazy'}
+                                decoding={currentBannerIndex === 0 ? 'sync' : 'async'}
+                            />
+                        </motion.div>
+                    </AnimatePresence>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/95 via-[#4a0e0e]/60 to-[#0a0a0a]/40" />
                 </div>
 
                 <div className="absolute inset-0 opacity-10 pointer-events-none z-0">
-                    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#d4af37] rounded-full filter blur-3xl" />
-                    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#d4af37] rounded-full filter blur-3xl" />
+                    <motion.div 
+                        animate={{ x: [0, 20, 0], y: [0, 30, 0] }}
+                        transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+                        className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#d4af37] rounded-full filter blur-[100px]" 
+                    />
+                    <motion.div 
+                        animate={{ x: [0, -30, 0], y: [0, -20, 0] }}
+                        transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+                        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#d4af37] rounded-full filter blur-[100px]" 
+                    />
                 </div>
 
                 {/* Discount badge — pinned to a corner, never overlaps the centered heading */}
-                <div className="hidden lg:block absolute top-8 right-6 xl:right-10 z-20">
-                    <div className="w-28 h-28 xl:w-32 xl:h-32">
+                <motion.div 
+                    initial={{ opacity: 0, rotate: -45 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    transition={{ duration: 1, delay: 0.5 }}
+                    className="hidden lg:block absolute top-8 right-6 xl:right-10 z-20"
+                >
+                    <motion.div 
+                        animate={{ rotate: 360 }}
+                        transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+                        className="w-28 h-28 xl:w-32 xl:h-32 relative group"
+                    >
+                        <div className="absolute inset-0 rounded-full border border-[#d4af37]/30 border-dashed animate-[spin_10s_linear_infinite_reverse]" />
                         <DiscountBadge />
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full py-6 sm:py-8">
                     <div className="text-center flex flex-col items-center">
-                        <div className="lg:hidden w-24 h-24 sm:w-28 sm:h-28 mb-4">
+                        <motion.div 
+                            animate={{ rotate: 360 }}
+                            transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+                            className="lg:hidden w-24 h-24 sm:w-28 sm:h-28 mb-4 relative"
+                        >
                             <DiscountBadge />
-                        </div>
+                        </motion.div>
 
-                        {/* Slide-specific text (re-animates on slide change only) */}
-                        <div key={currentBannerIndex} className="flex flex-col items-center animate-fade-in-up">
-                            <span className="inline-block text-[#d4af37] tracking-[0.25em] uppercase font-semibold text-xs mb-3 border border-[#d4af37]/40 rounded-full px-4 py-1.5">
-                                {activeSlide.eyebrow}
-                            </span>
+                        {/* Slide-specific text */}
+                        <AnimatePresence mode="wait">
+                            <motion.div 
+                                key={currentBannerIndex}
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -30 }}
+                                transition={{ duration: 0.8, ease: "easeOut" }}
+                                className="flex flex-col items-center"
+                            >
+                                <motion.span 
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="inline-block text-[#d4af37] tracking-[0.25em] uppercase font-semibold text-xs mb-3 border border-[#d4af37]/40 rounded-full px-4 py-1.5 backdrop-blur-sm"
+                                >
+                                    {activeSlide.eyebrow}
+                                </motion.span>
 
-                            <h1 className="font-luxury text-2xl sm:text-3xl lg:text-5xl text-white font-bold leading-tight max-w-4xl mx-auto mb-3 px-4 flex items-center justify-center min-h-[64px] sm:min-h-[90px] lg:min-h-[130px]">
-                                {activeSlide.heading}
-                            </h1>
+                                <h1 className="font-luxury text-3xl sm:text-4xl lg:text-6xl text-white font-bold leading-tight max-w-4xl mx-auto mb-3 px-4 flex items-center justify-center min-h-[64px] sm:min-h-[90px] lg:min-h-[140px] relative">
+                                    {activeSlide.heading}
+                                    {/* Animated gold underline */}
+                                    <motion.div 
+                                        initial={{ scaleX: 0 }}
+                                        animate={{ scaleX: 1 }}
+                                        transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
+                                        className="absolute -bottom-2 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" 
+                                    />
+                                </h1>
 
-                            <p className="text-cream/80 text-sm sm:text-base max-w-2xl mx-auto mb-5 leading-relaxed min-h-[40px] sm:min-h-[28px] flex items-center justify-center">
-                                {activeSlide.tagline}
-                            </p>
-                        </div>
+                                <p className="text-cream/80 text-sm sm:text-base max-w-2xl mx-auto mb-5 leading-relaxed min-h-[40px] sm:min-h-[28px] flex items-center justify-center mt-4">
+                                    {activeSlide.tagline}
+                                </p>
+                            </motion.div>
+                        </AnimatePresence>
 
                         {/* Slide indicators */}
                         <div className="flex justify-center gap-2 mb-5">
@@ -185,7 +232,12 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                         </div>
 
                         {/* Embedded Search Bar */}
-                        <div className="w-full max-w-4xl mx-auto bg-white/95 backdrop-blur-sm p-5 sm:p-6 rounded-lg shadow-2xl border border-[#d4af37]/20">
+                        <motion.div 
+                            initial={{ y: 50, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.8, delay: 0.6 }}
+                            className="w-full max-w-4xl mx-auto glass-card p-5 sm:p-6 rounded-2xl shadow-2xl border border-[#d4af37]/30 relative z-20"
+                        >
                             <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
 
                                 <div className="flex flex-col text-left">
@@ -229,7 +281,7 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
 
                                 <button
                                     type="submit"
-                                    className="w-full bg-[#5c1a1b] hover:bg-[#7a2426] text-white font-bold py-3.5 px-4 rounded text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-md hover:shadow-lg hover-shine">
+                                    className="w-full bg-[#4a0e0e] hover:bg-[#b76e79] text-white font-bold py-3.5 px-4 rounded text-sm uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-md hover:shadow-lg hover-shine">
                                     <i className="fa-solid fa-magnifying-glass mr-2" /> Search
                                 </button>
                             </form>
@@ -241,7 +293,7 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                                     </Link>
                                 </span>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </section>
@@ -252,7 +304,7 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <Reveal className="text-center mb-10 md:mb-20">
                             <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Fresh Designs</span>
-                            <h2 className="font-luxury text-2xl sm:text-3xl md:text-5xl text-[#5c1a1b] font-bold mt-2">Latest Arrivals</h2>
+                            <h2 className="font-luxury text-2xl sm:text-3xl md:text-5xl text-[#4a0e0e] font-bold mt-2">Latest Arrivals</h2>
                             <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
                         </Reveal>
 
@@ -266,7 +318,7 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                 <section key={cat.id} className="py-12 md:py-20 bg-[#fff8f0] border-t border-gray-100">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <Reveal className="text-center mb-10 md:mb-20">
-                            <h2 className="font-luxury text-3xl sm:text-4xl md:text-6xl text-[#5c1a1b] font-bold">{cat.name}</h2>
+                            <h2 className="font-luxury text-3xl sm:text-4xl md:text-6xl text-[#4a0e0e] font-bold">{cat.name}</h2>
                             <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
                         </Reveal>
 
@@ -276,7 +328,7 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                             <div className="text-center mt-8">
                                 <Link
                                     href={`/${cat.slug}`}
-                                    className="inline-flex items-center gap-2 bg-[#5c1a1b] hover:bg-[#7a2426] text-white px-6 py-3 rounded-sm font-bold text-xs uppercase tracking-widest transition-all duration-300">
+                                    className="inline-flex items-center gap-2 bg-[#4a0e0e] hover:bg-[#b76e79] text-white px-6 py-3 rounded-sm font-bold text-xs uppercase tracking-widest transition-all duration-300">
                                     See More Designs ({cat.total_products - cat.products.length}+ more)
                                     <i className="fa-solid fa-arrow-right" />
                                 </Link>
@@ -294,7 +346,7 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <Reveal className="text-center mb-10 md:mb-12">
                         <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Customer Stories</span>
-                        <h2 className="font-luxury text-2xl sm:text-3xl md:text-4xl text-[#5c1a1b] font-bold mt-2">What Our Clients Say</h2>
+                        <h2 className="font-luxury text-2xl sm:text-3xl md:text-4xl text-[#4a0e0e] font-bold mt-2">What Our Clients Say</h2>
                         <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
                     </Reveal>
                     <Reveal delay={150}>
@@ -309,14 +361,12 @@ export default function Home({ cities, categories, latestArrivals, featuredCateg
     );
 }
 
-// ── Horizontal Scrollable Product Slider ────────────────────────────────────
-
 function HorizontalProductSlider({ products }: { products: ProductCardType[] }) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const scroll = (direction: 'left' | 'right') => {
         if (!scrollRef.current) return;
-        const amount = scrollRef.current.clientWidth * 0.75;
+        const amount = scrollRef.current.clientWidth;
         scrollRef.current.scrollBy({ left: direction === 'right' ? amount : -amount, behavior: 'smooth' });
     };
 
@@ -328,12 +378,12 @@ function HorizontalProductSlider({ products }: { products: ProductCardType[] }) 
             <div className="absolute -top-16 right-0 hidden md:flex gap-2 z-10">
                 <button
                     onClick={() => scroll('left')}
-                    className="w-10 h-10 rounded-full bg-[#5c1a1b] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20">
+                    className="w-10 h-10 rounded-full bg-[#4a0e0e] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20">
                     <i className="fa-solid fa-arrow-left-long text-sm" />
                 </button>
                 <button
                     onClick={() => scroll('right')}
-                    className="w-10 h-10 rounded-full bg-[#5c1a1b] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20">
+                    className="w-10 h-10 rounded-full bg-[#4a0e0e] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 cursor-pointer border-2 border-transparent hover:border-white/20">
                     <i className="fa-solid fa-arrow-right-long text-sm" />
                 </button>
             </div>
@@ -341,12 +391,13 @@ function HorizontalProductSlider({ products }: { products: ProductCardType[] }) 
             {/* Scrollable container */}
             <div
                 ref={scrollRef}
-                className="flex gap-5 overflow-x-auto pt-1 pb-4 scroll-smooth"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                className="flex gap-5 overflow-x-auto pt-1 pb-4 scroll-smooth snap-x snap-mandatory"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
                 {products.map((product) => (
                     <div
                         key={product.id}
-                        className="flex-shrink-0 w-[calc(100%-20px)] sm:w-[calc(50%-15px)] md:w-[calc(33.33%-15px)] lg:w-[calc(25%-15px)]"
+                        className="snap-start flex-shrink-0 w-[85vw] sm:w-[calc(50%-10px)] md:w-[calc(33.333%-13.33px)] lg:w-[calc(25%-15px)]"
                     >
                         <ProductCard product={product} />
                     </div>
@@ -390,10 +441,10 @@ function ReviewsCarousel() {
         <div className="max-w-6xl mx-auto relative group">
             {/* Navigation Arrows (Top Right) */}
             <div className="absolute -top-16 right-0 hidden md:flex gap-2 z-10">
-                <button onClick={handlePrev} className="w-10 h-10 rounded-full bg-[#5c1a1b] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:-translate-x-0.5 cursor-pointer border-2 border-transparent hover:border-white/20" title="Previous">
+                <button onClick={handlePrev} className="w-10 h-10 rounded-full bg-[#4a0e0e] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:-translate-x-0.5 cursor-pointer border-2 border-transparent hover:border-white/20" title="Previous">
                     <i className="fa-solid fa-arrow-left-long text-sm" />
                 </button>
-                <button onClick={handleNext} className="w-10 h-10 rounded-full bg-[#5c1a1b] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:translate-x-0.5 cursor-pointer border-2 border-transparent hover:border-white/20" title="Next">
+                <button onClick={handleNext} className="w-10 h-10 rounded-full bg-[#4a0e0e] hover:bg-[#d4af37] text-white flex items-center justify-center shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-110 hover:translate-x-0.5 cursor-pointer border-2 border-transparent hover:border-white/20" title="Next">
                     <i className="fa-solid fa-arrow-right-long text-sm" />
                 </button>
             </div>
@@ -419,7 +470,7 @@ function ReviewsCarousel() {
                         <p className="text-gray-600 italic text-sm md:text-base leading-relaxed mb-6">"{rev.review}"</p>
                         <div className="flex items-center justify-between border-t border-gray-200/50 pt-4">
                             <div>
-                                <h4 className="font-luxury font-bold text-[#5c1a1b] text-sm tracking-wide">{rev.name}</h4>
+                                <h4 className="font-luxury font-bold text-[#4a0e0e] text-sm tracking-wide">{rev.name}</h4>
                                 <p className="text-xs text-gray-400">{rev.city}, Pakistan</p>
                             </div>
                             <span className="text-xs text-[#d4af37] font-semibold">{rev.date}</span>

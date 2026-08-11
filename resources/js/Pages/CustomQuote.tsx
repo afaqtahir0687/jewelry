@@ -69,7 +69,7 @@ export default function CustomQuote({ cities, categories, selectedJeweller, prod
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-8">
                         <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs"><i className="fa-solid fa-gem mr-1 animate-spin" style={{ animationDuration: '3s' }}></i> Bespoke Craftsmanship</span>
-                        <h1 className="font-luxury text-3xl md:text-4xl text-[#5c1a1b] font-bold mt-2">Request Custom Jewellery Quote</h1>
+                        <h1 className="font-luxury text-3xl md:text-4xl text-[#4a0e0e] font-bold mt-2">Request Custom Jewellery Quote</h1>
                         <p className="text-gray-500 text-sm mt-2 max-w-lg mx-auto">
                             Fill out the form below. We will generate a unique Lead ID, route your requirement to verified local partners, and get you quotes.
                         </p>
@@ -80,7 +80,7 @@ export default function CustomQuote({ cities, categories, selectedJeweller, prod
                         <form onSubmit={handleSubmit} className="space-y-6">
                             
                             {productTitle && (
-                                <div className="bg-[#5c1a1b] rounded border border-[#d4af37]/30 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-md">
+                                <div className="bg-[#4a0e0e] rounded border border-[#d4af37]/30 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-md">
                                     <div className="flex items-center gap-3 min-w-0">
                                         <div className="w-10 h-10 rounded-full flex items-center justify-center bg-[#d4af37]/20 text-[#d4af37] flex-shrink-0">
                                             <i className="fa-solid fa-ring text-lg"></i>
@@ -104,7 +104,7 @@ export default function CustomQuote({ cities, categories, selectedJeweller, prod
                                         <div className="w-10 h-10 rounded-full overflow-hidden border border-white bg-white flex-shrink-0">
                                             <img src={selectedJeweller.logo} alt="Logo" className="w-full h-full object-cover" />
                                         </div>
-                                        <div className="text-xs text-[#5c1a1b] min-w-0">
+                                        <div className="text-xs text-[#4a0e0e] min-w-0">
                                             <span className="text-[10px] text-gray-400 block font-bold uppercase tracking-wider">Sending Inquiry To</span>
                                             <strong className="font-luxury text-sm break-words">{selectedJeweller.business_name}</strong>
                                             ({selectedJeweller.area}, {selectedJeweller.city.name})

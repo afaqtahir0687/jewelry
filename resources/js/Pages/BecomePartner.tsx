@@ -53,7 +53,7 @@ export default function BecomePartner({ cities }: BecomePartnerProps) {
                         <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">
                             <i className="fa-solid fa-handshake mr-1" /> Join Our Network
                         </span>
-                        <h1 className="font-luxury text-3xl md:text-4xl text-[#5c1a1b] font-bold mt-2">Become a Verified Partner</h1>
+                        <h1 className="font-luxury text-3xl md:text-4xl text-[#4a0e0e] font-bold mt-2">Become a Verified Partner</h1>
                         <p className="text-gray-500 text-sm mt-2 max-w-lg mx-auto">
                             List your jewellery shop on Pakistan's most trusted platform. Fill out the form below and our
                             team will review your application.

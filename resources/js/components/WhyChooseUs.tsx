@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const FEATURES = [
     {
@@ -28,32 +29,60 @@ const FEATURES = [
     },
 ];
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: { staggerChildren: 0.2 }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+};
+
 export default function WhyChooseUs() {
     return (
         <section className="py-12 md:py-20 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div data-aos="fade-up" className="text-center mb-10 md:mb-14">
+                <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-10 md:mb-14"
+                >
                     <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Our Promise</span>
-                    <h2 className="font-luxury text-2xl sm:text-3xl md:text-5xl text-[#5c1a1b] font-bold mt-2">Why Choose Us</h2>
+                    <h2 className="font-luxury text-2xl sm:text-3xl md:text-5xl text-[#4a0e0e] font-bold mt-2">Why Choose Us</h2>
                     <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
-                </div>
+                </motion.div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                    {FEATURES.map((feature, idx) => (
-                        <div
+                <motion.div 
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6"
+                >
+                    {FEATURES.map((feature) => (
+                        <motion.div
                             key={feature.title}
-                            data-aos="fade-up"
-                            data-aos-delay={idx * 100}
-                            className="group bg-[#fff8f0] border border-[#d4af37]/15 rounded-xl p-6 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-[#d4af37]/50"
+                            variants={itemVariants}
+                            className="group bg-[#fff8f0] border border-[#d4af37]/15 rounded-xl p-6 text-center transition-all duration-300 hover:shadow-xl hover:border-[#d4af37]/50"
                         >
-                            <div className="w-16 h-16 rounded-full bg-[#5c1a1b] flex items-center justify-center mx-auto mb-5 transition-all duration-300 group-hover:bg-[#d4af37] group-hover:scale-110 group-hover:rotate-6">
-                                <i className={`${feature.icon} text-2xl text-[#d4af37] group-hover:text-[#5c1a1b] transition-colors duration-300`} />
-                            </div>
-                            <h3 className="font-luxury font-bold text-base text-[#5c1a1b] mb-2">{feature.title}</h3>
+                            <motion.div 
+                                animate={{ y: [0, -8, 0] }}
+                                transition={{ repeat: Infinity, duration: 3 + Math.random() * 2, ease: "easeInOut" }}
+                                className="w-16 h-16 rounded-full bg-[#4a0e0e] flex items-center justify-center mx-auto mb-5 transition-all duration-300 group-hover:bg-[#d4af37] group-hover:scale-110"
+                            >
+                                <i className={`${feature.icon} text-2xl text-[#d4af37] group-hover:text-[#4a0e0e] transition-colors duration-300`} />
+                            </motion.div>
+                            <h3 className="font-luxury font-bold text-base text-[#4a0e0e] mb-2">{feature.title}</h3>
                             <p className="text-xs text-gray-500 leading-relaxed">{feature.description}</p>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );

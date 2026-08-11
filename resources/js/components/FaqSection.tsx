@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Reveal from '@/Components/Reveal';
 
 interface Faq {
@@ -24,7 +24,7 @@ export default function FaqSection({ faqs, showHeading = true }: FaqSectionProps
                 {showHeading && (
                     <Reveal className="text-center mb-10 md:mb-12">
                         <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">Got Questions?</span>
-                        <h2 className="font-luxury text-2xl sm:text-3xl md:text-4xl text-[#5c1a1b] font-bold mt-2">Frequently Asked Questions</h2>
+                        <h2 className="font-luxury text-2xl sm:text-3xl md:text-4xl text-[#4a0e0e] font-bold mt-2">Frequently Asked Questions</h2>
                         <div className="w-24 h-0.5 bg-[#d4af37] mx-auto mt-4" />
                     </Reveal>
                 )}
@@ -41,24 +41,36 @@ export default function FaqSection({ faqs, showHeading = true }: FaqSectionProps
                                         aria-expanded={isOpen}
                                         className="w-full flex items-center justify-between gap-4 text-left px-5 py-4 md:px-6 md:py-5"
                                     >
-                                        <span className={`font-medium text-sm md:text-base transition-colors duration-300 ${isOpen ? 'text-[#5c1a1b]' : 'text-gray-800'}`}>
+                                        <span className={`font-medium text-sm md:text-base transition-colors duration-300 ${isOpen ? 'text-[#4a0e0e]' : 'text-gray-800'}`}>
                                             {faq.question}
                                         </span>
-                                        <ChevronDown
-                                            size={18}
-                                            className={`shrink-0 text-[#d4af37] transition-transform duration-300 ease-out ${isOpen ? 'rotate-180' : ''}`}
-                                        />
+                                        <motion.div
+                                            animate={{ rotate: isOpen ? 180 : 0 }}
+                                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                                            className="w-6 h-6 flex items-center justify-center rounded-full bg-[#4a0e0e]/5 shrink-0"
+                                        >
+                                            <i className={`fa-solid ${isOpen ? 'fa-minus' : 'fa-plus'} text-[#d4af37] text-xs`} />
+                                        </motion.div>
                                     </button>
-                                    <div
-                                        className="grid transition-[grid-template-rows] duration-300 ease-out"
-                                        style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
-                                    >
-                                        <div className="overflow-hidden">
-                                            <p className="px-5 pb-4 md:px-6 md:pb-5 text-sm text-gray-600 leading-relaxed">
-                                                {faq.answer}
-                                            </p>
-                                        </div>
-                                    </div>
+                                    
+                                    <AnimatePresence initial={false}>
+                                        {isOpen && (
+                                            <motion.div
+                                                initial="collapsed"
+                                                animate="open"
+                                                exit="collapsed"
+                                                variants={{
+                                                    open: { opacity: 1, height: "auto", marginBottom: 20 },
+                                                    collapsed: { opacity: 0, height: 0, marginBottom: 0 }
+                                                }}
+                                                transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+                                            >
+                                                <div className="px-5 md:px-6 text-sm text-gray-600 leading-relaxed">
+                                                    {faq.answer}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             </Reveal>
                         );

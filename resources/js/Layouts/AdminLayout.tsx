@@ -71,7 +71,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
         )}>
             {/* Logo */}
             <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
-                <img src="/images/gehna-logo.svg" alt="Gehna" className="h-9 w-auto" />
+                <img src="/images/gehna-diamond.svg" alt="Gehna" className="h-9 w-auto" />
                 <div>
                     <p className="text-[10px] text-gold tracking-widest uppercase">Admin CRM</p>
                 </div>

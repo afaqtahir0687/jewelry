@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import 'aos/dist/aos.css';
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
@@ -10,15 +12,15 @@
     --color-gold: #d4af37;
     --color-gold-hover: #bda030;
     --color-gold-light: #e8c766;
-    --color-maroon: #5c1a1b;
-    --color-maroon-dark: #3d1112;
-    --color-maroon-light: #7a2426;
-    --color-charcoal: #5c1a1b;
+    --color-burgundy: #4a0e0e;
+    --color-obsidian: #0a0a0a;
+    --color-rosegold: #b76e79;
+    --color-charcoal: #2c2c2c;
     --color-cream: #fff8f0;
-    --font-heading: 'Cormorant Garamond', serif;
-    --font-luxury: 'Cormorant Garamond', serif;
-    --font-sans: 'Poppins', 'Lato', sans-serif;
-    --font-body: 'Poppins', 'Lato', sans-serif;
+    --font-heading: 'Playfair Display', serif;
+    --font-luxury: 'Playfair Display', serif;
+    --font-sans: 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
 }
 
 @layer base {
@@ -175,6 +177,42 @@
 
     .hover-shine:hover::after {
         animation: shine 0.75s;
+    }
+
+    /* Custom Utilities for Redesign */
+    .glass-card {
+        @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-xl;
+    }
+    
+    .glass-dark {
+        @apply bg-black/40 backdrop-blur-lg border border-white/10;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: var(--color-cream);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background-color: var(--color-gold);
+        border-radius: 20px;
+    }
+
+    /* Diamond Sparkle Cursor Glint */
+    .cursor-glint {
+        pointer-events: none;
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        background: radial-gradient(circle, rgba(212,175,55,1) 0%, rgba(212,175,55,0) 70%);
+        mix-blend-mode: screen;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: top 0.1s ease-out, left 0.1s ease-out;
     }
 }
 

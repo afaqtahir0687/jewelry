@@ -85,7 +85,7 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                             <i className="fa-solid fa-chevron-right text-[8px]" />
                         </>
                     )}
-                    <span className="text-[#5c1a1b] font-semibold truncate max-w-xs">{product.title}</span>
+                    <span className="text-[#4a0e0e] font-semibold truncate max-w-xs">{product.title}</span>
                 </div>
             </div>
 
@@ -153,11 +153,11 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                                     {statusLabel}
                                 </span>
                                 {product.is_featured && (
-                                    <span className="text-xs bg-[#5c1a1b] text-[#d4af37] px-3 py-1 rounded-full font-semibold">✦ Featured</span>
+                                    <span className="text-xs bg-[#4a0e0e] text-[#d4af37] px-3 py-1 rounded-full font-semibold">✦ Featured</span>
                                 )}
                             </div>
 
-                            <h1 className="font-luxury text-3xl md:text-4xl font-bold text-[#5c1a1b] leading-tight">
+                            <h1 className="font-luxury text-3xl md:text-4xl font-bold text-[#4a0e0e] leading-tight">
                                 {product.title}
                             </h1>
 
@@ -165,7 +165,7 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                             <div className="border-y border-gray-100 py-4">
                                 <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Price</p>
                                 <div className="flex items-center gap-3 flex-wrap">
-                                    <p className={`text-2xl font-bold ${product.price_on_request ? 'text-gray-500 italic' : hasDiscount ? 'text-[#7B0A26]' : 'text-[#d4af37]'}`}>
+                                    <p className={`text-2xl font-bold ${product.price_on_request ? 'text-gray-500 italic' : hasDiscount ? 'text-[#4a0e0e]' : 'text-[#d4af37]'}`}>
                                         {displayPrice}
                                     </p>
                                     {hasDiscount && (
@@ -192,19 +192,19 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                                 {product.gold_purity && (
                                     <div className="bg-white rounded-lg p-4 border border-gray-100">
                                         <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Gold Purity</p>
-                                        <p className="font-semibold text-[#5c1a1b] text-sm">{product.gold_purity}</p>
+                                        <p className="font-semibold text-[#4a0e0e] text-sm">{product.gold_purity}</p>
                                     </div>
                                 )}
                                 {product.approximate_weight && (
                                     <div className="bg-white rounded-lg p-4 border border-gray-100">
                                         <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Approx. Weight</p>
-                                        <p className="font-semibold text-[#5c1a1b] text-sm">{product.approximate_weight}</p>
+                                        <p className="font-semibold text-[#4a0e0e] text-sm">{product.approximate_weight}</p>
                                     </div>
                                 )}
                                 {product.stone_info && (
                                     <div className="bg-white rounded-lg p-4 border border-gray-100 col-span-2">
                                         <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Stone Info</p>
-                                        <p className="font-semibold text-[#5c1a1b] text-sm">{product.stone_info}</p>
+                                        <p className="font-semibold text-[#4a0e0e] text-sm">{product.stone_info}</p>
                                     </div>
                                 )}
                             </div>
@@ -244,7 +244,7 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-10">
                             <span className="text-[#d4af37] tracking-widest uppercase font-semibold text-xs">You May Also Like</span>
-                            <h2 className="font-luxury text-2xl md:text-3xl text-[#5c1a1b] font-bold mt-2">Related Designs</h2>
+                            <h2 className="font-luxury text-2xl md:text-3xl text-[#4a0e0e] font-bold mt-2">Related Designs</h2>
                             <div className="w-16 h-0.5 bg-[#d4af37] mx-auto mt-3" />
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

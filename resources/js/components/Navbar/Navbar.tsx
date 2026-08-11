@@ -68,7 +68,7 @@ export default function Navbar() {
                 }`}
         >
             {/* Gold hairline accent */}
-            <div className="h-[3px] w-full bg-gradient-to-r from-[#5c1a1b] via-[#d4af37] to-[#5c1a1b]" />
+            <div className="h-[3px] w-full bg-gradient-to-r from-[#4a0e0e] via-[#d4af37] to-[#4a0e0e]" />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className={`flex justify-between items-center transition-all duration-300 ${scrolled ? 'h-12' : 'h-14'}`}>
 
@@ -76,7 +76,7 @@ export default function Navbar() {
                     <div className="flex-shrink-0 flex items-center">
                         <Link href="/" className="flex items-center" onClick={closeAllMenus}>
                             <img
-                                src="/images/gehna-logo.svg"
+                                src="/images/gehna-diamond.svg"
                                 alt="Gehna"
                                 className={`w-auto transition-all duration-300 ${scrolled ? 'h-10' : 'h-12'}`}
                             />
@@ -85,7 +85,7 @@ export default function Navbar() {
 
                     {/* Desktop Navigation Menu */}
                     <nav className="hidden md:flex items-center space-x-6 lg:space-x-10 h-full">
-                        <Link href="/" className="relative h-full flex items-center px-1 text-sm font-semibold text-[#5c1a1b] hover:text-[#d4af37] uppercase tracking-wider group transition-colors duration-200">
+                        <Link href="/" className="relative h-full flex items-center px-1 text-sm font-semibold text-[#4a0e0e] hover:text-[#d4af37] uppercase tracking-wider group transition-colors duration-200">
                             Home
                             <span className="absolute left-0 bottom-0 h-[2px] bg-[#d4af37] w-0 group-hover:w-full transition-all duration-300"></span>
                         </Link>
@@ -107,7 +107,7 @@ export default function Navbar() {
                     {/* Desktop CTA & Actions */}
                     <div className="hidden md:flex items-center gap-5">
                         <div className="flex items-center gap-4 pr-5 border-r border-gray-200">
-                            <a href="tel:+923017730687" className="text-[#5c1a1b] hover:text-[#d4af37] transition-all duration-200" title="Call us">
+                            <a href="tel:+923017730687" className="text-[#4a0e0e] hover:text-[#d4af37] transition-all duration-200" title="Call us">
                                 <i className="fa-solid fa-phone text-lg" />
                             </a>
                             <a
@@ -123,7 +123,7 @@ export default function Navbar() {
                         <Link href="/become-a-partner" className="border border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-white px-4 py-1.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all duration-300 whitespace-nowrap">
                             Become a Partner
                         </Link>
-                        <Link href="/custom-jewellery" className="bg-[#5c1a1b] hover:bg-[#7a2426] text-white px-5 py-1.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all duration-300 shadow-md whitespace-nowrap">
+                        <Link href="/custom-jewellery" className="bg-[#4a0e0e] hover:bg-[#b76e79] text-white px-5 py-1.5 text-xs font-bold uppercase tracking-widest rounded-sm transition-all duration-300 shadow-md whitespace-nowrap">
                             Custom Order
                         </Link>
                     </div>
@@ -141,7 +141,7 @@ export default function Navbar() {
                         </a>
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="text-[#5c1a1b] hover:text-[#d4af37] focus:outline-none transition-colors"
+                            className="text-[#4a0e0e] hover:text-[#d4af37] focus:outline-none transition-colors"
                             aria-expanded={mobileMenuOpen}
                             aria-label="Toggle menu"
                         >
@@ -163,7 +163,7 @@ export default function Navbar() {
                 {/* Drawer */}
                 <div className={`absolute top-0 right-0 w-4/5 max-w-sm h-full bg-white shadow-2xl transition-transform duration-300 ease-in-out transform flex flex-col ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                     <div className="flex justify-between items-center p-5 border-b border-gray-100">
-                        <span className="font-luxury font-bold text-xl tracking-wide text-[#5c1a1b]">MENU</span>
+                        <span className="font-luxury font-bold text-xl tracking-wide text-[#4a0e0e]">MENU</span>
                         <button onClick={closeAllMenus} className="text-gray-400 hover:text-red-500 transition-colors">
                             <i className="fa-solid fa-xmark text-2xl" />
                         </button>
@@ -171,7 +171,7 @@ export default function Navbar() {
 
                     <div className="flex-1 overflow-y-auto py-2">
                         <div className="px-5 py-3 border-b border-gray-50">
-                            <Link href="/" className="block text-sm font-bold uppercase tracking-wider text-[#5c1a1b] hover:text-[#d4af37]" onClick={closeAllMenus}>Home</Link>
+                            <Link href="/" className="block text-sm font-bold uppercase tracking-wider text-[#4a0e0e] hover:text-[#d4af37]" onClick={closeAllMenus}>Home</Link>
                         </div>
                         
                         {/* Mobile Accordion Menu */}
@@ -180,7 +180,7 @@ export default function Navbar() {
                                 {item.groups ? (
                                     <>
                                         <button 
-                                            className="w-full flex justify-between items-center px-5 py-3 text-sm font-bold uppercase tracking-wider text-[#5c1a1b] hover:text-[#d4af37]"
+                                            className="w-full flex justify-between items-center px-5 py-3 text-sm font-bold uppercase tracking-wider text-[#4a0e0e] hover:text-[#d4af37]"
                                             onClick={() => setExpandedMobileItem(expandedMobileItem === item.label ? null : item.label)}
                                         >
                                             {item.label}
@@ -196,7 +196,7 @@ export default function Navbar() {
                                                         <ul className="space-y-2 pl-2">
                                                             {group.links.map((link, lIdx) => (
                                                                 <li key={lIdx}>
-                                                                    <Link href={link.href} className="block text-sm text-[#5c1a1b] hover:text-[#d4af37]" onClick={closeAllMenus}>
+                                                                    <Link href={link.href} className="block text-sm text-[#4a0e0e] hover:text-[#d4af37]" onClick={closeAllMenus}>
                                                                         {link.label}
                                                                     </Link>
                                                                 </li>
@@ -208,7 +208,7 @@ export default function Navbar() {
                                         </div>
                                     </>
                                 ) : (
-                                    <Link href={item.href || '#'} className="block px-5 py-3 text-sm font-bold uppercase tracking-wider text-[#5c1a1b] hover:text-[#d4af37]" onClick={closeAllMenus}>
+                                    <Link href={item.href || '#'} className="block px-5 py-3 text-sm font-bold uppercase tracking-wider text-[#4a0e0e] hover:text-[#d4af37]" onClick={closeAllMenus}>
                                         {item.label}
                                     </Link>
                                 )}
@@ -218,7 +218,7 @@ export default function Navbar() {
                     </div>
 
                     <div className="p-5 border-t border-gray-100 space-y-3 bg-[#fff8f0]">
-                        <Link href="/products" className="block w-full text-center border border-[#5c1a1b]/30 px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-sm hover:border-[#d4af37] hover:text-[#d4af37] transition-colors" onClick={closeAllMenus}>
+                        <Link href="/products" className="block w-full text-center border border-[#4a0e0e]/30 px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-sm hover:border-[#d4af37] hover:text-[#d4af37] transition-colors" onClick={closeAllMenus}>
                             Shop Products
                         </Link>
                         <Link href="/become-a-partner" className="block w-full text-center border border-[#d4af37] text-[#d4af37] px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-sm hover:bg-[#d4af37] hover:text-white transition-colors" onClick={closeAllMenus}>
