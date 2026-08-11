@@ -19,7 +19,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
     const pageUrl = usePage().url;
     const footerRef = React.useRef<HTMLElement>(null);
     const [footerVisible, setFooterVisible] = React.useState(false);
-    const [isFirstLoad, setIsFirstLoad] = React.useState(true);
+    
+    // Only show loader on the homepage
+    const [isFirstLoad, setIsFirstLoad] = React.useState(pageUrl === '/');
     
     const { scrollYProgress } = useScroll();
     const scaleX = useSpring(scrollYProgress, {
@@ -29,10 +31,11 @@ export default function AppLayout({ children }: AppLayoutProps) {
     });
 
     React.useEffect(() => {
+        if (!isFirstLoad) return;
         // Set first load to false after animation
         const timer = setTimeout(() => setIsFirstLoad(false), 2000);
         return () => clearTimeout(timer);
-    }, []);
+    }, [isFirstLoad]);
 
     React.useEffect(() => {
         if (flash?.success) toast.success(flash.success);
