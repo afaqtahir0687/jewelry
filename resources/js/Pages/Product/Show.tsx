@@ -227,8 +227,11 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                                     <i className="fa-solid fa-gem mr-2" /> Request Custom Quote
                                 </Link>
                                 <a
-                                    href="https://wa.me/923017730687"
+                                    href={`https://wa.me/923017730687?text=${encodeURIComponent(
+                                        `Assalam-o-Alaikum, I am interested in this product:\n\n*Product:* ${product.title}\n*Price:* ${displayPrice}\n*Product ID:* #${product.id}\n*Link:* ${typeof window !== 'undefined' ? window.location.href : ''}`
+                                    )}`}
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                     className="flex-1 text-center bg-[#25D366] hover:bg-[#1ebe5d] text-white font-bold uppercase tracking-widest text-xs py-4 rounded transition-all duration-300 active:scale-[0.98]">
                                     <i className="fa-brands fa-whatsapp mr-2" /> Chat on WhatsApp
                                 </a>
